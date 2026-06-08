@@ -35,7 +35,9 @@ Each $k$-th observation is explained by a **model / prediction** plus the
 **uncertainty** (measurement noise). For linear regression the model is as simple
 as possible — a **line** parameterized by two values:
 
-$$\hat{y}_k = a\,x_k + b$$
+$$
+\hat{y}_k = a\,x_k + b
+$$
 
 - $a$ — the **slope**.
 - $b$ — the **abscissa intercept** / **offset** / **bias**. If the slope is zero,
@@ -46,7 +48,9 @@ from last week remains: with no error we would measure points exactly on the lin
 the error is **Gaussian / normally distributed** with **zero mean** (the sensor is
 right on average) and some standard deviation:
 
-$$e \sim N(0, \sigma^2)$$
+$$
+e \sim N(0, \sigma^2)
+$$
 
 ## Why "regression"? (Galton)
 
@@ -64,28 +68,42 @@ stuck.
 Data are pairs $(x_k, y_k)$, $k = 1, \dots, N$. Find $a$ and $b$ by least squares
 (the $\tfrac{1}{2}$ multiplier is included for convenience):
 
-$$\min_{a,b}\; \frac{1}{2}\sum_{k=1}^{N}\big(a\,x_k + b - y_k\big)^2$$
+$$
+\min_{a,b}\; \frac{1}{2}\sum_{k=1}^{N}\big(a\,x_k + b - y_k\big)^2
+$$
 
 Differentiate with respect to $a$ and $b$ (the $x_k, y_k$ are numbers) and set to
 zero. The derivative of a sum is the sum of derivatives; for the square we get
 twice the bracket times the derivative of the bracket interior:
 
-$$\frac{\partial}{\partial a} = 0 = \frac{1}{2}\sum_{k=1}^{N} 2\,x_k\,(a\,x_k + b - y_k)$$
-$$\frac{\partial}{\partial b} = 0 = \frac{1}{2}\sum_{k=1}^{N} 2\,(a\,x_k + b - y_k)$$
+$$
+\frac{\partial}{\partial a} = 0 = \frac{1}{2}\sum_{k=1}^{N} 2\,x_k\,(a\,x_k + b - y_k)
+$$
+
+$$
+\frac{\partial}{\partial b} = 0 = \frac{1}{2}\sum_{k=1}^{N} 2\,(a\,x_k + b - y_k)
+$$
 
 The constant $\tfrac{1}{2}$ and the $2$ cancel. Splitting each bracket into
 separate sums (and using $\sum_{k=1}^{N} b = N b$):
 
-$$0 = a\sum_{k=1}^{N} x_k + bN - \sum_{k=1}^{N} y_k$$
-$$0 = a\sum_{k=1}^{N} x_k^2 + b\sum_{k=1}^{N} x_k - \sum_{k=1}^{N} y_k x_k$$
+$$
+0 = a\sum_{k=1}^{N} x_k + bN - \sum_{k=1}^{N} y_k
+$$
+
+$$
+0 = a\sum_{k=1}^{N} x_k^2 + b\sum_{k=1}^{N} x_k - \sum_{k=1}^{N} y_k x_k
+$$
 
 ### The bias has a simple form
 
 From the first equation, isolating $b$ (move $-Nb$ over, divide by $N$) gives only
 **arithmetic means**:
 
-$$b = \frac{1}{N}\sum_{k=1}^{N} y_k - a\,\frac{1}{N}\sum_{k=1}^{N} x_k
-    = \bar{y} - a\,\bar{x}$$
+$$
+b = \frac{1}{N}\sum_{k=1}^{N} y_k - a\,\frac{1}{N}\sum_{k=1}^{N} x_k
+    = \bar{y} - a\,\bar{x}
+$$
 
 "Once you see the arithmetic mean, you cannot unsee it."
 
@@ -95,16 +113,18 @@ Both equations have the structure constant $+\,a\cdot(\text{const}) +
 b\cdot(\text{const})$, so write them as a linear algebraic system $Mp = r$ with
 $p = \binom{a}{b}$, solved in MATLAB as `p = M\r` (confirmed on the slide):
 
-$$\begin{pmatrix}
-\sum_{k=1}^{N} x_k & N \\[4pt]
+$$
+\begin{pmatrix}
+\sum_{k=1}^{N} x_k & N \\
 \sum_{k=1}^{N} x_k^2 & \sum_{k=1}^{N} x_k
 \end{pmatrix}
 \begin{pmatrix} a \\ b \end{pmatrix}
 =
 \begin{pmatrix}
-\sum_{k=1}^{N} y_k \\[4pt]
+\sum_{k=1}^{N} y_k \\
 \sum_{k=1}^{N} y_k x_k
-\end{pmatrix}$$
+\end{pmatrix}
+$$
 
 The matrix $M$ contains only the data ($x$); the right-hand side mixes $y$ and $x$.
 
@@ -112,9 +132,11 @@ The matrix $M$ contains only the data ($x$); the right-hand side mixes $y$ and $
 
 Starting from $y = a x + b$ and substituting $b = \bar{y} - a\bar{x}$:
 
-$$y = a x + \bar{y} - a\bar{x}
+$$
+y = a x + \bar{y} - a\bar{x}
   \quad\Longrightarrow\quad
-  y - \bar{y} = a\,(x - \bar{x})$$
+  y - \bar{y} = a\,(x - \bar{x})
+$$
 
 So if we **transform the data first**, the bias disappears. Define (slide):
 
@@ -123,8 +145,12 @@ So if we **transform the data first**, the bias disappears. Define (slide):
   center). Then $\tilde{y} = a\,\tilde{x}$ (no intercept).
   Example: $x = 1,2,3,4,5 \Rightarrow \tilde{x} = -2,-1,0,1,2$.
 - **Standardized (normalized) data:** also divide by the standard deviation
-  $$\tilde{x} = \frac{x - \bar{x}}{\sigma_x}, \qquad
-    \tilde{y} = \frac{y - \bar{y}}{\sigma_y}$$
+
+$$
+\tilde{x} = \frac{x - \bar{x}}{\sigma_x}, \qquad
+    \tilde{y} = \frac{y - \bar{y}}{\sigma_y}
+$$
+
   with $\sigma = \sqrt{\dfrac{1}{N-1}\sum_{k=1}^{N}(x_k - \bar{x})^2}$ (Bessel
   correction). The standardized variables have **zero mean and standard deviation
   one**. <!-- The caption's algebra here was garbled; the slide gives the clean centered/standardized definitions used above. -->
@@ -150,15 +176,19 @@ statistic), we can build a confidence interval for the slope. With the estimate
 $\hat{a}$ obtained from `M\r`, an $\alpha$ level of probability (e.g. 95%), and the
 chi-square quantile, the true slope $a^*$ lies in (slide):
 
-$$\hat{a} - \frac{\hat{\sigma}}{\sqrt{N}}\,\chi^{-1}_{\alpha}
+$$
+\hat{a} - \frac{\hat{\sigma}}{\sqrt{N}}\,\chi^{-1}_{\alpha}
   \;\le\; a^* \;\le\;
-  \hat{a} + \frac{\hat{\sigma}}{\sqrt{N}}\,\chi^{-1}_{\alpha}$$
+  \hat{a} + \frac{\hat{\sigma}}{\sqrt{N}}\,\chi^{-1}_{\alpha}
+$$
 
 where $\chi^{-1}_{\alpha}$ is the inverse CDF (quantile) of the chi-square
 distribution (a single MATLAB command), and $\hat{\sigma}$ is the standard
 deviation of how the model fits the data:
 
-$$\hat{\sigma} = \sqrt{\frac{1}{N-1}\sum_{k=1}^{N}(\hat{y}_k - y_k)^2}$$
+$$
+\hat{\sigma} = \sqrt{\frac{1}{N-1}\sum_{k=1}^{N}(\hat{y}_k - y_k)^2}
+$$
 
 This is the **root mean squared error (RMSE)** (sometimes just MSE, the mean
 squared error, without the root). RMSE is practical because, like a standard
@@ -170,7 +200,9 @@ With more parameters the sum-based matrices grow, so we move to **matrix/vector
 notation**. In general we measure several independent variables — e.g. temperature
 $T$, concentration $C$, and even a transformation like $T^2$. A model such as
 
-$$\hat{y} = a_1 T + a_2 C + a_3 T^2 + \dots$$
+$$
+\hat{y} = a_1 T + a_2 C + a_3 T^2 + \dots
+$$
 
 is still **linear in the parameters**, so linear regression still applies (a
 **model linear in parameters**). But carrying sums of $T$, $C$, $T^2$, $T\cdot y$,
@@ -191,10 +223,15 @@ $y$ is assumed to be a single measured quantity, so it stays a **vector**.
 
 For $x = (x_1, \dots, x_N)^T$ and the all-ones vector $\mathbf{1}$:
 
-$$x^T x = x_1^2 + x_2^2 + \dots + x_N^2 = \sum_{k=1}^{N} x_k^2$$
-$$\mathbf{1}^T x = x^T \mathbf{1} = \sum_{k=1}^{N} x_k, \qquad
+$$
+x^T x = x_1^2 + x_2^2 + \dots + x_N^2 = \sum_{k=1}^{N} x_k^2
+$$
+
+$$
+\mathbf{1}^T x = x^T \mathbf{1} = \sum_{k=1}^{N} x_k, \qquad
   \mathbf{1}^T y = \sum_{k=1}^{N} y_k, \qquad
-  x^T y = \sum_{k=1}^{N} x_k y_k$$
+  x^T y = \sum_{k=1}^{N} x_k y_k
+$$
 
 Note matrix multiplication does not commute, $A B \ne B A$, but for vectors
 $a^T b = b^T a$.
@@ -208,14 +245,18 @@ $\sum y_k x_k \to y^T x$, $\sum x_k \to \mathbf{1}^T x$, $\sum y_k \to
 The model in matrix form uses the regressor matrix $X$ ($N \times P$) and the
 parameter vector $p$ ($P \times 1$):
 
-$$\hat{y} = X p$$
+$$
+\hat{y} = X p
+$$
 
 so $\hat{y}$ is $N \times 1$ — one prediction per experiment, the same size as the
 measured data. Pose finding $p$ as a least-squares problem, writing the sum of
 squared differences in vector form (transpose-times-itself, as $x^T x = \sum
 x_k^2$):
 
-$$\min_{p}\; \frac{1}{2}\,(y - \hat{y})^T (y - \hat{y})$$
+$$
+\min_{p}\; \frac{1}{2}\,(y - \hat{y})^T (y - \hat{y})
+$$
 
 **Next time** we substitute $\hat{y} = X p$ and derive the solution, which will
 have the form $p = (\text{matrix})^{-1}(\text{matrix})\,(\text{vector})$ — the

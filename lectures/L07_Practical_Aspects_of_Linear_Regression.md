@@ -26,7 +26,9 @@ bottom, and so on — including **nonlinear transformations**: products, the
 distillate-to-feed ratio $D/F$, or $e^{T}$ (Arrhenius law). A simpler version is a
 **polynomial** in one variable:
 
-$$\hat{y} = p_0 + p_1 x + p_2 x^2 + p_3 x^3 + \dots$$
+$$
+\hat{y} = p_0 + p_1 x + p_2 x^2 + p_3 x^3 + \dots
+$$
 
 (Two variables would add cross terms.) The question is how to **select** reasonable
 terms.
@@ -36,7 +38,9 @@ terms.
 Building on last time's correlation concept: is "correlated" the same as
 "dependent"? No — it is a **one-sided implication** (slide):
 
-$$\text{correlation} \;\Longleftarrow\; \text{dependence (causality)}$$
+$$
+\text{correlation} \;\Longleftarrow\; \text{dependence (causality)}
+$$
 
 If variables are **dependent**, that **implies** correlation (we should see it in
 the correlation coefficient). But **correlation does not imply dependence** —
@@ -58,7 +62,9 @@ $x_1 = k\,x_2$ (two nearby distillation trays are strongly correlated, or the
 experiment was run by always increasing temperature and pressure together).
 Substituting:
 
-$$\hat{y} = p_1 k\, x_2 + p_2 x_2 = (p_1 k + p_2)\, x_2$$
+$$
+\hat{y} = p_1 k\, x_2 + p_2 x_2 = (p_1 k + p_2)\, x_2
+$$
 
 Only **one** effective parameter exists. If, say, $k = 1$ and the true value of the
 bracket is $3$, then any $p_1, p_2$ with $p_1 + p_2 = 3$ is a valid regression
@@ -121,7 +127,9 @@ Do not rely on a single number; check several for each candidate model.
 
 ### Root mean squared error (RMSE)
 
-$$\text{RMSE} = \sqrt{\frac{1}{N}\sum_{k=1}^{N}\big(y_k - \hat{y}_k\big)^2}$$
+$$
+\text{RMSE} = \sqrt{\frac{1}{N}\sum_{k=1}^{N}\big(y_k - \hat{y}_k\big)^2}
+$$
 
 (sometimes RMSPE, root mean squared **prediction** error). It lives in the units
 of the data — "our model is off by 0.01 bar."
@@ -130,7 +138,9 @@ of the data — "our model is off by 0.01 bar."
 
 Compares the model against simply fitting a **constant** (the mean of the data):
 
-$$R^2 = 1 - \frac{\sum_{k=1}^{N}(y_k - \hat{y}_k)^2}{\sum_{k=1}^{N}(y_k - \bar{y})^2}$$
+$$
+R^2 = 1 - \frac{\sum_{k=1}^{N}(y_k - \hat{y}_k)^2}{\sum_{k=1}^{N}(y_k - \bar{y})^2}
+$$
 
 The denominator's constant fit is the average $\bar{y}$. When the model's residual
 sum (numerator) is small relative to the constant-fit sum (denominator),
@@ -158,22 +168,28 @@ without that parameter with the same probability level.
 
 Build the **parameter covariance matrix** analogously to the data covariance:
 
-$$V_P = E[P P^T], \qquad
+$$
+V_P = E[P P^T], \qquad
 V_P = \begin{pmatrix} \sigma_{p_1}^2 & \sigma_{p_1 p_2} & \cdots \\
                       \sigma_{p_1 p_2} & \sigma_{p_2}^2 & \\
-                      \vdots & & \ddots \end{pmatrix}$$
+                      \vdots & & \ddots \end{pmatrix}
+$$
 
 ($P$ is $n_p \times 1$, so $P P^T$ is the $n_p \times n_p$ matrix.) Substituting
 $P = (X^T X)^{-1} X^T y$ and its transpose $P^T = y^T X (X^T X)^{-1}$ (using
 symmetry of $X^T X$):
 
-$$V_P = E\!\left[(X^T X)^{-1} X^T y\, y^T X (X^T X)^{-1}\right]$$
+$$
+V_P = E\!\left[(X^T X)^{-1} X^T y\, y^T X (X^T X)^{-1}\right]
+$$
 
 Assume **independent, constant measurement noise**, so $E[y y^T] = V_y =
 \sigma_y^2 I$. Pulling out $\sigma_y^2$, the inner $X^T X$ cancels with one
 $(X^T X)^{-1}$ (an $A^{-1} A$ pair):
 
-$$V_P = \sigma_y^2\, (X^T X)^{-1}$$
+$$
+V_P = \sigma_y^2\, (X^T X)^{-1}
+$$
 
 **Interpretation:** parameter uncertainty grows with the noise $\sigma_y^2$, and —
 because of the inverse — **shrinks as more measurements** make $X^T X$ grow (just
@@ -187,8 +203,10 @@ Treating $P$ as a random vector, $P \sim N(\hat{P}, V_P)$, the multivariate
 Gaussian PDF (the matrix generalization of the scalar
 $\frac{1}{\sqrt{2\pi}\,\sigma}e^{-(x-\bar{x})^2/2\sigma^2}$) is:
 
-$$\text{pdf}(p) = \frac{1}{(\sqrt{2\pi})^{n_p}\,\lvert V_P^{1/2}\rvert}\,
-  e^{-\frac{1}{2}(p - \hat{P})^T V_P^{-1}(p - \hat{P})}$$
+$$
+\text{pdf}(p) = \frac{1}{(\sqrt{2\pi})^{n_p}\,\lvert V_P^{1/2}\rvert}\,
+  e^{-\frac{1}{2}(p - \hat{P})^T V_P^{-1}(p - \hat{P})}
+$$
 
 Here $2\pi$ carries an exponent (normalization in several variables) and the scalar
 $\sigma$ becomes a **matrix square root** combined with a **determinant** to give a
@@ -203,8 +221,13 @@ much larger than that of $p_2$** — the data/model determined $p_2$ more accura
 As in the scalar case, the quadratic form follows a **chi-square** distribution
 with $n_p$ degrees of freedom, giving the **confidence region** (slide):
 
-$$(p - \hat{P})^T V_P^{-1}(p - \hat{P}) \sim \chi^2_{n_p}$$
-$$(p - \hat{P})^T V_P^{-1}(p - \hat{P}) \le \big(\chi^2_{n_p,\alpha}\big)^{-1}$$
+$$
+(p - \hat{P})^T V_P^{-1}(p - \hat{P}) \sim \chi^2_{n_p}
+$$
+
+$$
+(p - \hat{P})^T V_P^{-1}(p - \hat{P}) \le \big(\chi^2_{n_p,\alpha}\big)^{-1}
+$$
 
 This is the matrix analogue of a circle $p_1^2 + p_2^2 = r^2$ generalized to an
 ellipse $\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1$: the semi-axis lengths come from
@@ -224,11 +247,15 @@ black-and-white face images (Steven Tyler, George Bush, Robbie Williams, …), e
 pixel valued in $[0, 1]$ (0 = black, 1 = white). With ~10,000 pixels per image, the
 data matrix is
 
-$$X \in \mathbb{R}^{100 \times 10000}$$
+$$
+X \in \mathbb{R}^{100 \times 10000}
+$$
 
 — only **100 observations** but **10,000 variables**. A pixel-wise prediction model
 
-$$\hat{y} = p_1 x_1 + p_2 x_2 + \dots + p_{10000}\, x_{10000}$$
+$$
+\hat{y} = p_1 x_1 + p_2 x_2 + \dots + p_{10000}\, x_{10000}
+$$
 
 would need 10,000 parameters, but you cannot learn 10,000 parameters from 100 data
 points (as fitting a line needs at least two points, 10,000 parameters need at
@@ -239,7 +266,9 @@ most-probable combinations** of pixels — here **36 "eigenface" components**
 $\tilde{x}_1, \dots, \tilde{x}_{36}$ (e.g. the first captures the common background
 color). The reduced model then needs only **36 parameters**:
 
-$$\hat{y} = p_1 \tilde{x}_1 + \dots + p_{36}\,\tilde{x}_{36}$$
+$$
+\hat{y} = p_1 \tilde{x}_1 + \dots + p_{36}\,\tilde{x}_{36}
+$$
 
 Reconstructing the images from these components gives recognizable approximations —
 enough, for instance, to tell two people apart — **without** fitting 10,000

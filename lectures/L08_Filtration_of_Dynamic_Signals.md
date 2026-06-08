@@ -55,7 +55,9 @@ Plotting is impractical for 10,000 signals, so detect automatically:
     our assumptions about the signal. Compute the mean and standard deviation and
     use the band (slide):
 
-    $$[\,\bar{y} - 3\sigma_y,\; \bar{y} + 3\sigma_y\,]$$
+$$
+[\,\bar{y} - 3\sigma_y,\; \bar{y} + 3\sigma_y\,]
+$$
 
   Good practice: after removing an outlier, **recompute** the mean and standard
   deviation; if they do not change much, the removed point was genuinely an outlier
@@ -80,8 +82,10 @@ Using the **covariance matrix** (as for the regression parameters), a point's
 normalized deviation follows a chi-square distribution, giving a **confidence
 ellipse**. The test criterion (slide):
 
-$$(x - \bar{x})^T V^{-1} (x - \bar{x}) \le \chi^2_{N,\alpha},
-  \qquad V = \frac{1}{N-1} X^T X$$
+$$
+(x - \bar{x})^T V^{-1} (x - \bar{x}) \le \chi^2_{N,\alpha},
+  \qquad V = \frac{1}{N-1} X^T X
+$$
 
 Here $x$ is the vector of temperature and pressure for a data point. If the
 inequality holds, the point lies **inside the ellipse** — consistent with the
@@ -119,7 +123,9 @@ immediately (a single sample might be just an impulse we do not want to follow) 
 it should respond smoothly, like a **step response**. This is a first-order system
 with **gain 1** (slide):
 
-$$G(s) = \frac{1}{T s + 1}$$
+$$
+G(s) = \frac{1}{T s + 1}
+$$
 
 The gain is 1 because in the long run, if the signal is constant, the filter must
 return that same signal (0 → 0, sustained 1 → 1). There is **one parameter**, the
@@ -147,21 +153,27 @@ preferred for skewed data like salaries, where many earn the minimum.)
 For an $m$-day moving average, the output $y_k$ at the current time $k$ averages
 $m$ values. Including the current value (slide):
 
-$$y_k = \frac{1}{m}\sum_{i=0}^{m-1} u_{k-i}$$
+$$
+y_k = \frac{1}{m}\sum_{i=0}^{m-1} u_{k-i}
+$$
 
 Excluding the current value gives a **prediction** (using only past values, before
 today's number is known):
 
-$$y_k = \frac{1}{m}\sum_{i=1}^{m} u_{k-i}$$
+$$
+y_k = \frac{1}{m}\sum_{i=1}^{m} u_{k-i}
+$$
 
 (Care with the index count: summing $m+1$ values but dividing by $m$ would not be
 an average; hence the limits above.)
 
 Generalize the equal weights $\tfrac{1}{m}$ to arbitrary weights $b_i$:
 
-$$y_k = \sum_{i=1}^{m} \frac{1}{m}\, u_{k-i}
+$$
+y_k = \sum_{i=1}^{m} \frac{1}{m}\, u_{k-i}
   \qquad\longrightarrow\qquad
-  y_k = \sum_{i=1}^{m} b_i\, u_{k-i}$$
+  y_k = \sum_{i=1}^{m} b_i\, u_{k-i}
+$$
 
 - **Moving-average filter:** all weights equal, $b_1 = b_2 = \dots = b_m$, with
   $\sum_{i=1}^{m} b_i = 1$. (For $m = 3$: $b_1 + b_2 + b_3 = 1$ with all equal
@@ -175,7 +187,9 @@ $$y_k = \sum_{i=1}^{m} \frac{1}{m}\, u_{k-i}
 
 The model
 
-$$y_k = \sum_{i=1}^{m} b_i\, u_{k-i}$$
+$$
+y_k = \sum_{i=1}^{m} b_i\, u_{k-i}
+$$
 
 is called a **Finite Impulse Response (FIR)** filter.
 
@@ -184,20 +198,26 @@ is called a **Finite Impulse Response (FIR)** filter.
 Using the backward-shift operator $z^{-i}$ (so $u_{k-i} \leftrightarrow z^{-i}$;
 note $u_k$ corresponds to $z^0 = 1$, not shifted):
 
-$$Y(z^{-1})\,z^{0} = \left(\sum_{i=1}^{m} b_i\, z^{-i}\right) U(z^{-1})$$
+$$
+Y(z^{-1})\,z^{0} = \left(\sum_{i=1}^{m} b_i\, z^{-i}\right) U(z^{-1})
+$$
 
 Dividing the left and right sides by $z^0$ gives the transfer function (numerator
 the weighted shifts, denominator 1):
 
-$$G(z^{-1}) = \frac{Y(z^{-1})}{U(z^{-1})} = \frac{\sum_{i=1}^{m} b_i\, z^{-i}}{z^{0}}
-  = \sum_{i=1}^{m} b_i\, z^{-i}$$
+$$
+G(z^{-1}) = \frac{Y(z^{-1})}{U(z^{-1})} = \frac{\sum_{i=1}^{m} b_i\, z^{-i}}{z^{0}}
+  = \sum_{i=1}^{m} b_i\, z^{-i}
+$$
 
 ### Gain
 
 The gain is found by substituting $z = 1$ (the discrete-time equivalent of $s = 0$
 in continuous time, via $z = e^{T s}$):
 
-$$\text{gain} = \sum_{i=1}^{m} b_i$$
+$$
+\text{gain} = \sum_{i=1}^{m} b_i
+$$
 
 Because the moving-average and weighted-moving-average filters impose
 $\sum b_i = 1$, their **gain is 1** — exactly the gain of a good low-pass filter.

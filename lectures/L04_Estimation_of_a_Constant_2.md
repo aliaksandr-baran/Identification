@@ -24,8 +24,10 @@ Because all data $y_k$ come from the same process (the same two parameters), the
 
 We maximize the joint likelihood over $\bar{y}$ and $\sigma$:
 
-$$\max_{\bar{y},\,\sigma}\;\prod_{k=1}^{N}
-  \frac{1}{\sigma\sqrt{2\pi}}\, e^{-\frac{(y_k-\bar{y})^2}{2\sigma^2}}$$
+$$
+\max_{\bar{y},\,\sigma}\;\prod_{k=1}^{N}
+  \frac{1}{\sigma\sqrt{2\pi}}\, e^{-\frac{(y_k-\bar{y})^2}{2\sigma^2}}
+$$
 
 Differentiating a **product** (product rule, with $N-1$ undifferentiated terms) is
 unpleasant. The trick: take the **logarithm**, which turns a product into a sum,
@@ -33,9 +35,11 @@ because $\ln(a\cdot b) = \ln a + \ln b$. The natural logarithm is convenient sin
 $\ln(e^x) = x$, so the exponential disappears. Applying $\ln$ turns the product
 $\prod$ into a sum $\sum$:
 
-$$\max_{\bar{y},\,\sigma}\;\sum_{k=1}^{N}
+$$
+\max_{\bar{y},\,\sigma}\;\sum_{k=1}^{N}
   \left[\ln\!\frac{1}{\sigma\sqrt{2\pi}}
-        - \frac{(y_k-\bar{y})^2}{2\sigma^2}\right]$$
+        - \frac{(y_k-\bar{y})^2}{2\sigma^2}\right]
+$$
 
 **Does the log change the location of the optimum?** No — applying a **monotonic
 (increasing)** function preserves which value is larger, so the extrema stay at the
@@ -48,9 +52,11 @@ this has nothing to do with monotonicity. Rewriting $\frac{1}{\sigma\sqrt{2\pi}}
 = (\sigma\sqrt{2\pi})^{-1}$, the inner $\ln$ contributes $-\ln(\sigma\sqrt{2\pi})$,
 and after the overall minus we get $+\ln(\sigma\sqrt{2\pi})$:
 
-$$\min_{\bar{y},\,\sigma}\;\sum_{k=1}^{N}
+$$
+\min_{\bar{y},\,\sigma}\;\sum_{k=1}^{N}
   \left[\ln\!\big(\sigma\sqrt{2\pi}\big)
-        + \frac{(y_k-\bar{y})^2}{2\sigma^2}\right]$$
+        + \frac{(y_k-\bar{y})^2}{2\sigma^2}\right]
+$$
 
 This already contains the familiar **sum of squares** $\sum (y_k - \bar{y})^2$
 from the optimization-based (least-squares) approach.
@@ -61,9 +67,11 @@ Call the objective $F$. Take $\dfrac{\partial F}{\partial \bar{y}} = 0$. The fir
 term does not involve $\bar{y}$, so (same as last lecture, with constant
 $\tfrac{1}{2\sigma^2}$ that cancels against the zero right-hand side):
 
-$$0 = \sum_{k=1}^{N} (y_k - \bar{y})
+$$
+0 = \sum_{k=1}^{N} (y_k - \bar{y})
   \quad\Longrightarrow\quad
-  \hat{y} = \frac{1}{N}\sum_{k=1}^{N} y_k$$
+  \hat{y} = \frac{1}{N}\sum_{k=1}^{N} y_k
+$$
 
 So the **arithmetic mean is also the maximum-likelihood (statistically most
 probable) estimate**, not just the least-squares optimum — which is why the
@@ -74,24 +82,30 @@ function $L$ is called the *likelihood* function.
 Now take $\dfrac{\partial F}{\partial \sigma} = 0$. Split the log of the product
 $\ln(\sigma\sqrt{2\pi}) = \ln\sqrt{2\pi} + \ln\sigma$, so
 
-$$F = \sum_{k=1}^{N}\Big[\ln\sqrt{2\pi} + \ln\sigma
-      + \tfrac{1}{2}(y_k-\bar{y})^2\,\sigma^{-2}\Big]$$
+$$
+F = \sum_{k=1}^{N}\Big[\ln\sqrt{2\pi} + \ln\sigma
+      + \tfrac{1}{2}(y_k-\bar{y})^2\,\sigma^{-2}\Big]
+$$
 
 The derivative of a sum is the sum of derivatives: the constant $\ln\sqrt{2\pi}$
 gives 0, $\ln\sigma$ gives $\tfrac{1}{\sigma}$, and the last term gives
 $-\dfrac{(y_k-\bar{y})^2}{\sigma^3}$:
 
-$$\frac{\partial F}{\partial \sigma}
+$$
+\frac{\partial F}{\partial \sigma}
   = \sum_{k=1}^{N}\left[\frac{1}{\sigma}
-      - \frac{(y_k-\bar{y})^2}{\sigma^{3}}\right] = 0$$
+      - \frac{(y_k-\bar{y})^2}{\sigma^{3}}\right] = 0
+$$
 
 Multiply through by $\sigma^3$. The term $\sum_{k=1}^{N}\sigma^2 = N\sigma^2$
 (summing a $k$-independent term $N$ times), while the sum of squares must stay
 inside the sum (it depends on $k$):
 
-$$N\sigma^2 = \sum_{k=1}^{N}(y_k-\bar{y})^2
+$$
+N\sigma^2 = \sum_{k=1}^{N}(y_k-\bar{y})^2
   \quad\Longrightarrow\quad
-  \sigma^2 = \frac{1}{N}\sum_{k=1}^{N}(y_k-\bar{y})^2$$
+  \sigma^2 = \frac{1}{N}\sum_{k=1}^{N}(y_k-\bar{y})^2
+$$
 
 equivalently $\sigma = \sqrt{\dfrac{1}{N}\sum_{k=1}^{N}(y_k-\bar{y})^2}$ (Slovak:
 *rozptyl* = variance). This is essentially the **recycled definition of the
@@ -105,7 +119,9 @@ of freedom** by estimating the mean from the same data (using the arithmetic
 average). So out of $N$ data points, one is already gone, and the proper estimate
 divides by $N-1$:
 
-$$\sigma^2 = \frac{1}{N-1}\sum_{k=1}^{N}(y_k-\bar{y})^2$$
+$$
+\sigma^2 = \frac{1}{N-1}\sum_{k=1}^{N}(y_k-\bar{y})^2
+$$
 
 Dividing by $N-1$ instead of $N$ makes the number slightly **bigger**, so as not
 to **underestimate** the noise (the "standardized error" you may recall from high
@@ -123,9 +139,11 @@ so it splits over sums and pulls out constants. The true mean of a constant is t
 constant itself, $E[\bar{y}] = \bar{y}$, and each measurement has $E[y_k] =
 \bar{y}$:
 
-$$E[e] = E[\bar{y} - \hat{y}]
+$$
+E[e] = E[\bar{y} - \hat{y}]
   = \bar{y} - \frac{1}{N}\sum_{k=1}^{N} E[y_k]
-  = \bar{y} - \frac{1}{N}\,N\,\bar{y} = 0$$
+  = \bar{y} - \frac{1}{N}\,N\,\bar{y} = 0
+$$
 
 So as the number of measurements increases, the **estimation error converges to
 zero** and the estimate converges to the true value. This property is named: the
@@ -138,8 +156,10 @@ offset).
 
 Next, the **variance of the estimation error**:
 
-$$\operatorname{var}(e) = E\!\left[(\bar{y} - \hat{y})^2\right]
-  = E\!\left[\Big(\bar{y} - \tfrac{1}{N}\textstyle\sum_{k=1}^{N} y_k\Big)^2\right]$$
+$$
+\mathrm{var}(e) = E\!\left[(\bar{y} - \hat{y})^2\right]
+  = E\!\left[\Big(\bar{y} - \tfrac{1}{N}\textstyle\sum_{k=1}^{N} y_k\Big)^2\right]
+$$
 
 Factor $\tfrac{1}{N}$ out of the square: using $\bar{y} = \tfrac{N}{N}\bar{y}$,
 write $\bar{y} - \tfrac{1}{N}\sum y_k = \tfrac{1}{N}\sum_{k=1}^{N}(\bar{y}-y_k)$,
@@ -150,22 +170,28 @@ general $(a+b)^2 \ne a^2 + b^2$ because of the **cross terms** (e.g. $y_1 y_2$).
 But here we take the **expectation** (average), and we invoke an **independence
 assumption** (★): the expected product of any two distinct measurements is zero,
 
-$$E[y_i\,y_j] = 0 \quad (i \ne j),$$
+$$
+E[y_i\,y_j] = 0 \quad (i \ne j),
+$$
 
 which holds when the **samples / noise are independent** — the noise now does not
 influence the noise later (and vice versa), a reasonable assumption (to be
 justified in a later lecture). With independence, the cross terms vanish, so the
 square of the sum equals the sum of the squares inside the expectation:
 
-$$\operatorname{var}(e)
+$$
+\mathrm{var}(e)
   = \frac{1}{N^2}\sum_{k=1}^{N} E\!\left[(\bar{y}-y_k)^2\right]
   = \frac{1}{N^2}\,N\,\sigma^2
-  = \frac{\sigma^2}{N}$$
+  = \frac{\sigma^2}{N}
+$$
 
 because $\sum_{k=1}^{N} E[(\bar{y}-y_k)^2] = \sum \sigma^2 = N\sigma^2$ (the
 variance of the measurement noise). So:
 
-$$\sigma_e^2 = \frac{\sigma^2}{N}, \qquad \sigma_e = \frac{\sigma}{\sqrt{N}}$$
+$$
+\sigma_e^2 = \frac{\sigma^2}{N}, \qquad \sigma_e = \frac{\sigma}{\sqrt{N}}
+$$
 
 **Interpretation — consistency.** $\sigma$ is how noisy the sensor is; $\sigma_e$
 is how far off the estimate of the constant is. The **more samples we take, the
@@ -191,7 +217,9 @@ negative), so the distribution is one-sided. This is the **chi-square**
 distribution (Slovak: *chí kvadrát*). It has a parameter: summing $n$ squared
 normal variables,
 
-$$\sum_{i=1}^{n} X_i^2 \sim \chi^2 \text{ with } n \text{ degrees of freedom},$$
+$$
+\sum_{i=1}^{n} X_i^2 \sim \chi^2 \text{ with } n \text{ degrees of freedom},
+$$
 
 where $n$ counts how many normal variables were squared and summed. This will be
 useful later when estimating several parameters (not just one constant).
@@ -202,24 +230,32 @@ Normalize the error so it has zero mean and unit standard deviation, then square
 it — a single squared normal value has a chi-square distribution with **1** degree
 of freedom:
 
-$$\left(\frac{\bar{y} - \hat{y}}{\sigma_e}\right)^2 \sim \chi^2_{1}$$
+$$
+\left(\frac{\bar{y} - \hat{y}}{\sigma_e}\right)^2 \sim \chi^2_{1}
+$$
 
 Using the **cumulative distribution function** of the chi-square distribution we
 can build a **confidence interval**, exactly as in the statistics introduction.
 For an $\alpha$ confidence level, let the **quantile** (inverse CDF) be denoted
 $\chi^2_{\alpha}$ (a number obtained from one MATLAB command). Then
 
-$$\left(\frac{\bar{y} - \hat{y}}{\sigma_e}\right)^2 \le \chi^2_{\alpha}$$
+$$
+\left(\frac{\bar{y} - \hat{y}}{\sigma_e}\right)^2 \le \chi^2_{\alpha}
+$$
 
 Taking the square root of the inequality (as $x^2 \le 4 \Rightarrow |x| \le 2$):
 
-$$-\sqrt{\chi^2_{\alpha}} \;\le\; \frac{\bar{y} - \hat{y}}{\sigma_e}
-  \;\le\; \sqrt{\chi^2_{\alpha}}$$
+$$
+-\sqrt{\chi^2_{\alpha}} \;\le\; \frac{\bar{y} - \hat{y}}{\sigma_e}
+  \;\le\; \sqrt{\chi^2_{\alpha}}
+$$
 
 and rearranging gives the interval for the true constant $\bar{y}$:
 
-$$\hat{y} - \sigma_e\sqrt{\chi^2_{\alpha}} \;\le\; \bar{y}
-  \;\le\; \hat{y} + \sigma_e\sqrt{\chi^2_{\alpha}}$$
+$$
+\hat{y} - \sigma_e\sqrt{\chi^2_{\alpha}} \;\le\; \bar{y}
+  \;\le\; \hat{y} + \sigma_e\sqrt{\chi^2_{\alpha}}
+$$
 
 Every quantity on the left and right is computable **from data**: $\hat{y}$ is the
 arithmetic average, $\sigma_e$ is the estimated standard deviation of the error

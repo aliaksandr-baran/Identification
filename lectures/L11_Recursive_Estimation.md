@@ -19,7 +19,9 @@ that predicts the historical data. Deployed in industry, the model should predic
 future outputs for whatever inputs, so the **prediction error** should be
 approximately zero:
 
-$$e \approx 0$$
+$$
+e \approx 0
+$$
 
 (the difference between the system's measured output $y_k^{\text{meas}}$ and the
 model's prediction $\hat{y}_k$). **Recursive estimation** addresses the case when
@@ -40,7 +42,9 @@ The bias becomes a function of time. Comparing the previous prediction
 $\hat{y}_{k-1} = a x_{k-1} + b_{k-1}$ with the actual measurement $y_{k-1}$, update
 the bias by the prediction error:
 
-$$b_k = b_{k-1} + \big(y_{k-1} - \hat{y}_{k-1}\big)$$
+$$
+b_k = b_{k-1} + \big(y_{k-1} - \hat{y}_{k-1}\big)
+$$
 
 This shifts the line to the new operating point.
 
@@ -49,7 +53,9 @@ This shifts the line to the new operating point.
 Reacting to a single measurement is **myopic** (one noisy point swings the bias).
 Add **filtering** with a parameter $\delta \in [0, 1]$ acting as a **trust gain**:
 
-$$b_k = \delta\, b_{k-1} + (1 - \delta)\,(\text{prediction-error term})$$
+$$
+b_k = \delta\, b_{k-1} + (1 - \delta)\,(\text{prediction-error term})
+$$
 
 <!-- the exact combination was stated loosely; delta weights the old bias against the new error-based correction -->
 
@@ -61,7 +67,9 @@ $$b_k = \delta\, b_{k-1} + (1 - \delta)\,(\text{prediction-error term})$$
 This $\delta$ is like the gain of a **P controller**, where the control action
 changes by gain × control error (slide):
 
-$$u_k = K\, e_k = K\,(w_k - y_k)$$
+$$
+u_k = K\, e_k = K\,(w_k - y_k)
+$$
 
 Here, instead, the **estimate** changes by gain × **prediction error**.
 
@@ -71,9 +79,11 @@ Now the case where the **dependencies** themselves must change. Take the simples
 linear-regression setup ($b = 0$, scalar $a$), $y_k = a x_k$. The least-squares
 estimate from $N$ measurements and from $N-1$ measurements (slide):
 
-$$a_N = \frac{\sum_{k=1}^{N} y_k x_k}{\sum_{k=1}^{N} x_k^2},
+$$
+a_N = \frac{\sum_{k=1}^{N} y_k x_k}{\sum_{k=1}^{N} x_k^2},
   \qquad
-  a_{N-1} = \frac{\sum_{k=1}^{N-1} y_k x_k}{\sum_{k=1}^{N-1} x_k^2}$$
+  a_{N-1} = \frac{\sum_{k=1}^{N-1} y_k x_k}{\sum_{k=1}^{N-1} x_k^2}
+$$
 
 Taking all $N$ (e.g. a thousand or a million) historical values each time is
 impractical (large matrix inversions in the multidimensional case), and there is a
@@ -85,18 +95,23 @@ Split off the last term in the numerator and denominator,
 $\sum_{k=1}^{N} = \sum_{k=1}^{N-1} + (\text{term } N)$, and substitute
 $\sum_{k=1}^{N-1} y_k x_k = a_{N-1}\sum_{k=1}^{N-1} x_k^2$:
 
-$$a_N = \frac{a_{N-1}\sum_{k=1}^{N-1} x_k^2 + y_N x_N}{\sum_{k=1}^{N} x_k^2}$$
+$$
+a_N = \frac{a_{N-1}\sum_{k=1}^{N-1} x_k^2 + y_N x_N}{\sum_{k=1}^{N} x_k^2}
+$$
 
 To recover $a_{N-1}$ times the **full** sum, **add and subtract** $a_{N-1} x_N^2$
 ("fake it till you make it"):
 
-$$a_N = \frac{a_{N-1}\sum_{k=1}^{N} x_k^2 + y_N x_N - a_{N-1} x_N^2}
-             {\sum_{k=1}^{N} x_k^2}$$
+$$
+a_N = \frac{a_{N-1}\sum_{k=1}^{N} x_k^2 + y_N x_N - a_{N-1} x_N^2}
+             {\sum_{k=1}^{N} x_k^2}
+$$
 
 Separating $a_{N-1}$ gives the **recursive update**:
 
-$$\boxed{\,a_N = a_{N-1} + \frac{x_N}{\sum_{k=1}^{N} x_k^2}\,
-  \big(y_N - a_{N-1} x_N\big)\,}$$
+$$
+a_N = a_{N-1} + \frac{x_N}{\sum_{k=1}^{N} x_k^2}\,\big(y_N - a_{N-1} x_N\big)
+$$
 
 The structure mirrors the bias update and the controller:
 
@@ -126,11 +141,15 @@ In general the prediction model is $y = X p$, with the regressor (row) vector
 $\phi_N$ for sample $N$ giving $y_N = \phi_N^T p$. The same line of reasoning yields
 the vector recursion (slide):
 
-$$p_N = p_{N-1} + P_N^{-1}\,\phi_N\,\big(y_N - \phi_N^T p_{N-1}\big)$$
+$$
+p_N = p_{N-1} + P_N^{-1}\,\phi_N\,\big(y_N - \phi_N^T p_{N-1}\big)
+$$
 
 with the **covariance** matrix accumulating as
 
-$$P_N = P_{N-1} + \phi_N\,\phi_N^T \quad\longrightarrow\ \text{covariance}$$
+$$
+P_N = P_{N-1} + \phi_N\,\phi_N^T \quad\longrightarrow\ \text{covariance}
+$$
 
 (equivalently the gain is $(X^T X)^{-1} x_N$ in the earlier notation). The
 ingredients are again the same:
@@ -149,11 +168,15 @@ confidence band around it.)
 With more time, this is one step away from a **state estimator**. For a
 state-space model
 
-$$x_k = A x_{k-1} + B u_{k-1}$$
+$$
+x_k = A x_{k-1} + B u_{k-1}
+$$
 
 a corrected estimate of the form
 
-$$\hat{x}_k = A \hat{x}_{k-1} + B u_{k-1} + K\big(y_k - C \hat{x}_k\big)$$
+$$
+\hat{x}_k = A \hat{x}_{k-1} + B u_{k-1} + K\big(y_k - C \hat{x}_k\big)
+$$
 
 with a wisely chosen gain $K$ (the **Kalman gain**) becomes the **Kalman filter** —
 which estimates the **states** of a dynamic system rather than the parameters. The

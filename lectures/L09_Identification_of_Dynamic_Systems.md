@@ -32,13 +32,17 @@ Represent a dynamic system as an input–output box. It is better to work in the
 **Laplace domain**, where (for linear dynamics representable by a transfer
 function):
 
-$$Y(s) = G(s)\,U(s)$$
+$$
+Y(s) = G(s)\,U(s)
+$$
 
 What is $G(s)$ in the **time domain**, i.e. $g(t)$? Take the simplest example
 (slide):
 
-$$G(s) = \frac{1}{s + \frac{1}{T}} \quad\xrightarrow{\;\mathcal{L}^{-1}\;}\quad
-  g(t) = e^{-t/T}$$
+$$
+G(s) = \frac{1}{s + \frac{1}{T}} \quad\xrightarrow{\;\mathcal{L}^{-1}\;}\quad
+  g(t) = e^{-t/T}
+$$
 
 (using $\dfrac{1}{s+a} \to e^{-at}$). This $g(t)$ starts at a constant at $t = 0$
 and decays to zero as $t \to \infty$ (for $T > 0$).
@@ -56,9 +60,11 @@ disappears over time.
 To compute the time-domain output we use the **convolution** (the innocent-looking
 "$*$"):
 
-$$y(t) = g(t) * u(t)
+$$
+y(t) = g(t) * u(t)
   = \int_0^t g(\tau)\,u(t-\tau)\,d\tau
-  = \int_0^t g(t-\tau)\,u(\tau)\,d\tau$$
+  = \int_0^t g(t-\tau)\,u(\tau)\,d\tau
+$$
 
 (two equivalent forms). An integral is an infinitesimal **sum over past time**. A
 dynamic system keeps **memory** of past inputs: the output at the current time
@@ -74,7 +80,9 @@ applications (convolutional neural networks, image processing, control/modelling
 The FIR model is the discrete counterpart, where the integral becomes a finite sum
 and the coefficients $b_i$ are **samples of $g$** at discrete points:
 
-$$y_k = \sum_{i=1}^{m} b_i\, u_{k-i}$$
+$$
+y_k = \sum_{i=1}^{m} b_i\, u_{k-i}
+$$
 
 The output at time $k$ is the accumulated influence of the past inputs.
 
@@ -83,19 +91,40 @@ The output at time $k$ is the accumulated influence of the past inputs.
 Assume a **step response** with a step at time 0 (no assumption that the gain is
 1). Write the prediction equations. Before the step all inputs are zero, so:
 
-$$y_0 = 0 = b_1\cdot 0 + b_2\cdot 0 + \dots + b_m\cdot 0$$
-$$y_1 = b_1 u_0 + b_2 u_{-1} + \dots + b_m u_{1-m} \quad(\text{past terms } = 0)$$
-$$y_2 = b_1 u_1 + b_2 u_0 + \dots + b_m u_{2-m}$$
-$$\vdots$$
-$$y_m = b_1 u_{m-1} + b_2 u_{m-2} + \dots + b_m u_0$$
-$$\vdots$$
-$$y_N = b_1 u_{N-1} + b_2 u_{N-2} + \dots + b_m u_{N-m}$$
+$$
+y_0 = 0 = b_1\cdot 0 + b_2\cdot 0 + \dots + b_m\cdot 0
+$$
+
+$$
+y_1 = b_1 u_0 + b_2 u_{-1} + \dots + b_m u_{1-m} \quad(\text{past terms } = 0)
+$$
+
+$$
+y_2 = b_1 u_1 + b_2 u_0 + \dots + b_m u_{2-m}
+$$
+
+$$
+\vdots
+$$
+
+$$
+y_m = b_1 u_{m-1} + b_2 u_{m-2} + \dots + b_m u_0
+$$
+
+$$
+\vdots
+$$
+
+$$
+y_N = b_1 u_{N-1} + b_2 u_{N-2} + \dots + b_m u_{N-m}
+$$
 
 Since these are **linear in the parameters** $b_i$ (the $y$'s and $u$'s are known
 data), we build a matrix equation exactly as in linear regression, $y = X p$ with
 $p = (b_1, \dots, b_m)^T$:
 
-$$\begin{pmatrix} y_1 \\ y_2 \\ \vdots \\ y_m \\ \vdots \\ y_N \end{pmatrix}
+$$
+\begin{pmatrix} y_1 \\ y_2 \\ \vdots \\ y_m \\ \vdots \\ y_N \end{pmatrix}
 =
 \begin{pmatrix}
 u_0 & 0 & 0 & \cdots & 0 \\
@@ -105,7 +134,8 @@ u_{m-1} & u_{m-2} & \cdots & & u_0 \\
 \vdots & & & & \\
 u_{N-1} & u_{N-2} & \cdots & & u_{N-m}
 \end{pmatrix}
-\begin{pmatrix} b_1 \\ b_2 \\ \vdots \\ b_m \end{pmatrix}$$
+\begin{pmatrix} b_1 \\ b_2 \\ \vdots \\ b_m \end{pmatrix}
+$$
 
 Build each row by taking the input "strip" $\dots, 0, 0, u_0, u_1, u_2, \dots$,
 flipping it, and pasting it at the right place. The matrix first becomes **square**
@@ -126,8 +156,10 @@ To reach the model types familiar from automatic control, recall the FIR transfe
 function was just a **numerator** with $1$ in the denominator. Extend the
 denominator (slide) — the **AutoRegressive model with eXogenous input (ARX)**:
 
-$$G(z^{-1}) = \frac{\sum_{i=1}^{m} b_i\, z^{-i}}{1 + \sum_{i=1}^{n} a_i\, z^{-i}}\;
-  z^{-n_k}$$
+$$
+G(z^{-1}) = \frac{\sum_{i=1}^{m} b_i\, z^{-i}}{1 + \sum_{i=1}^{n} a_i\, z^{-i}}\;
+  z^{-n_k}
+$$
 
 The optional $z^{-n_k}$ term represents an **input (time) delay** of $n_k$ steps —
 the same idea as the unit-delay block $z^{-1}$ in Simulink, which makes the current
@@ -138,13 +170,17 @@ in the discussion. (The sum limits $n, m, n_k$ follow MATLAB's notation.)
 
 Clearing the fraction:
 
-$$Y(z^{-1})\Big(1 + \sum_{i=1}^{n} a_i z^{-i}\Big)
-  = U(z^{-1})\sum_{i=1}^{m} b_i z^{-i}$$
+$$
+Y(z^{-1})\Big(1 + \sum_{i=1}^{n} a_i z^{-i}\Big)
+  = U(z^{-1})\sum_{i=1}^{m} b_i z^{-i}
+$$
 
 The backward shift $z^{-i} \leftrightarrow y_{k-i}$ (and $z^0 = 1$ is no shift,
 $y_k$) gives directly:
 
-$$y_k = -\sum_{i=1}^{n} a_i\, y_{k-i} + \sum_{i=1}^{m} b_i\, u_{k-i}$$
+$$
+y_k = -\sum_{i=1}^{n} a_i\, y_{k-i} + \sum_{i=1}^{m} b_i\, u_{k-i}
+$$
 
 This is an **$m/n$-order ARX model**.
 
@@ -164,16 +200,33 @@ This is an **$m/n$-order ARX model**.
 As with FIR, assume step-response data with steady state (all zero) before the
 step. Break the sums into components. The prediction equations:
 
-$$y_1 = -a_1 y_0 - a_2 y_{-1} - \dots - a_n y_{1-n}
-        + b_1 u_0 + b_2 u_{-1} + \dots + b_m u_{1-m}$$
-$$y_2 = -a_1 y_1 - a_2 y_0 - \dots - a_n y_{2-n}
-        + b_1 u_1 + b_2 u_0 + \dots + b_m u_{2-m}$$
-$$\vdots$$
-$$y_m = -a_1 y_{m-1} - a_2 y_{m-2} - \dots - a_n y_{m-n}
-        + b_1 u_{m-1} + b_2 u_{m-2} + \dots + b_m u_0$$
-$$\vdots$$
-$$y_N = -a_1 y_{N-1} - a_2 y_{N-2} - \dots
-        + \dots + b_m u_{N-m}$$
+$$
+y_1 = -a_1 y_0 - a_2 y_{-1} - \dots - a_n y_{1-n}
+        + b_1 u_0 + b_2 u_{-1} + \dots + b_m u_{1-m}
+$$
+
+$$
+y_2 = -a_1 y_1 - a_2 y_0 - \dots - a_n y_{2-n}
+        + b_1 u_1 + b_2 u_0 + \dots + b_m u_{2-m}
+$$
+
+$$
+\vdots
+$$
+
+$$
+y_m = -a_1 y_{m-1} - a_2 y_{m-2} - \dots - a_n y_{m-n}
+        + b_1 u_{m-1} + b_2 u_{m-2} + \dots + b_m u_0
+$$
+
+$$
+\vdots
+$$
+
+$$
+y_N = -a_1 y_{N-1} - a_2 y_{N-2} - \dots
+        + \dots + b_m u_{N-m}
+$$
 
 (all terms with negative-or-zero "past" indices are zero by the steady-state
 assumption).
@@ -192,7 +245,8 @@ sets, e.g. $p = (a_1, \dots, a_n,\, b_1, \dots, b_m)^T$. The regressor matrix is
 **wide**, with $n + m$ columns, its left block built from shifted **outputs**
 $-y_{k-i}$ and its right block from shifted **inputs** $u_{k-i}$:
 
-$$\begin{pmatrix} y_1 \\ y_2 \\ \vdots \\ y_m \\ \vdots \\ y_N \end{pmatrix}
+$$
+\begin{pmatrix} y_1 \\ y_2 \\ \vdots \\ y_m \\ \vdots \\ y_N \end{pmatrix}
 =
 \begin{pmatrix}
 -y_0 & 0 & \cdots & u_0 & 0 & \cdots \\
@@ -200,7 +254,8 @@ $$\begin{pmatrix} y_1 \\ y_2 \\ \vdots \\ y_m \\ \vdots \\ y_N \end{pmatrix}
 \vdots & & & \vdots & & \\
 -y_{N-1} & -y_{N-2} & \cdots & u_{N-1} & u_{N-2} & \cdots & u_{N-m}
 \end{pmatrix}
-\begin{pmatrix} a_1 \\ \vdots \\ a_n \\ b_1 \\ \vdots \\ b_m \end{pmatrix}$$
+\begin{pmatrix} a_1 \\ \vdots \\ a_n \\ b_1 \\ \vdots \\ b_m \end{pmatrix}
+$$
 
 We know the $y$'s and $u$'s and solve for the $a$'s and $b$'s (the poles and
 zeros), again by least squares / pseudoinverse — exactly as in linear regression.

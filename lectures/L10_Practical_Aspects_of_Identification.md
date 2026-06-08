@@ -18,9 +18,11 @@ model extends ARX: the **ARMAX** model — **AutoRegressive Moving Average with
 eXogenous input** — combining ARX with a **moving average (MA)** term. Its
 prediction equation:
 
-$$y_k = -\sum_{i=1}^{n} a_i\, y_{k-i}
+$$
+y_k = -\sum_{i=1}^{n} a_i\, y_{k-i}
         + \sum_{i=1}^{m} b_i\, u_{k-i}
-        + \sum_{i=1}^{n_c} c_i\, e_{k-i}$$
+        + \sum_{i=1}^{n_c} c_i\, e_{k-i}
+$$
 
 <!-- the upper limit of the MA (c) sum is not explicitly stated in the lecture -->
 
@@ -118,7 +120,9 @@ Example with a **P controller** $G_C = K_R$ and plant $G_S = \dfrac{K}{Ts+1}$
 (where a **negative** time constant $T$, i.e. a positive pole, makes it unstable).
 The closed-loop characteristic equation (after a common denominator):
 
-$$T s + 1 + K_R K = 0$$
+$$
+T s + 1 + K_R K = 0
+$$
 
 Choosing the right $K_R$ (here likely negative if $K$ is positive) can push the
 unstable pole to be **stable**. The closed-loop relation (reference → response) has
@@ -165,7 +169,9 @@ the **autocorrelation** (Slovak intuition: "Inception"). Repeating for shifts of
 2, 3, … samples gives the **autocorrelation function (ACF)**, available in MATLAB /
 Python. Conceptually (centered products, normalized):
 
-$$\text{ACF}(i) \;\sim\; \frac{1}{N}\sum_{k}(y_k - \bar{y})(y_{k-i} - \bar{y})$$
+$$
+\text{ACF}(i) \;\sim\; \frac{1}{N}\sum_{k}(y_k - \bar{y})(y_{k-i} - \bar{y})
+$$
 
 <!-- the exact normalization was not fully written on the board; the function normalizes so ACF(0)=1 -->
 

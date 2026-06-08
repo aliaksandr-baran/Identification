@@ -109,7 +109,9 @@ outcomes) this is easy to interpret, but for a continuous quantity like the
 a normal distribution, written — note the whole world, even the Germans, write a
 capital **N**, not G:
 
-$$X \sim N(\mu, \sigma^2)$$
+$$
+X \sim N(\mu, \sigma^2)
+$$
 
 with two parameters $\mu$ and $\sigma$ (slide: written with $\bar{x}$;
 $X \sim N(\bar{x}, \sigma^2)$ with parameters $\bar{x}$ and $\sigma^2$).
@@ -128,7 +130,9 @@ The parameters and their Slovak names (confirmed from the slide):
 The PDF of the normal distribution (the function from the German banknote;
 confirmed from the slide):
 
-$$f(x) = \frac{1}{\sigma\sqrt{2\pi}}\, e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$
+$$
+f(x) = \frac{1}{\sigma\sqrt{2\pi}}\, e^{-\frac{(x-\mu)^2}{2\sigma^2}}
+$$
 
 This PDF, $f(x)$, tells us **how proportionally likely** the outcome $x$ is.
 
@@ -138,7 +142,9 @@ To understand this scary-looking function, the lecturer looks at the simpler cas
 $\mu = 0$ and $\sigma = 1$ — the **standard normal / standard Gaussian
 distribution**. Then:
 
-$$f(x) = \frac{1}{\sqrt{2\pi}}\, e^{-\frac{1}{2}x^2}$$
+$$
+f(x) = \frac{1}{\sqrt{2\pi}}\, e^{-\frac{1}{2}x^2}
+$$
 
 He sketches it in three steps (the slide shows the same three-panel build-up):
 
@@ -164,13 +170,17 @@ For a continuous PDF the analogue of "going through all possibilities and
 summing" is **integration**. So a valid PDF must integrate to one. Testing the
 standard-normal exponential alone in MATLAB:
 
-$$\int_{-\infty}^{\infty} e^{-\frac{1}{2}x^2}\, dx = \sqrt{2\pi} \approx 2.5066$$
+$$
+\int_{-\infty}^{\infty} e^{-\frac{1}{2}x^2}\, dx = \sqrt{2\pi} \approx 2.5066
+$$
 
 That is exactly why the normalizing constant $\tfrac{1}{\sqrt{2\pi}}$ (more
 generally $\tfrac{1}{\sigma\sqrt{2\pi}}$) is there — so the **total probability is
 1**. The slide states the general properties:
 
-$$f(x) \ge 0, \qquad F(\infty) = \int_{-\infty}^{\infty} f(x)\, dx = 1$$
+$$
+f(x) \ge 0, \qquad F(\infty) = \int_{-\infty}^{\infty} f(x)\, dx = 1
+$$
 
 The interpretation: *some* event must happen — the temperature in the room is
 either $-\infty$, some finite number, or $+\infty$ — so the total probability is 1.
@@ -185,7 +195,9 @@ relative probability; the CDF written $F$ (capital) gives the **probability
 itself**. The CDF is defined as the probability that $X$ is less than or equal to
 some value $z$ (a particular value of $x$):
 
-$$F(z) = \Pr(X \le z) = \int_{-\infty}^{z} f(x)\, dx$$
+$$
+F(z) = \Pr(X \le z) = \int_{-\infty}^{z} f(x)\, dx
+$$
 
 We must start the integral at one end, so we begin at $-\infty$. This computes the
 **area under the PDF curve** up to $z$ — the same principle as summing
@@ -209,7 +221,9 @@ Sketching the CDF point by point (slide shows the integral form):
 What we usually want is the probability that $X$ falls in an **interval**, which
 is the difference of two CDF values, equivalently a definite integral (slide):
 
-$$P(a \le x \le b) = \int_{a}^{b} f(x)\, dx$$
+$$
+P(a \le x \le b) = \int_{a}^{b} f(x)\, dx
+$$
 
 To do this in practice you **collect data**, estimate the two parameters (mean and
 variance/standard deviation) of the curve, and then ask such questions. Example
@@ -232,9 +246,17 @@ Measuring distance from the mean in **standard deviations** gives the famous
 interval probabilities (computed in MATLAB by integrating the standard-normal PDF
 between the limits; confirmed on the slide):
 
-$$P(\mu - \sigma \le x \le \mu + \sigma) = 68.27\%$$
-$$P(\mu - 2\sigma \le x \le \mu + 2\sigma) = 95.45\%$$
-$$P(\mu - 3\sigma \le x \le \mu + 3\sigma) = 99.73\%$$
+$$
+P(\mu - \sigma \le x \le \mu + \sigma) = 68.27\%
+$$
+
+$$
+P(\mu - 2\sigma \le x \le \mu + 2\sigma) = 95.45\%
+$$
+
+$$
+P(\mu - 3\sigma \le x \le \mu + 3\sigma) = 99.73\%
+$$
 
 So $\pm 1\sigma \approx 68\%$, $\pm 2\sigma \approx 95\%$, $\pm 3\sigma \approx
 99.7\%$. The lecturer notes this is **general** — once you know the mean and
@@ -252,7 +274,9 @@ value):
 **Sample mean** — the arithmetic average (sum the values, divide by the number of
 trials), same idea as the $\tfrac{1}{6}$ dice probability:
 
-$$\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i$$
+$$
+\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i
+$$
 
 **Variance / standard deviation** — described verbally as **the average of how
 much the samples differ from the mean**, and because that difference can be
@@ -260,7 +284,10 @@ positive or negative, the **square** is used (the lecturer does not write the
 explicit denominator; the slide leaves it as "$\sigma^2 = \dots$"):
 
 <!-- unclear: lecturer states "average of the squared differences from the mean" but does not specify the denominator (n vs n-1) -->
-$$\sigma^2 \approx \frac{1}{n}\sum_{i=1}^{n} (x_i - \bar{x})^2$$
+
+$$
+\sigma^2 \approx \frac{1}{n}\sum_{i=1}^{n} (x_i - \bar{x})^2
+$$
 
 The standard deviation is then the average distance of the data (heights,
 temperatures, …) from their mean value.
