@@ -35,7 +35,8 @@ identification → recursive estimation**.
 
 ## Exam preparation
 
-Three study files for the exam (oral theory + practical MATLAB):
+Three study files for the exam (oral theory + practical MATLAB). All formulas are
+typeset in LaTeX so they render on GitHub and Obsidian:
 
 - [`Exam_Prep_1_Practical_MATLAB.md`](Exam_Prep_1_Practical_MATLAB.md) — reusable
   MATLAB templates for the full identification workflow (load → clean →
@@ -86,10 +87,18 @@ clean_vtt.py     strips VTT timestamps/tags and de-duplicates rolling captions
 
 ## Math rendering
 
-Display equations use `$$ … $$` on their own lines and avoid GitHub's
-disallowed macros (e.g. `\mathrm` instead of `\operatorname`), so they render on
-both **GitHub** and **Obsidian**. The notes use Obsidian-compatible YAML
-frontmatter.
+All Markdown here — the lecture notes **and** the three exam-prep guides —
+typesets math with `$ … $` (inline) and `$$ … $$` (display) so it renders on both
+**GitHub** and **Obsidian**. Two rules keep the display blocks GitHub-safe:
+
+- **Avoid GitHub's disallowed macros** (e.g. `\mathrm` instead of `\operatorname`).
+- **Never leave a bare `=` (or `-`) alone on a line inside a `$$` block.** GitHub
+  parses block structure *before* math, so a lone `=` is read as a setext `<h1>`
+  underline and the whole equation renders as a giant heading (with the LaTeX
+  shown literally). Keep the `=` on the same line as its left-hand side, or use
+  `&=` inside `\begin{aligned} … \end{aligned}`.
+
+The lecture notes also use Obsidian-compatible YAML frontmatter.
 
 ## Attribution
 
