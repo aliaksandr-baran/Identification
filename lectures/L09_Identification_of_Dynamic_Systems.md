@@ -124,8 +124,7 @@ data), we build a matrix equation exactly as in linear regression, $y = X p$ wit
 $p = (b_1, \dots, b_m)^T$:
 
 $$
-\begin{pmatrix} y_1 \\ y_2 \\ \vdots \\ y_m \\ \vdots \\ y_N \end{pmatrix}
-=
+\begin{pmatrix} y_1 \\ y_2 \\ \vdots \\ y_m \\ \vdots \\ y_N \end{pmatrix} =
 \begin{pmatrix}
 u_0 & 0 & 0 & \cdots & 0 \\
 u_1 & u_0 & 0 & \cdots & 0 \\
@@ -246,8 +245,7 @@ sets, e.g. $p = (a_1, \dots, a_n,\, b_1, \dots, b_m)^T$. The regressor matrix is
 $-y_{k-i}$ and its right block from shifted **inputs** $u_{k-i}$:
 
 $$
-\begin{pmatrix} y_1 \\ y_2 \\ \vdots \\ y_m \\ \vdots \\ y_N \end{pmatrix}
-=
+\begin{pmatrix} y_1 \\ y_2 \\ \vdots \\ y_m \\ \vdots \\ y_N \end{pmatrix} =
 \begin{pmatrix}
 -y_0 & 0 & \cdots & u_0 & 0 & \cdots \\
 -y_1 & -y_0 & \cdots & u_1 & u_0 & \cdots \\
