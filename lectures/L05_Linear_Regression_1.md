@@ -118,7 +118,8 @@ $$
 \sum_{k=1}^{N} x_k & N \\
 \sum_{k=1}^{N} x_k^2 & \sum_{k=1}^{N} x_k
 \end{pmatrix}
-\begin{pmatrix} a \\ b \end{pmatrix} =
+\begin{pmatrix} a \\ b \end{pmatrix}
+=
 \begin{pmatrix}
 \sum_{k=1}^{N} y_k \\
 \sum_{k=1}^{N} y_k x_k
