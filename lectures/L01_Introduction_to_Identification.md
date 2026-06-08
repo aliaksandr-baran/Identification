@@ -59,7 +59,7 @@ and asked the servant what he wanted as a reward. The servant said: put **one**
 grain of rice on the first square of the chessboard, **two** grains on the next
 square, then keep **doubling**. On the third square there are four grains, on
 the fourth square eight grains, and it keeps doubling. By the time you reach the
-end — $2^{64}$ grains of rice — you have about the same number of grains as the
+end (about $2^{64}$ grains of rice), you have about the same number of grains as the
 number of atoms in the universe, or even more. So it is quite scary.
 
 ### The logarithmic axis
@@ -132,7 +132,7 @@ Around April 2021, Facebook blocked the web page of a French city
 Statistically, the combination of letters in the name mostly resembles a swear
 word. Facebook apparently has a policy that swear words should not be names of
 websites / Facebook pages / users, and runs an algorithm comparing swear words
-against names. With statistical evidence — more than **95% confidence** — the
+against names. With statistical evidence (more than **95% confidence**), the
 algorithm claimed the website was violating the rules.
 
 ### Google Maps eco-friendly routing

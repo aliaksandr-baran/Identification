@@ -95,7 +95,7 @@ $$N\sigma^2 = \sum_{k=1}^{N}(y_k-\bar{y})^2
 
 equivalently $\sigma = \sqrt{\dfrac{1}{N}\sum_{k=1}^{N}(y_k-\bar{y})^2}$ (Slovak:
 *rozptyl* = variance). This is essentially the **recycled definition of the
-variance** — the average distance of the data from the mean — which gives the
+variance** (the average distance of the data from the mean), which gives the
 Gaussian bell its width.
 
 ### Bessel's correction

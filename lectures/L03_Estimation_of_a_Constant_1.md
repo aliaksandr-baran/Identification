@@ -23,7 +23,7 @@ data (1,000 samples), what mean and standard deviation generated it?
 
 ## The problem: estimation of a constant
 
-This is the **estimation of a constant** — essentially finding the **mean** — and
+This is the **estimation of a constant** (essentially finding the **mean**), and
 also studying the **properties** of that mean as we take **more and more
 samples**.
 
@@ -192,7 +192,7 @@ to itself $N$ times — "one banana, second banana, … until $N$ bananas"):
 $$\sum_{i=1}^{N} y_i - N\hat{y} = 0 \quad\Longrightarrow\quad
   \hat{y} = \frac{1}{N}\sum_{i=1}^{N} y_i$$
 
-So the **arithmetic mean** is the answer. Moreover, the minimized quantity
+So the **arithmetic mean** is the answer. The minimized quantity
 $\sum (y_i - \hat{y})^2$ is essentially the (scaled) **variance** — so minimizing
 least squares is **minimizing the variance of the estimate**. That is why the
 arithmetic mean behaves so well: it minimizes the error/variance itself.
@@ -231,5 +231,5 @@ all samples — with respect to the two parameters:
 
 $$\max_{\bar{y},\,\sigma} \;\prod_{k=1}^{N} L(\bar{y}, \sigma \mid y_k)$$
 
-This "beast" — a product of several Gaussian fractions/exponentials — will be
+This "beast" (a product of several Gaussian fractions/exponentials) will be
 **solved analytically next time** (cliffhanger).

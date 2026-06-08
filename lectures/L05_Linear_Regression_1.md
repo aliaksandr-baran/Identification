@@ -182,7 +182,7 @@ Arrange the data so each **column** is one independent variable (or its
 transformation) and each **row** is one experiment. With $N$ experiments and $P$
 variables, the **regressor matrix** $X$ has dimensions $N \times P$ (the lecturer
 deliberately writes columns first because, in practice, there may be ~200
-variables but ~16,000 measurements — e.g. 15-minute data over a year — so the
+variables but ~16,000 measurements (e.g. 15-minute data over a year), so the
 columns, representing each physical variable, matter more). Lowercase $x$ denotes
 a single data **vector** (one column); capital $X$ is the full matrix. The output
 $y$ is assumed to be a single measured quantity, so it stays a **vector**.
