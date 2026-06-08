@@ -178,22 +178,27 @@ causal filter would add.
    **always stable**, needs **high order**.
 4. **ARX** model: `y_k = −Σ a_i y_{k−i} + Σ b_i u_{k−i}` — uses past outputs
    (feedback); **few parameters**, can be unstable.
-5. Both are **linear in the parameters** → least squares with a regressor of
-   lagged samples (`X\y`).
-6. Transfer function in `z⁻¹` (unit delay). FIR vs ARX: ARX usually lower RMSE
+5. **ARMAX** = ARX + a moving-average term on past **errors** → captures
+   disturbances and self-corrects online.
+6. All are **linear in the parameters** (ARMAX needs nonlinear optimization for the
+   `c` part) → least squares with a regressor of lagged samples (`X\y`).
+7. Transfer function in `z⁻¹` (unit delay). FIR vs ARX: ARX usually lower RMSE
    with far fewer parameters.
 
 **Formulas**
 ```
-convolution: y(t) = ∫₀ᵗ g(τ) u(t−τ) dτ
-FIR:  y_k = Σ_{i=1}^{m} b_i u_{k−i}
-ARX:  y_k = −Σ_{i=1}^{n} a_i y_{k−i} + Σ_{i=1}^{m} b_i u_{k−i}
+convolution: y(t) = ∫₀ᵗ g(τ) u(t−τ) dτ      g(t) = impulse response
+FIR:   y_k = Σ_{i=1}^{m} b_i u_{k−i}
+ARX:   y_k = −Σ a_i y_{k−i} + Σ b_i u_{k−i}
+ARMAX: y_k = −Σ a_i y_{k−i} + Σ b_i u_{k−i} + Σ c_i e_{k−i}   (e = past errors)
 G(z⁻¹) = (Σ b_i z⁻ⁱ) / (1 + Σ a_i z⁻ⁱ)     z⁻¹ = unit delay
 ```
 
 **Follow-ups**
 - *FIR vs ARX?* → FIR all-zero/stable/high-order; ARX poles+zeros/few-params/can be
   unstable.
+- *What does ARMAX add?* → an MA term on past errors that absorbs **disturbances**
+  (leaking valve, feed change), freeing `a,b` to learn the true dynamics.
 - *Why does FIR need order ~50?* → no feedback; memory window `τ = m·Ts` must span
   the settling time (m=50, Ts=0.02 → only 1 s), and higher orders barely help.
 - *What is z⁻¹?* → one-sample delay: `z⁻¹ y_k = y_{k−1}`.
@@ -216,6 +221,8 @@ lagged inputs and outputs) changes."
 4. **Forgetting factor λ**: `1` = standard RLS (≡ batch LS); `<1` discounts old
    data → **tracks time-varying parameters** (tracking vs noise trade-off).
 5. RLS is a special case of the **Kalman filter**.
+6. Simplest version = the **bias update**: when only a constant offset drifts, shift
+   `b` by the prediction error (optionally filtered by a trust gain δ).
 
 **Formulas**
 ```
@@ -223,12 +230,15 @@ e_k = y_k − φₖᵀ θ_{k−1}                      (innovation / prediction 
 K_k = P_{k−1} φₖ / (λ + φₖᵀ P_{k−1} φₖ)      (gain)
 θ_k = θ_{k−1} + K_k e_k                       (update estimate)
 P_k = (1/λ)(P_{k−1} − K_k φₖᵀ P_{k−1})        (update covariance)
+bias update:   b_k = b_{k−1} + (y_{k−1} − ŷ_{k−1})   ; filtered with δ∈[0,1]
+scalar slope:  a_N = a_{N−1} + (x_N/Σx_k²)(y_N − a_{N−1}x_N)
 ```
 
 **Follow-ups**
 - *Why recursive?* → real-time use; time-varying systems; no need to store all data.
 - *What does λ do?* → λ<1 forgets old data to follow drift; smaller = faster but noisier.
 - *Link to batch LS / Kalman?* → λ=1 ⇒ same as batch LS; RLS = Kalman for constant params.
+- *Simplest case?* → bias update — adapt only the offset; same "old + gain × error" shape.
 
 **If stuck:** write the one-line mantra "**old + gain × innovation**" and explain
 each term.
@@ -246,9 +256,14 @@ each term.
 3. **Sampling time** `Ts`: too big → aliasing/miss fast dynamics; too small →
    noisy/stiff.
 4. **Model-order selection** from **ACF/PACF** of the output (PACF → AR order `n`).
-5. **Validation**: training vs testing RMSE; one-step prediction vs free
+5. **Static vs dynamic / linearity check**: step `⅓,⅔,1` → proportional = static
+   gain; same-sign-but-not-proportional = nonlinear-bearable; **sign flip = red
+   alert** (uncontrollable by a linear controller).
+6. **Unstable plant** → identify the **closed loop** (controller + plant in one box,
+   reference → response), then fit ARX.
+7. **Validation**: training vs testing RMSE; one-step prediction vs free
    simulation; residual checks; avoid overfitting.
-6. Real workflow (**Flexy²**, Assignment 2): clean → standardize → split → FIR/ARX
+8. Real workflow (**Flexy²**, Assignment 2): clean → standardize → split → FIR/ARX
    → compare.
 
 **Formulas**
@@ -267,6 +282,10 @@ validate on TESTING data; free simulation is the harder test
   input→output link and bias the regressor → higher RMSE.
 - *One-step-ahead vs simulation?* → OSA uses real past outputs (easier, lower RMSE);
   compare models the *same* way to be fair.
+- *How tell static from dynamic?* → step changes; immediate scaled output = static,
+  no point fitting a dynamic model.
+- *Unstable plant?* → can't run open-loop; identify the closed loop with an existing
+  stabilizing controller.
 
 **If stuck:** describe your Assignment 2 pipeline end-to-end — it touches every
 practical point.

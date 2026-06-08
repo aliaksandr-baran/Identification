@@ -299,6 +299,19 @@ a = theta(1:n);  b = theta(n+1:end);
 yhat = Phi * theta;
 ```
 
+### ARMAX model  `y_k = -Σ a_i y_{k-i} + Σ b_i u_{k-i} + Σ c_i e_{k-i}`
+ARX plus a moving-average term on **past errors** — models disturbances and
+self-corrects online. The `c` part makes it **nonlinear** in the parameters, so
+plain `\` no longer works; use the System Identification Toolbox:
+```matlab
+dataID = iddata(y, u, Ts);               % package output/input
+na = 2; nb = 2; nc = 2; nk = 1;          % AR / X / MA orders + input delay
+sysARMAX = armax(dataID, [na nb nc nk]); % iterative (nonlinear) estimation
+ypred = predict(sysARMAX, dataID, 1);    % 1-step-ahead prediction
+```
+Use ARMAX when ARX residuals are clearly **correlated** (a sign that an unmodelled
+disturbance is leaking into `a, b`).
+
 ### Building transfer functions from the coefficients (Seminars 9–10)
 ```matlab
 % FIR:  a = 1,  b = [0, b1..bm]
@@ -483,6 +496,18 @@ end
   convergence. Small `P` = strong trust in the initial `theta`.
 - RLS is a special case of the **Kalman filter** (the gain `K` is the Kalman gain).
 - Plot `Theta` rows vs `k` to show the estimates converging to their true values.
+
+### Bias update — the one-line recursive scheme (L11)
+When only a constant **offset** has drifted (slope still good), adapt just `b`:
+```matlab
+delta = 0.95;                              % trust gain in [0,1]; ->1 = slow/cautious
+for k = 2:N
+    yhat = a*x(k-1) + b;                   % prediction with current bias
+    b    = delta*b + (1-delta)*(b + (y(k-1) - yhat));   % filtered bias update
+end
+```
+Same "estimate ← estimate + gain × prediction-error" shape as a P controller;
+`delta→1` ignores noisy single points, `delta=0` follows the latest measurement.
 
 ---
 

@@ -78,8 +78,9 @@ backing them up.
 2. **Impulse response** & **convolution** `y(t)=∫g(τ)u(t−τ)dτ`.
 3. Discrete models: **FIR** `y_k=Σ b_i u_{k−i}` (all-zero, always stable, high order).
 4. **ARX** `y_k=−Σ a_i y_{k−i}+Σ b_i u_{k−i}` (poles+zeros, few parameters).
-5. Both are **linear in parameters** → solved by least squares (regressor of lags).
-6. **Transfer function** in `z⁻¹` (unit delay); FIR vs ARX comparison; stability.
+5. **ARMAX** = ARX + a moving-average term on past **errors** (models disturbances).
+6. Both ARX/FIR are **linear in parameters** → least squares (regressor of lags).
+7. **Transfer function** in `z⁻¹` (unit delay); FIR vs ARX comparison; stability.
 
 ### Topic 7 — Recursive Identification  *(→ Part R)*
 1. Batch vs **recursive**: update the estimate per new sample (online / real-time).
@@ -88,6 +89,8 @@ backing them up.
 4. **Forgetting factor λ**: `1` = standard RLS (= batch LS); `<1` tracks
    time-varying parameters (tracking vs noise trade-off).
 5. RLS is a special case of the **Kalman filter**.
+6. Simplest special case: the **bias update** (adapt only the offset `b` by the
+   prediction error, optionally filtered by a trust gain δ).
 
 ### Topic 8 — Practical Aspects of Identification  *(→ Parts G6, H, E)*
 1. **Experiment / input design**: needs **persistent excitation** (rich spectrum).
@@ -326,6 +329,17 @@ ellipses visualizes the covariance structure.
 Plot cumulative/explained variance vs PC index and find the **elbow (knee)** —
 the point of diminishing returns — keep PCs up to there.
 
+### D7. Parameter confidence ellipse and "interval contains zero" (L07)?
+The parameter covariance is `V_p = σ²(XᵀX)⁻¹` (noise variance × inverse
+information). Treating `p ~ N(p̂, V_p)`, the quadratic form
+`(p−p̂)ᵀ V_p⁻¹ (p−p̂)` follows a **chi-square** with `n_p` degrees of freedom, so
+its level set `≤ χ²_{n_p,α}` is the **confidence ellipse** — the multivariate
+generalization of the scalar interval. Semi-axis lengths come from the parameter
+CIs; off-diagonal terms tilt the ellipse. Practical test: if a parameter's
+confidence interval **contains zero** (e.g. `[−1, 2]` at 95%), the model can live
+**without** that parameter — it may be unobservable (collinearity), under-excited,
+or simply not causal. A clean way to prune overfit terms.
+
 ---
 
 ## Part E — Training/testing & model quality
@@ -429,6 +443,19 @@ inefficient substitute for ARX's feedback.
 difference equations into algebraic transfer functions `G(z⁻¹)=Y/U`. `z⁻ⁿᵏ`
 represents a pure input **time delay** of `nk` samples.
 
+### G7b. What is the ARMAX model and when do you need it?
+**Auto-Regressive Moving Average with eXogenous input** — ARX plus a moving-average
+term on the past **prediction errors**:
+`y_k = −Σ a_i·y_{k−i} + Σ b_i·u_{k−i} + Σ c_i·e_{k−i}`.
+The three parts: AR (past outputs, `a`), exogenous input (past inputs, `b`), and
+the new MA part (past errors `e_{k−i}`, weights `c`). Why it helps: plain ARX/FIR
+**ignore disturbances** (a leaking valve, a changed feed quality). The MA term lets
+the `c` coefficients **absorb the systematic disturbance errors**, freeing `a` and
+`b` to learn the *true* plant dynamics. Unlike train-once ARX, ARMAX **corrects
+itself online** (a moving average of recent errors). Cost: usually needs
+**nonlinear optimization** to fit; to predict ahead (future `e_k` unknown) you
+assume `e_k` is zero-mean Gaussian noise and build ±σ disturbance scenarios.
+
 ### G8. One-step-ahead prediction vs simulation?
 - **One-step-ahead (OSA):** predict `y_k` using *measured* past outputs `y_{k−i}`
   (regressor uses real data) — what `Phi*theta` computes.
@@ -489,6 +516,18 @@ This is the bias–variance / tracking–noise trade-off.
 the current model, i.e. the genuinely new information. RLS moves the estimate in
 proportion to it.
 
+### R7. Bias update — the simplest recursive scheme (L11).
+If a deployed model develops an almost **constant systematic error** (e.g. a
+changed feed/supplier, mild nonlinearity) but the **slope is still correct**, you
+adapt only the **offset `b`**, not the verified slopes — industry prefers this.
+Update by the prediction error: `b_k = b_{k−1} + (y_{k−1} − ŷ_{k−1})`. Reacting to
+one point is myopic, so filter it with a trust gain `δ ∈ [0,1]`:
+`b_k = δ·b_{k−1} + (1−δ)·(new bias)`. `δ→1` = distrust measurements (slow drift to
+a new operating point); `δ=0` = follow the latest point fully. Same shape as a P
+controller (`estimate ← estimate + gain × error`); the scalar slope version (RLS
+with `b=0`) is `a_N = a_{N−1} + (x_N / Σx_k²)(y_N − a_{N−1}x_N)`, whose gain shrinks
+automatically as data accumulates — add a **forgetting window** to keep adapting.
+
 ---
 
 ## Part H — Experiment design
@@ -530,6 +569,29 @@ line** (standardization is a purely *linear* `(x−μ)/σ` map). A straight line
 confirms no nonlinear distortion was introduced; numerically, check
 `mean ≈ 0`, `std ≈ 1`.
 
+### H7. Static vs dynamic, and the linearity check (L10)?
+Plan step changes of, say, `⅓, ⅔, 1` and read the **steady-state** outputs:
+- **Proportional** outputs → a **static gain** suffices (no dynamic model needed).
+- **Non-proportional but same-sign** gain → nonlinear but **bearable** (integral
+  control can handle it).
+- **Gain that changes sign** → **red alert**: strongly nonlinear, essentially
+  uncontrollable with a linear controller (even LQR fails).
+- **Immediate scaled step, no transient** → no pole/zero info → use a static model;
+  fitting ARMAX here gives meaningless numbers the test data will expose.
+This is why the deciding step changes must be in the **original experiment design**.
+
+### H8. How do you identify an *unstable* plant (closed-loop ID)?
+You can't run an open-loop experiment on an unstable system, and you need a model
+to design a stabilizing controller — a **chicken-and-egg** problem. If the plant
+already runs in production, a stabilizing controller likely exists. Then put
+**controller + plant in one box** and identify the **closed loop** (reference →
+response), because open-loop steady-state data reveals nothing about poles/delays.
+Example: a P controller `K_R` on `K/(Ts+1)` (positive pole, `T<0`) gives the
+closed-loop characteristic equation `Ts + 1 + K_R·K = 0`; choosing `K_R` stabilizes
+it, and the reference→response relation (two unknowns) is fitted as a discrete
+**ARX** model. A bad experiment can fit a *stable* model to an unstable plant — a
+reason to loop back and redesign.
+
 ---
 
 ## Part I — The two assignments (be ready to discuss yours)
@@ -560,9 +622,12 @@ be standardized. So `u` (fan speed) is the input used to identify the dynamics.
 - PCA = eigenvectors of covariance, ordered by variance.
 - FIR = past **inputs** only, all-zero, high order, always stable.
 - ARX = past inputs **and outputs**, poles+zeros, low order, can be unstable.
+- ARMAX = ARX + MA on past **errors** (`c·e_{k−i}`) → models disturbances, self-corrects.
 - `z⁻¹` = unit delay.
 - PACF → AR order `n`; ACF → MA/memory.
 - PRBS = best persistently-exciting input.
 - Train fits, test judges; gap = overfitting.
 - RLS = "old estimate + gain × innovation"; λ=1 ⇒ batch LS; λ<1 ⇒ tracks drift.
 - RLS gain K = Kalman gain; P = estimate covariance (starts large).
+- Bias update = simplest recursive scheme: shift only the offset by the prediction error.
+- Unstable plant → identify the **closed loop** (controller + plant in one box).
