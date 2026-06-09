@@ -137,7 +137,7 @@ $$
 $$
 
 - PCA: $\mathrm{eig}\big(\mathrm{cov}(X)\big)$ → eigenvectors (directions), eigenvalues (variance).
-- Overfit: $\mathrm{RMSE}_{\text{train}}\downarrow \text{ but } \mathrm{RMSE}_{\text{test}}\uparrow$.
+- Overfit: $\mathrm{RMSE_{\text{train}}}\downarrow \text{ but } \mathrm{RMSE_{\text{test}}}\uparrow$.
 
 **Follow-ups**
 - *Why remove correlated inputs?* → ill-conditioning, unreliable coefficients.

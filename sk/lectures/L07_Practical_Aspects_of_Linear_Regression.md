@@ -259,7 +259,7 @@ treba aspoň 10 000 bodov).
 
 **PCA** vykoná štatistiku na dátach a zostrojí malý počet **nezávislých, najpravdepodobnejších
 kombinácií** pixelov — tu **36 komponentov „eigentváre"**
-$\tilde{x}_1, \dots, \tilde{x}_{36}$ (napr. prvý zachytáva spoločnú farbu pozadia).
+$\tilde x_1, \dots, \tilde x_{36}$ (napr. prvý zachytáva spoločnú farbu pozadia).
 Redukovaný model potom potrebuje iba **36 parametrov**:
 
 $$

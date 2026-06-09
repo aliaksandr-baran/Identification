@@ -32,10 +32,13 @@ jazyka a zdieľané oboma verziami.
 ## Math rendering · Vykresľovanie matematiky
 
 All notes typeset math with `$ … $` (inline) and `$$ … $$` (display) so they render
-on both **GitHub** and **Obsidian**. Two rules keep the display blocks GitHub-safe:
-never leave a bare `=` (or `-`) alone on a line inside a `$$` block (GitHub reads it
-as a setext heading and the equation breaks), and prefer a `$$` display block over a
-long inline `$…$` formula that shares its line with another inline span.
+on both **GitHub** and **Obsidian**. Two rules keep them GitHub-safe: never leave a
+bare `=` (or `-`) alone on a line inside a `$$` block (GitHub reads it as a setext
+heading and the equation breaks); and keep inline subscripts from pairing as emphasis
+— a `_` right after a `}` (e.g. `\mathrm{RMSE}_{\text{test}}`) can open Markdown
+emphasis, so two on one line make GitHub eat the underscores and show raw `$…$`. Write
+the subscript inside the brace (`\mathrm{RMSE_{\text{test}}}`) or drop the brace
+(`\hat y_k`, `\tilde x_1`). The per-language READMEs list both rules in full.
 
 ## Attribution · Pôvod
 
