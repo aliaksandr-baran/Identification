@@ -1,384 +1,366 @@
 ---
 lecture: L01
-title: "Introduction to Identification. Data Visualization."
-course: Identification
+title: "Úvod do identifikácie. Vizualizácia dát."
+course: Identifikácia
 source: "https://www.youtube.com/watch?v=PZz7OA9_4Gw"
 ---
 
-# L01 — Introduction to Identification. Data Visualization.
-
-## About this lecture
-
-The lecturer introduces the subject of **identification** and frames this first
-lecture as a relatively brief, "cartoon" overview — lots of pictures and **no
-mathematical formulas whatsoever**. The goal is to look at how our world works
-at the moment, how it used to work, what changed, and why we should look at the
-subject of system identification. Some of the material was already shown in the
-"modeling in process industry" class, but here it goes a bit deeper.
-
-## The accelerating world
-
-The first message is that our world is really accelerating — everything is
-happening faster and faster. The lecturer illustrates this with a sequence of
-big events in human history and the shrinking gaps between them:
-
-- The **Agricultural Revolution** — when mankind stopped wandering around the
-  Earth and settled down somewhere with a field of crops (vegetables, fruit,
-  and so on).
-- It then took **8,000 years** until the **Industrial Revolution**, where we
-  realized we can divide jobs in society and make some jobs automated or at
-  least mechanized — using a steam engine or other engines to help us.
-- From the Industrial Revolution to the **invention of the light bulb**.
-- Only **120 years** passed between the invention of the light bulb and the
-  **moon landing**.
-- Only **20 years** from the moon landing to the **World Wide Web** (the
-  lecturer first says "90 years" then corrects to about 20).
-- And **9 years** to the **sequencing of the human genome**.
-
-These events are somewhat arbitrary, but they are big events in human history.
-The interesting part is that the gap between them keeps shortening — we are
-speeding up in development. This speed-up in the 20th and 21st century was also
-observed in something called **Moore's law** (Slovak: *Moorov zákon*).
-
-## Moore's law
-
-Mr Moore was an engineer (the lecturer believes at Bell Laboratories in the US).
-He made a **data-based observation**: he took some data, used a time axis, and
-marked several points representing the **number of transistors** on different
-computer processors (nowadays we might say "on chips") — basically how much
-computing power a processor holds. He plotted ("depicted, drew") this data and
-found out that **roughly each 10 years the number of transistors is doubling**.
-
-When something is doubling, that is **exponential growth**.
-
-### The chess-and-rice story (example of exponential growth)
-
-The standard first example of exponential growth: a story about a shah/king in
-Iran or Persia who was playing chess with one of his servants. He lost the game
-and asked the servant what he wanted as a reward. The servant said: put **one**
-grain of rice on the first square of the chessboard, **two** grains on the next
-square, then keep **doubling**. On the third square there are four grains, on
-the fourth square eight grains, and it keeps doubling. By the time you reach the
-end (about $2^{64}$ grains of rice), you have about the same number of grains as the
-number of atoms in the universe, or even more. So it is quite scary.
-
-### The logarithmic axis
-
-On the Moore's-law plot, the y-axis is **not a linear scale** — it is
-**logarithmic**. One step in that direction does not mean adding the same amount
-each time (1, 2, 3, 4, 5, 6); it means adding **powers of 10**. Here one step
-corresponds to increasing the scale by $10^5$, i.e. by 100,000 (for example,
-from 1 to 100,000). Because of this, **if you get a straight line on such a
-plot, that already indicates exponential growth** — which is exactly what Moore
-observed.
-
-With further evolution, Moore's law was actually getting **violated**: we have
-been seeing even more rapid development and even higher numbers of transistors
-on a chip. The graph the lecturer shows is from 2011; it predicts we will reach
-the **singularity** at some point — that in 2023 the computing power of a chip
-will surpass the human brain. Maybe we are somewhere around it.
-
-## The growth of data
-
-The same trend, in slightly different numbers, is happening with the **amount of
-data**. Cheaper, more available, and more reliable sensors give rise to more
-sensing capacity: we can sense more data, store more data, at a much smaller
-price. The problem now is that **we need to make sense of the data** — the world
-is extremely rich with data.
-
-The lecturer stresses that **data by itself does not tell us what happened** —
-it just sits in some database. It is good to plot the data and have at least
-basic statistics for an overview, but **making sense out of data is a much
-harder problem.** The rest of the lecture goes through example datasets.
-
-## Examples of data in the world
-
-### Dog breed prices during COVID
-
-A news item (around 2022) reported that the prices of dog breeds rapidly changed
-during the COVID pandemic in the UK / Great Britain. The reason discussed: the
-**demand rose** — during the pandemic, in some places only people with dogs were
-allowed to go outside, and people stuck at home wanted some company/friends.
-
-### Nitrogen dioxide levels over China
-
-Satellite images show the **nitrogen dioxide (NO₂) levels** over China in
-**January 2020** and again in **February 2020**. In February the levels are much
-lower. The reason: **factories shut down** because of the COVID-19 pandemic.
-The lecturer notes that COVID-19 acts like a great source of data — it was
-effectively a **step change in many inputs in the world** (analogous to a step
-change in some input applied to a device).
-
-### Fossil fuel prices
-
-Around **March 2020** there is a big step change in **fossil fuel prices** —
-oil, naphta/natural gas, even coal. The point: if, back in January 2020, you
-could predict what would happen to oil prices, you could adapt your company's
-strategy (buy more oil, empty reservoirs while the price is down, etc.) and
-make money. Money is a big driver of these problems.
-
-### Kyoto aquarium penguin relationships
-
-A cartoon-like **flow chart of complicated romantic relationships between
-penguins** at the Kyoto aquarium. Data was tracked on how the penguins like each
-other (including possible "cheating" on partners) and then depicted. One possible
-use: the aquarium staff could avoid fights between the penguins by managing
-"love triangles."
-
-### Facebook blocking a French city
-
-Around April 2021, Facebook blocked the web page of a French city
-<!-- unclear: city name, caption reads "Bish"; sounds like the town "Bitche" -->.
-Statistically, the combination of letters in the name mostly resembles a swear
-word. Facebook apparently has a policy that swear words should not be names of
-websites / Facebook pages / users, and runs an algorithm comparing swear words
-against names. With statistical evidence (more than **95% confidence**), the
-algorithm claimed the website was violating the rules.
-
-### Google Maps eco-friendly routing
-
-Google Maps was supposed to offer the most ecological / environmentally friendly
-route for your car. It is unclear whether this fully materialized; it still seems
-to offer mainly the fastest (and lowest-distance) route. A discussed limitation:
-the route choice does not really take into account whether you go up or down, and
-suggesting a route through a traffic jam is not ecological because you end up
-running your engine while stuck.
-
-### Data breach headline / data privacy
-
-A news headline (jokingly: if you listen to Nickelback
-<!-- unclear: caption reads "Nickel Beck" -->, be aware of this threat) points to
-**data privacy**: how do we encrypt and cipher data to make them inexposable to
-third parties. The lecturer notes (without naming countries, to stay politically
-correct) that you may not want to share your data with anybody, yet we are doing
-it quite often.
-
-### Bitcoin price (the lecturer's favourite trend)
-
-A series of newspaper headlines is shown, deliberately out of order at first,
-then chronological: Bitcoin price over \$30,000; could go long-term to \$140,000;
-over \$40,000; in three days the price is down; value below \$30,000; then up 20%
-in seven days. The span of these headlines is just **one month** — so it is hard
-to keep track of from headlines alone. Hence the idea: **plot the data to
-visualize it.**
-
-Walking through the Bitcoin price plot over time:
-
-- The trend starts around **2013**. There was an initial hype, then the price
-  went down (around August 2015 someone who bought near \$1,000 would be sad).
-- But if you just waited two years, even buying at that price would put you about
-  **300% in plus** in four years — investments take some time.
-- Extending the graph (a red line marks where the previous graph ended), we enter
-  a volatile period; the price kept increasing through 2017–2018.
-- If you caught the trend late and bought at about \$12,500, within half a year to
-  a year you would be back to about \$2,500. Should you sell? Probably not,
-  because it would change again.
-- By 2021 (the year the shown headlines came from) it got another big impulse —
-  possibly due to milder regulations and better acceptance with merchants, more
-  public access to the market, people not travelling and having "free money"
-  (stimulus checks) to invest.
-- The lecturer also shows the price on a **logarithmic scale** (similar to the
-  Moore's-law plot). On the log scale you would be tempted to fit a **straight
-  line** and start predicting whether the Bitcoin price in 2025 will be where it
-  is now. Visualizing the data in a different context can reveal at least some
-  information.
-- Later: a steep decline until 2023, then recovery, and a recent jump around the
-  **US elections** and the hype around it. Another big jump is attributed to Elon
-  Musk deciding to invest \$1 billion in Bitcoin
-  <!-- unclear: figure stated as "one billion / 1 billion dollars" -->.
-
-The lecturer states this is **not** to persuade anyone to invest in Bitcoin —
-he personally does not, disliking that it drains resources and (in his view) has
-no value. The point is that **different aspects in the data cause changes of some
-trend at some point**, and it is quite hard to find out what actually caused what
-we see in the data values.
-
-### COVID active cases in Slovakia
-
-Another trend is given as a guessing game with day-number units (e.g. day 1 to
-~33, values around 600–650; then 1 to ~100 days, with the previous trend
-reversed; then peaks over almost a year). It is the **number of active COVID
-cases in Slovakia**. Between March 2020 and 21 January (2021) there was a first
-mild wave, but the **second wave after the summer** (around September 2020) hit
-quite heavily.
-
-### Daily PCR cases and filtering
-
-Related data: the **number of daily PCR cases** (PCR being a method of testing
-for the COVID antigen) versus days since the first case. The lecturer made this
-plot in **MATLAB** from data from the National Center of Health Information.
-
-The raw curve (yellow) shows **sharp spikes / peaks**. The reason: the number of
-new cases was much higher on **Monday**, because many testing places did not work
-on weekends, or people spent time at home with the flu over the weekend and got
-tested on Monday.
-
-A course topic preview: **how to reveal this kind of trend**. The blue curve
-does some sort of **averaging** — similar to the **7-day median** number of
-active cases used during the pandemic (which fed into the "traffic light"
-status). This is nothing else than applied **filtering** (as seen, or to be seen,
-in the "Technical Means of Automation" class). Even the prime minister was using
-the results of this filtering.
-
-### Germany — cases vs deaths (correlation)
-
-COVID-19 data from **Germany** (not Slovakia). The first wave was mild, the second
-much tougher, and it continued. The **top plot** shows the number of cases; the
-**bottom plot** shows the number of deaths (people who passed away).
-
-Observations from the discussion:
-
-- The two signals share the same basic **shape**, especially at the beginning —
-  the two variables (signals) are **correlated**: when one signal increases the
-  other also increases (not necessarily at the same time). Treated as two
-  variables, this can be seen as a **dynamic system / process** where something
-  happening triggered a response. **Correlation and causality are not the same
-  thing**, but the data at least shows a qualitative response.
-- At a later peak (a kind of third wave in 2021) the rise is **not as pronounced
-  in the number of deaths**. Possible explanations: **vaccination** (started
-  around February 2021); a **mutation of the virus** that was not as deadly; and
-  some **built-up resistance** in the population (people could be infected
-  multiple times).
-
-### Survivorship bias — WWII airplanes
-
-A classic picture: in the Second World War, the engineering problem was how to
-make more airplanes come back safely from battle. The graph shows, from a
-collection of returning planes, **where the planes were hit and still returned**.
-
-The paradox: should we reinforce the parts that **are** hit, or the parts that
-are **not** hit? The data says we should reinforce the parts that are **not**
-hit — this is **survivorship bias**. Planes hit in the marked places returned
-home, so those areas can take damage; the planes that did **not** return were hit
-elsewhere (e.g. the engine, the pilot, or a narrow critical part). A naive,
-sentimental reaction would reinforce the visibly-hit spots, but that would not
-help. This is one of the very early **data-based decision-making** problems: how
-to make sense out of data and act accordingly to improve some performance.
-
-### Medical screening data
-
-Beyond a cardiogram, many **screening techniques** in medicine produce this sort
-of data (e.g. being scanned for a tumour, X-rays for broken bones or dental
-problems). The amount of data is growing, but the number of skilled doctors who
-can read it is not growing as much — so we need to do something about it. (The
-lecturer mentions a student looking for a summer internship at Siemens
-Healthineers <!-- unclear: caption reads "seens healthy years" --> working on
-this type of problem.) Steps include first **digitalizing** data that may only
-exist on paper in pen/ink, and then finding trends to reason about what happened,
-the patient's status, the diagnosis, and the treatment.
-
-### Electricity generation vs CO₂ intensity per country
-
-A plot of **electricity generation vs CO₂ intensity per country**. Each point is
-sampled every **one hour**: the amount of electricity generated by the country's
-power plants, and the CO₂ intensity (how much CO₂ is emitted to the atmosphere by
-that production). Countries shown include France, Germany, Poland, Italy, Spain,
-Belgium, Portugal (Slovakia not shown).
-
-Conclusions from the discussion:
-
-- **Poland** is the least efficient (highest CO₂) — it has a lot of coal and many
-  coal power plants. Its electricity generation is also much **narrower** (less
-  flexible).
-- **France** uses a lot of **nuclear** power. It is interesting because **no
-  matter how much power is needed, it emits roughly the same amount of CO₂** —
-  showing the efficiency / environmental friendliness of nuclear power plants.
-  France is also relatively flexible in generation while staying on the
-  environmentally-friendly end.
-- **Germany** shows an interesting trend along an axis with a **negative slope /
-  negative derivative**: when producing a relatively **small** amount of energy
-  the CO₂ emissions are **high**, but when producing a **high** amount of energy
-  the CO₂ emissions are **lower**. This is somewhat paradoxical at first. The
-  explanation: it is the effect of **coal power plants** running even when
-  renewables are not. The high generation comes during the day — peaks of good
-  wind for wind turbines and clear days for solar cells.
-
-## Types of data visualization
-
-The examples lead to different types of data visualization. Starting from
-collected data, even just using different plots can already reveal insights. The
-lecturer highlights four common types.
-
-### Time series
-
-Whatever signal / trend / information you have, plotted against its corresponding
-**time step** on the horizontal axis. This is what was done in "Theory of
-Automatic Control" and throughout this lecture.
-
-- Sometimes there are **no time stamps** (e.g. the electricity plot), so we do
-  not know exactly when each point happened — we only know the **sampling
-  interval** (e.g. the points are one hour apart).
-- When we **do** know the time stamp, we can reason about it. The lecturer gives
-  an example of 15-minute data from a plant where the data points suddenly seemed
-  to **double** (two values for one hour). The cause turned out to be the
-  **daylight-saving time shift** (summer/winter time): at the switch, the times
-  ran 2:00, 2:15, 2:30, 2:45, 3:00, then 2:00 again — a practical challenge you
-  may encounter.
-- With time series it can also be hard to observe **correlations** when there are
-  only a couple of variables.
-
-### Scatter / correlation plots
-
-Here we take two variables and plot one against the other, **losing the sense of
-time** (we no longer know when each point was collected, only that the pair
-occurred together).
-
-- **Positive correlation:** if the variable on the horizontal axis increases, the
-  other variable also increases (moving right, we also move up). You can think of
-  approximating the cloud of points with a line whose slope is positive. One axis
-  appears as a function of the other.
-- **Negative correlation:** the Germany case is an example — generating more power
-  goes with emitting less CO₂.
-- **Centering:** the plot can be drawn so that the origin is moved to the place of
-  the most common value (the **mean**). After centering, positive deviations and
-  negative deviations from the mean are directly visible, and it is easier to see,
-  e.g., that increasing the horizontal value by 2 increases the vertical value by
-  10. This is much harder to read from absolute numbers (what does "600 g CO₂
-  equivalent" mean — is it big or small?). So visualization is not only about
-  *how I plot the graph* but also *how I transform my variables* (we already saw
-  the logarithmic transform with the Bitcoin price).
-
-### Histograms
-
-A histogram represents how **dense** the data is in certain regions — how
-frequently certain values occur. It works like making **bins** ("baskets"): for a
-bin in the middle, count how many points fall between, say, −0.1 and +0.1; the
-count is like dropping a pebble/ball into a column. This directly shows that some
-values are totally unlikely or never observed, while others are more likely. The
-shape may start to look like the famous **bell curve / Gaussian curve**.
-
-In a combined scatter+histogram view, red regions mark a very likely place for
-points to occur, while blue can represent **outliers** or much less likely values
-(e.g. points far from the mean, with negative deviations). A scatter plot can
-show **almost no correlation**: applying the test "if we slightly increase the
-horizontal variable, what happens to the vertical one?" gives no clear answer
-(there are increasing and non-increasing directions). The histograms along each
-axis then show the density of values in each variable separately.
-
-### Parity plots
-
-Parity plots are less commonly seen but useful. A problem with the previous plots
-is that you must choose a relatively **small number of variables** to display
-(two, or at most three dimensions), so you cannot easily visualize many
-variables. One possibility a parity plot offers is to plot the **observed trend
-versus how your model / understanding predicts that trend**.
-
-The specific example: the **brightness of pixels** in two photographs of the same
-object taken about **4 hours apart**, with brightness values between 0 and 0.5
-(white vs black). The two variables share the same unit, but one is the **actual
-observation** and the other is a **prediction** of that variable (or another
-variable we try to correlate with). A histogram-like colouring shows where many
-pixels lie: blue dots are less likely values, red is where many pixels are. Along
-the line $y = x$ we can see the similarity between the two photos: if a pixel has
-brightness 0.1 in one photo and the same situation is captured, that point lies
-near the $y = x$ line. The plot shows the two photos are very similar, differing
-only by some noise or small changes. (Students will do experiments with parity
-plots during the exercises.)
-
-## Closing
-
-The lecturer skips the final slide for the day, invites questions and comments,
-and asks students for their opinion on the lecture and on it being delivered in
-English. He notes that the **YouTube video is post-processed** after the lecture
-with **subtitles**, and that students can even **download the transcript** from
-the lecture to help them.
+# L01 — Úvod do identifikácie. Vizualizácia dát.
+
+## O tejto prednáške
+
+Prednášajúci predstavuje predmet **identifikácia** a rámuje túto prvú
+prednášku ako relatívne stručný, „komiksový" prehľad — veľa obrázkov a **žiadne
+matematické vzorce**. Cieľom je pozrieť sa na to, ako náš svet funguje
+v súčasnosti, ako fungoval predtým, čo sa zmenilo a prečo by sme sa mali venovať
+predmetu identifikácie systémov. Časť materiálu bola už ukázaná v predmete
+„modelovanie v procesnom priemysle", tu však ideme o niečo hlbšie.
+
+## Zrýchľujúci sa svet
+
+Prvou správou je, že náš svet sa skutočne zrýchľuje — všetko sa deje
+rýchlejšie a rýchlejšie. Prednášajúci to ilustruje postupnosťou
+veľkých udalostí v ľudskej histórii a skracujúcimi sa intervalmi medzi nimi:
+
+- **Poľnohospodárska revolúcia** — keď ľudstvo prestalo túlať sa po
+  Zemi a usadilo sa niekde s poľom úrody (zelenina, ovocie a podobne).
+- Potom uplynulo **8 000 rokov** do **priemyselnej revolúcie**, kde sme
+  si uvedomili, že môžeme rozdeliť prácu v spoločnosti a niektoré práce
+  automatizovať alebo aspoň mechanizovať — pomocou parného alebo iných strojov.
+- Od priemyselnej revolúcie k **vynálezu žiarovky**.
+- Medzi vynálezom žiarovky a **pristátím na Mesiaci** uplynulo len **120 rokov**.
+- Od pristátia na Mesiaci k **World Wide Web** len **20 rokov**
+  (prednášajúci najprv povie „90 rokov", potom opraví na asi 20).
+- A **9 rokov** k **sekvenovaniu ľudského genómu**.
+
+Tieto udalosti sú do istej miery ľubovoľné, no sú to veľké udalosti v ľudskej histórii.
+Zaujímavé je, že medzery medzi nimi sa stále skracujú — vývoj sa zrýchľuje.
+Toto zrýchlenie v 20. a 21. storočí bolo pozorované aj v niečom, čo sa
+nazýva **Moorov zákon**.
+
+## Moorov zákon
+
+Pán Moore bol inžinier (prednášajúci sa domnieva, že v Bell Laboratories v USA).
+Urobil **pozorovanie na základe dát**: vzal nejaké dáta, použil časovú os a
+vyznačil niekoľko bodov predstavujúcich **počet tranzistorov** na rôznych
+počítačových procesoroch (dnes by sme povedali „na čipoch") — teda koľko
+výpočtového výkonu procesor obsahuje. Tieto dáta zobrazil a zistil, že
+**zhruba každých 10 rokov sa počet tranzistorov zdvojnásobuje**.
+
+Keď sa niečo zdvojnásobuje, ide o **exponenciálny rast**.
+
+### Príbeh o šachu a ryži (príklad exponenciálneho rastu)
+
+Štandardný prvý príklad exponenciálneho rastu: príbeh o šachovi/kráľovi v
+Iráne alebo Perzii, ktorý hral šach s jedným zo svojich sluhov. Prehrával hru
+a opýtal sa sluhu, čo chce ako odmenu. Sluha povedal: daj **jedno** zrnko ryže
+na prvé políčko šachovnice, **dve** zrnká na ďalšie políčko, a stále
+**zdvojnásobuj**. Na treťom políčku sú štyri zrnká, na štvrtom osem, a stále
+sa to zdvojnásobuje. Keď sa dostanete na koniec (asi $2^{64}$ zrniek ryže),
+máte asi rovnaký počet zrniek, ako je počet atómov vo vesmíre, alebo aj viac.
+Je to teda dosť desivé.
+
+### Logaritmická os
+
+Na Moorovom grafe nie je os y **v lineárnej mierke** — je
+**logaritmická**. Jeden krok v tomto smere neznamená pridávanie rovnakého množstva
+zakaždým (1, 2, 3, 4, 5, 6); znamená pridávanie **mocnín desiatky**. Tu jeden krok
+zodpovedá zväčšeniu mierky o $10^5$, teda o 100 000 (napríklad
+od 1 do 100 000). Preto **ak na takomto grafe dostanete priamku, naznačuje to exponenciálny rast** —
+čo je presne to, čo Moore pozoroval.
+
+S ďalším vývojom bol Moorov zákon vlastne **porušovaný**: videli sme
+ešte rýchlejší vývoj a ešte vyšší počet tranzistorov na čipe. Graf, ktorý
+prednášajúci ukazuje, je z roku 2011; predpovedá, že v určitom bode dosiahneme
+**singularitu** — že v roku 2023 výpočtový výkon čipu prekoná ľudský mozog.
+Možno sa niekde okolo toho nachádzame.
+
+## Rast dát
+
+Rovnaký trend, s mierne odlišnými číslami, sa deje aj s **množstvom
+dát**. Lacnejšie, dostupnejšie a spoľahlivejšie senzory vedú k väčšej senzornej
+kapacite: môžeme snímať viac dát, ukladať viac dát, za oveľa nižšiu
+cenu. Problémom teraz je, že **potrebujeme pochopiť, čo dáta znamenajú** —
+svet je nesmierene bohatý na dáta.
+
+Prednášajúci zdôrazňuje, že **dáta samotné nám nehovoria, čo sa stalo** —
+len sedia v nejakej databáze. Je dobré dáta vykresliť a mať aspoň
+základnú štatistiku pre prehľad, ale **zmysluplná interpretácia dát je oveľa
+náročnejší problém.** Zvyšok prednášky prechádza príkladmi dátových súborov.
+
+## Príklady dát zo sveta
+
+### Ceny plemien psov počas COVID
+
+Správa v médiách (okolo roku 2022) informovala, že ceny plemien psov sa rýchlo zmenili
+počas pandémie COVID vo Veľkej Británii. Diskutovaný dôvod: **dopyt stúpol** —
+počas pandémie smeli na niektorých miestach von iba ľudia so psami,
+a ľudia uväznení doma chceli spoločnosť/priateľov.
+
+### Hladiny oxidu dusičitého nad Čínou
+
+Satelitné snímky ukazujú **hladiny oxidu dusičitého (NO₂)** nad Čínou v
+**januári 2020** a opäť vo **februári 2020**. Vo februári sú hladiny oveľa
+nižšie. Dôvod: **zastavenie prevádzky tovární** kvôli pandémii COVID-19.
+Prednášajúci poznamenáva, že COVID-19 je akoby skvelý zdroj dát — bol
+v podstate **skokovou zmenou mnohých vstupov vo svete** (analogicky skokova zmena
+vstupu aplikovaná na zariadenie).
+
+### Ceny fosílnych palív
+
+Okolo **marca 2020** nastáva veľká skoková zmena v **cenách fosílnych palív** —
+ropa, nafta/zemný plyn, dokonca uhlie. Pointa: keby ste si v januári 2020
+dokázali predpovedať, čo sa stane s cenami ropy, mohli by ste prispôsobiť
+stratégiu svojej firmy (nakúpiť viac ropy, vyprázdniť zásobníky, kým je cena nízka atď.)
+a zarobiť peniaze. Peniaze sú veľkým hnacím motorom týchto problémov.
+
+### Romantické vzťahy tučniakov v akváriu v Kjóte
+
+Komiksový **vývojový diagram komplikovaných romantických vzťahov medzi
+tučniakmi** v akváriu v Kjóte. Sledovalo sa, ako sa tučniaci navzájom majú radi
+(vrátane prípadného „podvádzania" partnerov) a potom to bolo zobrazené. Jedno možné
+využitie: personál akvária mohol predchádzať bitkám medzi tučniakmi riadením
+„milostných trojuholníkov".
+
+### Facebook blokuje francúzske mesto
+
+Okolo apríla 2021 Facebook zablokoval webovú stránku francúzskeho mesta
+<!-- unclear: meno mesta, popis hovorí "Bish"; znie ako mesto "Bitche" -->.
+Štatisticky kombinácia písmen v názve najviac pripomína neslušné slovo. Facebook zrejme
+má politiku, že neslušné slová nesmú byť názvami webových stránok / Facebook stránok / používateľov,
+a prevádzkuje algoritmus porovnávajúci neslušné slová s názvami. So štatistickými dôkazmi
+(s viac ako **95 % spoľahlivosťou**) algoritmus tvrdil, že webová stránka porušuje pravidlá.
+
+### Ekologické trasy v Google Maps
+
+Google Maps mal ponúkať najekologickejšiu / environmentálne najšetrnejšiu
+trasu pre vaše auto. Nie je jasné, či sa to plne realizovalo; zdá sa, že stále
+ponúka hlavne najrýchlejšiu (a najkratšiu) trasu. Diskutované obmedzenie:
+výber trasy v skutočnosti nezohľadňuje, či idete hore alebo dole, a
+navrhovanie trasy cez dopravnú zápchu nie je ekologické, pretože nakoniec
+nechávate bežať motor, kým stojíte v kolóne.
+
+### Únik dát / ochrana súkromia dát
+
+Novinový titulok (žartovne: ak počúvate Nickelback
+<!-- unclear: popis znie "Nickel Beck" -->, buďte si vedomí tejto hrozby) poukazuje na
+**ochranu súkromia dát**: ako šifrujeme a kódujeme dáta, aby neboli vystavené
+tretím stranám. Prednášajúci poznamenáva (bez menovania krajín, aby zostal politicky
+korektný), že možno nechcete zdieľať svoje dáta s nikým, a predsa to robíme pomerne často.
+
+### Cena Bitcoinu (prednášajúceho obľúbený trend)
+
+Zobrazuje sa séria novinových titulkov, spočiatku úmyselne v nesprávnom poradí,
+potom chronologicky: cena Bitcoinu nad 30 000 $; dlhodobo by mohla dosiahnuť 140 000 $;
+nad 40 000 $; za tri dni cena klesá; hodnota pod 30 000 $; potom o 20 % nahor
+za sedem dní. Rozpätie týchto titulkov je len **jeden mesiac** — takže je ťažké
+sledovať situáciu len z titulkov. Preto myšlienka: **vykresliť dáta na ich vizualizáciu**.
+
+Prechádzanie grafom ceny Bitcoinu v čase:
+
+- Trend začína okolo roku **2013**. Bol tu počiatočný hype, potom cena klesla (okolo
+  augusta 2015 by bol smutný niekto, kto kúpil blízko 1 000 $).
+- Ale keby ste len počkali dva roky, aj kúpa za túto cenu by vás za štyri roky
+  dostala asi **o 300 % do plusu** — investície si vyžadujú čas.
+- Predĺžením grafu (červená čiara označuje, kde predchádzajúci graf skončil) vstupujeme
+  do volatilného obdobia; cena ďalej rástla v rokoch 2017–2018.
+- Keby ste zachytili trend neskoro a kúpili za asi 12 500 $, za pol roka až rok
+  by ste boli späť na asi 2 500 $. Mali by ste predať? Pravdepodobne nie,
+  pretože by sa to opäť zmenilo.
+- V roku 2021 (rok, z ktorého pochádzajú zobrazené titulky) dostala cena ďalší veľký impulz —
+  pravdepodobne kvôli miernejším reguláciám a lepšiemu prijatiu obchodníkmi, väčšiemu
+  verejnému prístupu na trh, ľuďom necestujúcim a majúcim „voľné peniaze"
+  (stimulačné šeky) na investovanie.
+- Prednášajúci ukazuje aj cenu na **logaritmickej mierke** (podobne ako Moorov zákon).
+  Na logaritmickej mierke by ste boli v pokušení preložiť dáta **priamkou**
+  a začať predpovedať, či cena Bitcoinu v roku 2025 bude tam, kde je teraz.
+  Vizualizácia dát v inom kontexte môže odhaliť aspoň nejaké informácie.
+- Neskôr: prudký pokles do roku 2023, potom zotavenie a nedávny skok okolo
+  **amerických volieb** a hype okolo nich. Ďalší veľký skok sa pripisuje rozhodnutiu
+  Elona Muska investovať 1 miliardu dolárov do Bitcoinu
+  <!-- unclear: obrázok uvádza "one billion / 1 billion dollars" -->.
+
+Prednášajúci uvádza, že toto **nie je** na presvedčenie kohokoľvek investovať do Bitcoinu —
+osobne to nerobí, pretože sa mu nepáči, že vyčerpáva zdroje a (podľa jeho názoru) nemá
+žiadnu hodnotu. Pointa je, že **rôzne aspekty v dátach spôsobujú zmeny nejakého
+trendu v nejakom bode**, a je dosť ťažké zistiť, čo skutočne spôsobilo to, čo
+vidíme v hodnotách dát.
+
+### Aktívne prípady COVID na Slovensku
+
+Ďalší trend je zadaný ako hádanka s jednotkami čísel dní (napr. deň 1 až
+~33, hodnoty okolo 600–650; potom 1 až ~100 dní s predchádzajúcim trendom
+obráteným; potom vrcholy počas takmer roka). Je to **počet aktívnych prípadov COVID
+na Slovensku**. Medzi marcom 2020 a 21. januárom (2021) bola mierna prvá vlna, ale
+**druhá vlna po lete** (okolo septembra 2020) zasiahla dosť silno.
+
+### Denné PCR prípady a filtrácia
+
+Súvisiace dáta: **počet denných PCR prípadov** (PCR je metóda testovania
+na COVID antigén) versus dni od prvého prípadu. Prednášajúci vytvoril tento
+graf v **MATLAB** z dát Národného centra zdravotníckych informácií.
+
+Surová krivka (žltá) vykazuje **ostré skokové vrcholy**. Dôvod: počet
+nových prípadov bol oveľa vyšší v **pondelok**, pretože mnohé testovacie miesta
+cez víkend nepracovali, alebo ľudia strávili víkend doma s chrípkou a dali sa
+otestovať v pondelok.
+
+Ukážka témy predmetu: **ako odhaliť tento druh trendu**. Modrá krivka
+robí akési **priemerovanie** — podobné **7-dennému mediánu** počtu
+aktívnych prípadov používanému počas pandémie (ktorý vstupoval do statusu
+„semaforu"). Nie je to nič iné ako aplikovaná **filtrácia** (ako vidno, alebo bude vidno,
+v predmete „Technické prostriedky automatizácie"). Výsledky tejto filtrácie
+používal aj predseda vlády.
+
+### Nemecko — prípady vs úmrtia (korelácia)
+
+Dáta COVID-19 z **Nemecka** (nie zo Slovenska). Prvá vlna bola mierna, druhá
+oveľa ťažšia a pokračovala. **Horný graf** ukazuje počet prípadov; **dolný graf**
+ukazuje počet úmrtí (ľudia, ktorí zomreli).
+
+Postrehy z diskusie:
+
+- Oba signály zdieľajú rovnaký základný **tvar**, najmä na začiatku —
+  dve premenné (signály) sú **korelované**: keď jeden signál rastie, rastie aj
+  druhý (nie nevyhnutne v rovnakom čase). Považované za dve premenné, možno to
+  vidieť ako **dynamický systém / proces**, kde niečo, čo sa stalo, vyvolalo odozvu.
+  **Korelácia a kauzalita nie sú to isté**, ale dáta aspoň ukazujú kvalitatívnu odozvu.
+- V neskoršom vrchole (akási tretia vlna v roku 2021) nárast **nie je taký výrazný
+  v počte úmrtí**. Možné vysvetlenia: **očkovanie** (začalo okolo februára 2021); **mutácia vírusu**,
+  ktorá nebola taká smrteľná; a akási **nadobudnutá odolnosť** v populácii (ľudia mohli
+  byť infikovaní viackrát).
+
+### Skreslenie prežitia — lietadlá z druhej svetovej vojny
+
+Klasický obrázok: v druhej svetovej vojne bol inžiniersky problém, ako
+dostať viac lietadiel späť bezpečne z boja. Graf ukazuje, zo zbierky
+vracajúcich sa lietadiel, **kde boli lietadlá zasiahnuté a predsa sa vrátili**.
+
+Paradox: mali by sme spevniť časti, ktoré **sú** zasiahnuté, alebo časti,
+ktoré zasiahnuté **nie sú**? Dáta hovoria, že by sme mali spevniť časti, ktoré
+**nie sú** zasiahnuté — to je **skreslenie prežitia**. Lietadlá zasiahnuté na
+označených miestach sa vrátili domov, takže tieto oblasti znesia poškodenie;
+lietadlá, ktoré sa **nevrátili**, boli zasiahnuté inde (napr. motor, pilot alebo
+úzka kritická časť). Naivná, sentimentálna reakcia by posilnila viditeľne zasiahnuté miesta,
+ale to by nepomohlo. Toto je jeden z veľmi skorých **problémov rozhodovania na základe dát**:
+ako pochopiť dáta a podľa toho konať na zlepšenie nejakého výkonu.
+
+### Dáta lekárskeho skríningu
+
+Okrem kardiogramu mnohé **skríningové techniky** v medicíne produkujú tento
+druh dát (napr. skenovanie na nádor, röntgen na zlomeniny kostí alebo dentálne
+problémy). Množstvo dát rastie, ale počet zručných lekárov, ktorí to dokážu čítať,
+nerastie tak rýchlo — preto musíme niečo urobiť. (Prednášajúci spomína študenta, ktorý
+hľadá letný stáž v Siemens Healthineers <!-- unclear: popis znie "seens healthy years" -->,
+pracujúceho na tomto type problému.) Kroky zahŕňajú najprv **digitalizáciu** dát,
+ktoré môžu existovať len na papieri perom/atramentom, a potom hľadanie trendov na
+uvažovanie o tom, čo sa stalo, o stave pacienta, diagnóze a liečbe.
+
+### Výroba elektriny vs intenzita CO₂ podľa krajiny
+
+Graf **výroby elektriny vs intenzita CO₂ podľa krajiny**. Každý bod je
+vzorkovaný každú **jednu hodinu**: množstvo elektriny vyrobenej elektrárňami
+krajiny a intenzita CO₂ (koľko CO₂ sa emituje do atmosféry touto výrobou).
+Zobrazené krajiny zahŕňajú Francúzsko, Nemecko, Poľsko, Taliansko, Španielsko,
+Belgicko, Portugalsko (Slovensko nie je zobrazené).
+
+Závery z diskusie:
+
+- **Poľsko** je najmenej efektívne (najvyššie CO₂) — má veľa uhlia a mnoho
+  uhoľných elektrární. Jeho výroba elektriny je tiež oveľa **užšia** (menej
+  flexibilná).
+- **Francúzsko** využíva veľa **jadrovej** energie. Je to zaujímavé, pretože **bez
+  ohľadu na to, koľko energie je potrebné, emituje zhruba rovnaké množstvo CO₂** —
+  čo ukazuje efektívnosť / ekologickú šetrnosť jadrových elektrární.
+  Francúzsko je tiež relatívne flexibilné vo výrobe, pričom zostáva na
+  environmentálne šetrnom konci.
+- **Nemecko** ukazuje zaujímavý trend pozdĺž osi s **záporným sklonom /
+  zápornou deriváciou**: pri výrobe relatívne **malého** množstva energie sú emisie CO₂
+  **vysoké**, ale pri výrobe **veľkého** množstva energie sú emisie CO₂ **nižšie**.
+  To je na prvý pohľad akosi paradoxné. Vysvetlenie: je to efekt **uhoľných elektrární**
+  bežiacich aj keď obnoviteľné zdroje nepracujú. Vysoká výroba prichádza cez deň —
+  vrcholy dobrého vetra pre veterné turbíny a jasné dni pre solárne články.
+
+## Typy vizualizácie dát
+
+Príklady vedú k rôznym typom vizualizácie dát. Počnúc od zozbieraných dát,
+už len použitie rôznych grafov môže odhaliť poznatky. Prednášajúci zdôrazňuje
+štyri bežné typy.
+
+### Časový rad
+
+Akýkoľvek signál / trend / informáciu, ktorú máte, zobrazíte oproti zodpovedajúcemu
+**časovému kroku** na vodorovnej osi. To bolo robené v predmete „Teória automatického riadenia"
+a v celej tejto prednáške.
+
+- Niekedy **nie sú časové razítka** (napr. graf s elektrinou), takže nevieme presne,
+  kedy každý bod nastal — vieme len **interval vzorkovania** (napr. body sú od seba hodinu).
+- Keď **vieme** časové razítko, môžeme o ňom uvažovať. Prednášajúci dáva
+  príklad 15-minútových dát zo závodu, kde sa dátové body zdanlivo **zdvojnásobili**
+  (dve hodnoty pre jednu hodinu). Príčinou sa ukázal byť **prechod na letný/zimný čas**:
+  pri prepnutí časy bežali 2:00, 2:15, 2:30, 2:45, 3:00, potom opäť 2:00 — praktická
+  výzva, s ktorou sa môžete stretnúť.
+- Pri časových radoch môže byť tiež ťažké pozorovať **korelácie**, keď je len niekoľko premenných.
+
+### Bodové / korelačné grafy
+
+Tu vezmeme dve premenné a vykreslíme jednu oproti druhej, **strácame zmysel
+pre čas** (už nevieme, kedy bol každý bod zozbieraný, len že pár nastal spolu).
+
+- **Pozitívna korelácia:** ak premenná na vodorovnej osi rastie, rastie aj
+  druhá premenná (pohybom doprava sa pohybujeme aj nahor). Môžete si predstaviť
+  aproximáciu oblaku bodov priamkou s kladným sklonom. Jedna os sa javí ako funkcia druhej.
+- **Záporná korelácia:** prípad Nemecka je príkladom — väčšia výroba elektriny
+  ide ruka v ruke s nižšími emisiami CO₂.
+- **Centrovanie:** graf môže byť nakreslený tak, že počiatok je presunutý na
+  miesto najčastejšej hodnoty (**priemer**). Po centrovaní sú pozitívne a
+  negatívne odchýlky od priemeru priamo viditeľné a je ľahšie vidieť,
+  napr., že zvýšenie vodorovnej hodnoty o 2 zvyšuje zvislú hodnotu o
+  10. To je oveľa ťažšie čítať z absolútnych čísel (čo znamená „600 g CO₂
+  ekvivalent" — je to veľa alebo málo?). Vizualizácia teda nie je len o
+  *tom, ako kreslím graf*, ale aj *o tom, ako transformujem premenné* (logaritmickú
+  transformáciu sme už videli pri cene Bitcoinu).
+
+### Histogramy
+
+Histogram zobrazuje, ako **hustá** je dáta v určitých oblastiach — ako
+často sa vyskytujú určité hodnoty. Funguje ako vytváranie **priečinkov** („košov"): pre
+priečinok uprostred spočítajte, koľko bodov padá napríklad medzi −0,1 a +0,1;
+počet je ako hádzanie kamienka/guľôčky do stĺpca. Priamo to ukazuje, že niektoré
+hodnoty sú úplne nepravdepodobné alebo nikdy nepozorované, zatiaľ čo iné sú
+pravdepodobnejšie. Tvar môže začať vyzerať ako slávna **Gaussova krivka**.
+
+V kombinovanom pohľade bodový graf+histogram červené oblasti označujú veľmi
+pravdepodobné miesto výskytu bodov, zatiaľ čo modrá môže reprezentovať
+**odľahlé hodnoty** alebo oveľa menej pravdepodobné hodnoty (napr. body ďaleko od
+priemeru, so zápornými odchýlkami). Bodový graf môže ukazovať **takmer žiadnu koreláciu**:
+aplikáciou testu „ak mierne zvýšime vodorovnú premennú, čo sa stane so zvislou?"
+nedostaneme jasnú odpoveď (existujú rastúce aj nerastúce smery). Histogramy pozdĺž každej
+osi potom ukazujú hustotu hodnôt v každej premennej osobitne.
+
+### Paritné grafy
+
+Paritné grafy sú menej bežné, ale užitočné. Problémom predchádzajúcich grafov
+je, že musíte zvoliť relatívne **malý počet premenných** na zobrazenie
+(dve, alebo maximálne tri dimenzie), takže nemôžete ľahko vizualizovať mnoho
+premenných. Jednou z možností, ktorú paritný graf ponúka, je vykresliť **pozorovaný trend
+oproti tomu, ako ho predpovedá váš model / pochopenie**.
+
+Konkrétny príklad: **jas pixelov** na dvoch fotografiách toho istého
+objektu nasnímaných asi **4 hodiny** od seba, s hodnotami jasu medzi 0 a 0,5
+(biela vs čierna). Obe premenné majú rovnakú jednotku, ale jedna je **skutočné
+pozorovanie** a druhá je **predpoveď** tejto premennej (alebo inej
+premennej, ktorú sa snažíme korelovať). Farebné podfarbenie podobné histogramu ukazuje,
+kde leží mnoho pixelov: modré body sú menej pravdepodobné hodnoty, červená je miesto,
+kde je veľa pixelov. Pozdĺž priamky $y = x$ môžeme vidieť podobnosť dvoch fotografií:
+ak má pixel jas 0,1 na jednej fotografii a rovnaká situácia je zachytená, tento bod leží
+blízko priamky $y = x$. Graf ukazuje, že obe fotografie sú veľmi podobné, líšia sa
+len nejakým šumom alebo malými zmenami. (Študenti budú robiť experimenty s paratnými
+grafmi počas cvičení.)
+
+## Záver
+
+Prednášajúci preskočí záverečný snímok pre daný deň, pozve otázky a komentáre
+a opýta sa študentov na ich názor na prednášku a na to, že prebieha v angličtine.
+Poznamenáva, že **YouTube video je po prednáške spracované** so **subtitrami**
+a že študenti môžu dokonca **stiahnuť prepis** prednášky, aby im pomohol.

@@ -1,83 +1,84 @@
 ---
 lecture: L11
-title: "Recursive Estimation"
-course: Identification
+title: "Rekurzívny odhad"
+course: Identifikácia
 source: "https://www.youtube.com/watch?v=cTlkFkwKV4U"
 ---
 
-# L11 — Recursive Estimation
+# L11 — Rekurzívny odhad
 
-> Formulas verified against the lecturer's slide deck (*L Identifikácia, L11 —
-> 30. 04. 2024*). Note: on camera the lecturer momentarily wrote the slope estimate
-> as $\sum y_k / \sum x_k$; the slide (and the recursion he then derives) uses the
-> correct least-squares form $a_N = \frac{\sum y_k x_k}{\sum x_k^2}$, used below.
+> Vzorce overené podľa prednášateľových snímok (*L Identifikácia, L11 —
+> 30. 04. 2024*). Poznámka: na kamere prednášateľ na chvíľu napísal odhad sklonu
+> ako $\sum y_k / \sum x_k$; snímka (a rekurzia, ktorú potom odvodzuje) používa
+> správnu formu najmenších štvorcov $a_N = \frac{\sum y_k x_k}{\sum x_k^2}$,
+> použitú nižšie.
 
-## The problem
+## Problém
 
-We have a plant/process/system for which, from an experiment, we built a model
-that predicts the historical data. Deployed in industry, the model should predict
-future outputs for whatever inputs, so the **prediction error** should be
-approximately zero:
+Máme zariadenie/proces/systém, pre ktorý sme z experimentu zostavili model, ktorý
+predikuje historické dáta. Nasadený v priemysle, model by mal predikoval budúce výstupy
+pre ľubovoľné vstupy, takže **chyba predikcie** by mala byť približne nulová:
 
 $$
 e \approx 0
 $$
 
-(the difference between the system's measured output $y_k^{\text{meas}}$ and the
-model's prediction $\hat{y}_k$). **Recursive estimation** addresses the case when
-this does **not** happen and the model must **adapt online**.
+(rozdiel medzi nameraným výstupom systému $y_k^{\text{meas}}$ a predikciou modelu
+$\hat{y}_k$). **Rekurzívny odhad** rieši prípad, keď sa to **nestane** a model sa musí
+**adaptovať online**.
 
-## Bias update
+## Aktualizácia posunu
 
-Suppose the historical (nominal) data was well fit, but in a region of the
-independent variables not explored in training, the real plant evolves with an
-almost **constant systematic error** (e.g. nonlinearity, or a changed reactant
-supplier). The **slope** still looks correct (the dependent variable still reacts
-the same way), and we cannot change the independent variables — so we only adjust
-the **bias / offset** $b$ to absorb the constant shift. This is the simplest
-recursive estimation, the **bias update**, much used in industry (companies prefer
-not to change verified slopes/dependencies).
+Predpokladajme, že historické (nominálne) dáta boli dobre nafitované, ale v oblasti
+nezávislých premenných, ktorá nebola preskúmaná pri trénovaní, skutočné zariadenie sa
+vyvíja s takmer **konštantnou systematickou chybou** (napr. nelinearita alebo zmenený
+dodávateľ reaktantov). **Sklon** vyzerá stále správne (závislá premenná reaguje
+rovnakým spôsobom), a nemôžeme meniť nezávislé premenné — preto upravujeme len
+**posuv/offset** $b$, aby absorboval konštantný posun. Toto je najjednoduchší
+rekurzívny odhad, **aktualizácia posunu**, hojne využívaná v priemysle (spoločnosti
+preferujú nemeniť overené sklony/závislosti).
 
-The bias becomes a function of time. Comparing the previous prediction
-$\hat{y}_{k-1} = a x_{k-1} + b_{k-1}$ with the actual measurement $y_{k-1}$, update
-the bias by the prediction error:
+Posuv sa stáva funkciou času. Porovnaním predchádzajúcej predikcie
+$\hat{y}_{k-1} = a x_{k-1} + b_{k-1}$ s aktuálnym meraním $y_{k-1}$, aktualizujeme
+posuv o chybu predikcie:
 
 $$
 b_k = b_{k-1} + \big(y_{k-1} - \hat{y}_{k-1}\big)
 $$
 
-This shifts the line to the new operating point.
+Toto posúva priamku na nový prevádzkový bod.
 
-### Filtered bias update
+### Filtrovaná aktualizácia posunu
 
-Reacting to a single measurement is **myopic** (one noisy point swings the bias).
-Add **filtering** with a parameter $\delta \in [0, 1]$ acting as a **trust gain**:
+Reagovanie na jedno meranie je **krátkozraké** (jeden zašumený bod hojdá posunom).
+Pridáme **filtráciu** s parametrom $\delta \in [0, 1]$ pôsobiacim ako **faktor
+dôvery**:
 
 $$
-b_k = \delta\, b_{k-1} + (1 - \delta)\,(\text{prediction-error term})
+b_k = \delta\, b_{k-1} + (1 - \delta)\,(\text{člen chyby predikcie})
 $$
 
 <!-- the exact combination was stated loosely; delta weights the old bias against the new error-based correction -->
 
-- $\delta$ close to **1**: we do **not trust** recent measurements much; the bias
-  changes little, but a sustained trend gradually accumulates and slowly shifts the
-  line to a new operating point.
-- $\delta = 0$: the estimate is driven **entirely** by the new measurement.
+- $\delta$ blízko **1**: **nedôverujeme** nedávnym meraniam príliš; posuv sa mení málo,
+  ale trvalý trend sa postupne akumuluje a pomaly posúva priamku na nový prevádzkový
+  bod.
+- $\delta = 0$: odhad je riadený **výlučne** novým meraním.
 
-This $\delta$ is like the gain of a **P controller**, where the control action
-changes by gain × control error (slide):
+Toto $\delta$ je ako zosilnenie **P regulátora**, kde riadiaca akcia sa mení o
+zosilnenie × riadiaca chyba (snímka):
 
 $$
 u_k = K\, e_k = K\,(w_k - y_k)
 $$
 
-Here, instead, the **estimate** changes by gain × **prediction error**.
+Tu sa namiesto toho **odhad** mení o zosilnenie × **chyba predikcie**.
 
-## Updating the slope: recursive least squares (scalar)
+## Aktualizácia sklonu: rekurzívna metóda najmenších štvorcov (skalárna)
 
-Now the case where the **dependencies** themselves must change. Take the simplest
-linear-regression setup ($b = 0$, scalar $a$), $y_k = a x_k$. The least-squares
-estimate from $N$ measurements and from $N-1$ measurements (slide):
+Teraz prípad, kde sa musia meniť samotné **závislosti**. Vezmime najjednoduchšie
+nastavenie lineárnej regresie ($b = 0$, skalárne $a$), $y_k = a x_k$. Odhad
+najmenších štvorcov z $N$ meraní a z $N-1$ meraní (snímka):
 
 $$
 a_N = \frac{\sum_{k=1}^{N} y_k x_k}{\sum_{k=1}^{N} x_k^2},
@@ -85,103 +86,100 @@ a_N = \frac{\sum_{k=1}^{N} y_k x_k}{\sum_{k=1}^{N} x_k^2},
   a_{N-1} = \frac{\sum_{k=1}^{N-1} y_k x_k}{\sum_{k=1}^{N-1} x_k^2}
 $$
 
-Taking all $N$ (e.g. a thousand or a million) historical values each time is
-impractical (large matrix inversions in the multidimensional case), and there is a
-**pattern**: the new value should be the old value plus a (filtered) correction.
+Brať všetkých $N$ (napr. tisíc alebo milión) historických hodnôt zakaždým je
+nepraktické (veľké inverzie matíc vo viacrozmernom prípade) a existuje
+**vzor**: nová hodnota by mala byť stará hodnota plus (filtrovaná) korekcia.
 
-### Deriving the recursion
+### Odvodenie rekurzie
 
-Split off the last term in the numerator and denominator,
-$\sum_{k=1}^{N} = \sum_{k=1}^{N-1} + (\text{term } N)$, and substitute
+Oddelíme posledný člen v čitateli a menovateli,
+$\sum_{k=1}^{N} = \sum_{k=1}^{N-1} + (\text{člen } N)$, a dosadíme
 $\sum_{k=1}^{N-1} y_k x_k = a_{N-1}\sum_{k=1}^{N-1} x_k^2$:
 
 $$
 a_N = \frac{a_{N-1}\sum_{k=1}^{N-1} x_k^2 + y_N x_N}{\sum_{k=1}^{N} x_k^2}
 $$
 
-To recover $a_{N-1}$ times the **full** sum, **add and subtract** $a_{N-1} x_N^2$
-("fake it till you make it"):
+Aby sme dostali $a_{N-1}$ krát **úplný** súčet, **pridáme a odčítame** $a_{N-1} x_N^2$
+(„predstieraj, kým to nedokážeš"):
 
 $$
 a_N = \frac{a_{N-1}\sum_{k=1}^{N} x_k^2 + y_N x_N - a_{N-1} x_N^2}
              {\sum_{k=1}^{N} x_k^2}
 $$
 
-Separating $a_{N-1}$ gives the **recursive update**:
+Oddelením $a_{N-1}$ dostaneme **rekurzívnu aktualizáciu**:
 
 $$
 a_N = a_{N-1} + \frac{x_N}{\sum_{k=1}^{N} x_k^2}\,\big(y_N - a_{N-1} x_N\big)
 $$
 
-The structure mirrors the bias update and the controller:
+Štruktúra odráža aktualizáciu posunu a regulátor:
 
-- $y_N$ is the **measurement** just taken.
-- $a_{N-1} x_N$ is the **prediction of the old (un-updated) model** — the
-  prediction at time $N$ based on information available until time $N-1$, written
-  $\hat{y}_{N\mid N-1}$. So $(y_N - a_{N-1}x_N)$ is the **prediction error**.
-- $\dfrac{x_N}{\sum_{k=1}^{N} x_k^2}$ is the **gain** — how much we trust the new
-  measurement.
+- $y_N$ je práve vykonané **meranie**.
+- $a_{N-1} x_N$ je **predikcia starého (neaktualizovaného) modelu** — predikcia
+  v čase $N$ na základe informácií dostupných do času $N-1$, zapísaná
+  $\hat{y}_{N\mid N-1}$. Takže $(y_N - a_{N-1}x_N)$ je **chyba predikcie**.
+- $\dfrac{x_N}{\sum_{k=1}^{N} x_k^2}$ je **zosilnenie** — nakoľko dôverujeme novému
+  meraniu.
 
-### The gain shrinks automatically (and forgetting)
+### Zosilnenie sa automaticky zmenšuje (a zabúdanie)
 
-Unlike the bias update, the gain is **not** our free choice. Starting out with one
-measurement ($x = 1$) the gain is 1; after 100 measurements (all $x = 1$) it is
-$\tfrac{1}{100}$ — much smaller. This is desirable: $a_{N-1}$ already carries the
-information of $N-1$ points, which we do not want erased by one possibly-noisy
-measurement.
+Na rozdiel od aktualizácie posunu, zosilnenie **nie je** naša voľná voľba. Začínajúc
+s jedným meraním ($x = 1$) je zosilnenie 1; po 100 meraniach (všetky $x = 1$) je
+$\tfrac{1}{100}$ — oveľa menšie. Toto je žiaduce: $a_{N-1}$ už nesie informáciu
+$N-1$ bodov, ktorú nechceme prepísať jedným možno zašumeným meraním.
 
-But if 10 years of data dictate a correlation and only ~5 recent measurements
-contradict it, we can **limit** the past data — use only the last month or half
-year. This is a **shortened time window for more recent updates** (forgetting),
-tuned by how much the process can change.
+Ak však 10 rokov dát diktuje koreláciu a len ~5 nedávnych meraní je s ňou v rozpore,
+môžeme **obmedziť** minulé dáta — použiť iba posledný mesiac alebo polrok. Toto je
+**skrátené časové okno pre novšie aktualizácie** (zabúdanie), naladené podľa toho,
+ako veľmi sa proces môže meniť.
 
-## Recursive least squares: general (vector) case
+## Rekurzívna metóda najmenších štvorcov: všeobecný (vektorový) prípad
 
-In general the prediction model is $y = X p$, with the regressor (row) vector
-$\phi_N$ for sample $N$ giving $y_N = \phi_N^T p$. The same line of reasoning yields
-the vector recursion (slide):
+Vo všeobecnosti je predikčný model $y = X p$, kde regresný (riadkový) vektor
+$\phi_N$ pre vzorku $N$ dáva $y_N = \phi_N^T p$. Rovnaká úvaha dáva vektorovú
+rekurziu (snímka):
 
 $$
 p_N = p_{N-1} + P_N^{-1}\,\phi_N\,\big(y_N - \phi_N^T p_{N-1}\big)
 $$
 
-with the **covariance** matrix accumulating as
+pričom **kovariančná** matica sa akumuluje ako
 
 $$
-P_N = P_{N-1} + \phi_N\,\phi_N^T \quad\longrightarrow\ \text{covariance}
+P_N = P_{N-1} + \phi_N\,\phi_N^T \quad\longrightarrow\ \text{kovariancia}
 $$
 
-(equivalently the gain is $(X^T X)^{-1} x_N$ in the earlier notation). The
-ingredients are again the same:
+(ekvivalentne zosilnenie je $(X^T X)^{-1} x_N$ v predchádzajúcej notácii).
+Ingrediencie sú opäť rovnaké:
 
-- the **prediction error** $\big(y_N - \phi_N^T p_{N-1}\big)$;
-- the **a priori knowledge** $p_{N-1}$ (the previous parameter estimate);
-- the **gain** $P_N^{-1}\phi_N$ — built from the covariance matrix (the accumulated
-  $X^T X$ of historical $x$ values) and its inverse, so as the number of past
-  values grows the gain **shrinks**.
+- **chyba predikcie** $\big(y_N - \phi_N^T p_{N-1}\big)$;
+- **apriorné znalosti** $p_{N-1}$ (predchádzajúci odhad parametrov);
+- **zosilnenie** $P_N^{-1}\phi_N$ — zostavené z kovariančnej matice (akumulovaného
+  $X^T X$ historických hodnôt $x$) a jej inverzie, takže s rastúcim počtom minulých
+  hodnôt zosilnenie **klesá**.
 
-(Over time, the estimate $p$ converges toward the real $p^{*}$, with a shrinking
-confidence band around it.)
+(V priebehu času sa odhad $p$ konverguje k skutočnému $p^{*}$, so zmenšujúcim sa
+intervalom spoľahlivosti okolo neho.)
 
-## Connection to the Kalman filter
+## Spojenie s Kalmanovým filtrom
 
-With more time, this is one step away from a **state estimator**. For a
-state-space model
+S viac času je toto jeden krok od **odhadovača stavu**. Pre model stavového priestoru
 
 $$
 x_k = A x_{k-1} + B u_{k-1}
 $$
 
-a corrected estimate of the form
+korigovaný odhad tvaru
 
 $$
 \hat{x}_k = A \hat{x}_{k-1} + B u_{k-1} + K\big(y_k - C \hat{x}_k\big)
 $$
 
-with a wisely chosen gain $K$ (the **Kalman gain**) becomes the **Kalman filter** —
-which estimates the **states** of a dynamic system rather than the parameters. The
-idea is identical: from the previous prediction (at time $k-1$) we predict $x_k$;
-we measure something about the state; and we correct using a **gain matrix** times
-the measurement discrepancy.
+s múdro zvoleným zosilnením $K$ (**Kalmanov zisk**) sa stáva **Kalmanovým filtrom** —
+ktorý odhaduje **stavy** dynamického systému namiesto parametrov. Myšlienka je
+identická: z predchádzajúcej predikcie (v čase $k-1$) predpovedáme $x_k$;
+zmeráme niečo o stave; a korigujeme pomocou **matice zosilnenia** krát nesúlad merania.
 
-*(This concludes the course.)*
+*(Tým sa kurz končí.)*

@@ -1,537 +1,525 @@
-# Identification — Oral Exam Preparation (Theory)
+# Identifikácia — Príprava na ústnu skúšku (teória)
 
-> Goal: be able to *explain in words* the concepts behind every practical step,
-> answer "why", and write the key formulas on a board.
+> Cieľ: vedieť *slovne vysvetliť* pojmy za každým praktickým krokom,
+> odpovedať na „prečo" a zapísať kľúčové vzorce na tabuľu.
 
-## Exam format
-You are randomly assigned **two topics — one from each category**:
+## Forma skúšky
+Sú vám náhodne pridelené **dve témy — jedna z každej kategórie**:
 
-**I. Static Identification**
-1. Introduction to Statistics
-2. Estimation of a Constant
-3. Linear Regression
-4. Practical Aspects of Linear Regression
+**I. Statická identifikácia**
+1. Úvod do štatistiky
+2. Odhad konštanty
+3. Lineárna regresia
+4. Praktické aspekty lineárnej regresie
 
-**II. Dynamic Identification**
-5. Filtration of Dynamic Signals
-6. Modelling of Dynamic Systems
-7. Recursive Identification
-8. Practical Aspects of Identification
+**II. Dynamická identifikácia**
+5. Filtrácia dynamických signálov
+6. Modelovanie dynamických systémov
+7. Rekurzívna identifikácia
+8. Praktické aspekty identifikácie
 
-The rest of this file has two parts: **(1)** a per-topic *talk track* — what to
-put on the board for each of the 8 topics — and **(2)** detailed Q&A (Parts A–R)
-backing them up.
-
----
-
-## Topic talk-tracks (what to say if assigned this topic)
-
-### Topic 1 — Introduction to Statistics  *(→ Parts A, B)*
-1. Population vs sample; random variable; measurement = signal + noise.
-2. Location: mean, median, geometric mean — and when each is used (robustness).
-3. Spread: variance & standard deviation; the **$N-1$** (unbiased) denominator.
-4. **PDF** (density, integrates to 1) vs **CDF** ($P(X \le x)$) vs **quantile** (inverse CDF).
-5. The **normal distribution**; the 68–95–99.7 rule ($\pm 1/2/3\,\sigma$).
-6. Histograms; with more data the histogram $\to$ the true PDF (law of large numbers).
-7. Why it matters: Gaussian noise is what makes **least squares optimal**.
-
-### Topic 2 — Estimation of a Constant  *(→ Part EC, B)*
-1. Setup: many noisy measurements of one true value, $y_i = c + e_i$.
-2. Least-squares estimate of the constant = the **arithmetic mean** (derive it).
-3. Estimator properties: **unbiased**, **consistent**; variance of the estimate
-   $\mathrm{var}(\hat{c}) = \sigma^2/N$ $\to$ error shrinks as $1/\sqrt{N}$ (averaging beats noise).
-4. Alternative estimators: median (robust to outliers), geometric mean
-   (multiplicative data); compare spread via repeated trials / box plots.
-5. Under Gaussian noise the mean is the **maximum-likelihood** estimate.
-6. Confidence interval on the estimate; more data $\to$ tighter interval.
-
-### Topic 3 — Linear Regression  *(→ Part C)*
-1. Model **linear in the parameters**: $y = X p + e$ (features may be nonlinear
-   in the data: $\sqrt{h}$, $T^2$, $1/T$).
-2. The regressor/design matrix $X$; the intercept (bias) column.
-3. Least squares: minimise $\|X p - y\|^2$ $\to$ **normal equations**
-   $p = (X^T X)^{-1} X^T y$ = `X\y` (QR internally).
-4. **Gauss–Markov assumptions** $\to$ LS is the Best Linear Unbiased Estimator (BLUE).
-5. Quality: **RMSE**, parity plot, parameter confidence intervals.
-6. Extends to multivariate (many inputs).
-
-### Topic 4 — Practical Aspects of Linear Regression  *(→ Parts C7, D, E)*
-1. **Standardization** (zero mean, unit variance): comparable scales + better
-   conditioning of $X^T X$.
-2. **Correlation vs covariance**; correlation $\in [-1, 1]$.
-3. **Multicollinearity**: correlated inputs make $X^T X$ near-singular $\to$ unstable
-   coefficients $\to$ drop redundant features (feature selection).
-4. **PCA** for decorrelation / dimensionality reduction (elbow rule).
-5. **Training vs testing**; over- vs under-fitting; choosing model order/structure.
-6. Outliers and data cleaning.
-
-### Topic 5 — Filtration of Dynamic Signals  *(→ Part F)*
-1. Why filter: separate the useful signal from noise by **frequency content**.
-2. **Low-pass** (keep slow trend), **high-pass** (keep fast part), band-pass;
-   the cut-off frequency.
-3. **Moving average** = a FIR low-pass filter; window size sets the smoothing.
-4. **Causal** (`filter`, introduces delay) vs **zero-phase** (`filtfilt`, no lag).
-5. Trade-off: more smoothing removes noise but also destroys real dynamics.
-
-### Topic 6 — Modelling of Dynamic Systems  *(→ Part G)*
-1. Dynamic vs static: the output has **memory** (depends on past).
-2. **Impulse response** & **convolution** $y(t) = \int g(\tau)\,u(t-\tau)\,d\tau$.
-3. Discrete models: **FIR** $y_k = \sum b_i u_{k-i}$ (all-zero, always stable, high order).
-4. **ARX** $y_k = -\sum a_i y_{k-i} + \sum b_i u_{k-i}$ (poles+zeros, few parameters).
-5. **ARMAX** = ARX + a moving-average term on past **errors** (models disturbances).
-6. Both ARX/FIR are **linear in parameters** $\to$ least squares (regressor of lags).
-7. **Transfer function** in $z^{-1}$ (unit delay); FIR vs ARX comparison; stability.
-
-### Topic 7 — Recursive Identification  *(→ Part R)*
-1. Batch vs **recursive**: update the estimate per new sample (online / real-time).
-2. **RLS** structure: $\theta_k = \theta_{k-1} + K_k (y_k - \phi_k^T \theta_{k-1})$
-   = old + gain × innovation.
-3. The covariance $P$ and gain $K$ (= Kalman gain); initialization ($P_0$ large).
-4. **Forgetting factor $\lambda$**: $1$ = standard RLS (= batch LS); $<1$ tracks
-   time-varying parameters (tracking vs noise trade-off).
-5. RLS is a special case of the **Kalman filter**.
-6. Simplest special case: the **bias update** (adapt only the offset $b$ by the
-   prediction error, optionally filtered by a trust gain $\delta$).
-
-### Topic 8 — Practical Aspects of Identification  *(→ Parts G6, H, E)*
-1. **Experiment / input design**: needs **persistent excitation** (rich spectrum).
-2. Input types: step (few frequencies) → random → **PRBS** (near-white, preferred).
-3. **Sampling time** choice (avoid aliasing / stiffness).
-4. **Model-order selection** from **ACF/PACF** of the output.
-5. **Validation**: training vs testing RMSE, one-step prediction vs free
-   simulation, residual checks; overfitting.
-6. Real workflow (Flexy², Assignment 2): clean → standardize → split → FIR/ARX →
-   compare.
+Zvyšok tohto súboru má dve časti: **(1)** postup prezentácie pre každú tému —
+čo napísať na tabuľu ku každej z 8 tém — a **(2)** podrobné otázky a odpovede
+(časti A–R), ktoré ich podkladajú.
 
 ---
 
-## Part A — Fundamentals
+## Čo povedať k téme (plán na tabuľu)
 
-### A1. What is system identification?
-Building a **mathematical model** of a system from **measured input–output
-data**, instead of from first-principles physics. We choose a model *structure*
-(class of equations) and then *estimate its parameters* so the model reproduces
-the data. It is data-driven (empirical / black-box) modelling, the counterpart
-to white-box (physical) modelling. A grey-box model mixes both.
+### Téma 1 — Úvod do štatistiky  *(→ Časti A, B)*
+1. Populácia vs. výber; náhodná premenná; meranie = signál + šum.
+2. Poloha: priemer, medián, geometrický priemer — a kedy sa ktorý používa (robustnosť).
+3. Rozptyl: rozptyl a smerodajná odchýlka; menovateľ **$N-1$** (nestranný).
+4. **Hustota pravdepodobnosti (PDF)** (hustota, integrál = 1) vs. **distribučná funkcia (CDF)** ($P(X \le x)$) vs. **kvantil** (inverzná CDF).
+5. **Normálne rozdelenie**; pravidlo 68–95–99,7 ($\pm 1/2/3\,\sigma$).
+6. Histogramy; s viac dátami histogram $\to$ skutočná hustota pravdepodobnosti (zákon veľkých čísel).
+7. Prečo na tom záleží: Gaussov šum je práve to, čo robí **metódu najmenších štvorcov** optimálnou.
 
-### A2. Black-box vs grey-box vs white-box?
-The three differ by **how much internal knowledge of the system you have/use** —
-a spectrum from "none" to "complete":
+### Téma 2 — Odhad konštanty  *(→ Časť EC, B)*
+1. Zadanie: veľa zašumených meraní jednej skutočnej hodnoty, $y_i = c + e_i$.
+2. Odhad konštanty metódou najmenších štvorcov = **aritmetický priemer** (odvodiť).
+3. Vlastnosti odhadcu: **nestranný**, **konzistentný**; rozptyl odhadu
+   $\mathrm{var}(\hat{c}) = \sigma^2/N$ $\to$ chyba klesá ako $1/\sqrt{N}$ (priemerovanie potláča šum).
+4. Alternatívne odhadce: medián (robustný voči odľahlým hodnotám), geometrický priemer
+   (multiplikatívne dáta); porovnanie rozptylu cez opakované pokusy / krabicové grafy.
+5. Pri Gaussovom šume je priemer odhadom **maximálnej vierohodnosti**.
+6. Interval spoľahlivosti odhadu; viac dát $\to$ užší interval.
 
-- **White-box** (full internal knowledge): model derived from physical laws
-  (mass/energy balances, conservation); structure *and* parameters have physical
-  meaning. *Most insight, most effort/expertise needed.*
-- **Black-box** (no internal knowledge): structure chosen only for convenience
-  (FIR, ARX); parameters are just fitted numbers with no physical meaning — you
-  only see inputs and outputs. *Fastest, but no physical insight; can't explain
-  *why* it works.*
-- **Grey-box** (partial internal knowledge): known structure from physics with
-  unknown parameters fitted to data — a balanced hybrid combining both.
+### Téma 3 — Lineárna regresia  *(→ Časť C)*
+1. Model **lineárny v parametroch**: $y = X p + e$ (príznaky môžu byť nelineárne
+   v dátach: $\sqrt{h}$, $T^2$, $1/T$).
+2. Regresná matica $X$; stĺpec absolútneho člena (posunu).
+3. Metóda najmenších štvorcov: minimalizovať $\|X p - y\|^2$ $\to$ **normálne rovnice**
+   $p = (X^T X)^{-1} X^T y$ = `X\y` (interne cez QR).
+4. **Gauss–Markovove predpoklady** $\to$ MNŠ je najlepší lineárny nestranný odhadca (BLUE).
+5. Kvalita: **RMSE**, paritný graf, intervaly spoľahlivosti parametrov.
+6. Rozširuje sa na multivariátny prípad (mnoho vstupov).
 
-**Vending-machine analogy:**
-- *Black-box* = a **user** of the machine: insert money, get a drink, no idea of
-  the internal mechanism.
-- *White-box* = the **technician**: inspects every internal component to
-  understand how each part contributes.
-- *Grey-box* = the **operator**: knows the basic mechanical principles but not
-  every detail.
+### Téma 4 — Praktické aspekty lineárnej regresie  *(→ Časti C7, D, E)*
+1. **Štandardizácia** (nulový priemer, jednotkový rozptyl): porovnateľné škály + lepšia
+   podmienosť $X^T X$.
+2. **Korelácia vs. kovariancia**; korelácia $\in [-1, 1]$.
+3. **Multikolinearita**: korelované vstupy robia $X^T X$ blízko singulárnou $\to$ nestabilné
+   koeficienty $\to$ odstrániť redundantné príznaky (výber príznakov).
+4. **Analýza hlavných komponentov (PCA)** na dekorelizáciu / redukciu dimenzie (pravidlo lakťa).
+5. **Trénovacie vs. testovacie** dáta; preučenie/podučenie; výber rádu/štruktúry modelu.
+6. Odľahlé hodnoty a čistenie dát.
 
-| Aspect | White-box | Grey-box | Black-box |
-|--------|-----------|----------|-----------|
-| Internal knowledge | Complete | Partial | None |
-| Parameters | Physical | Mixed | Just fitted |
-| Effort / expertise | High | Medium | Low |
-| Physical insight | Full | Some | None |
-| Course examples | First-principles tank/gas models | Known structure + LS fit | FIR, ARX |
+### Téma 5 — Filtrácia dynamických signálov  *(→ Časť F)*
+1. Prečo filtrovať: oddeliť užitočný signál od šumu podľa **frekvenčného obsahu**.
+2. **Dolnopriepustný filter** (zachová pomalý trend), **hornopriepustný filter** (zachová rýchlu zložku), pásmový filter;
+   medzná frekvencia.
+3. **Kĺzavý priemer** = FIR dolnopriepustný filter; veľkosť okna určuje mieru vyhladzovanie.
+4. **Kauzálny** (`filter`, vnáša oneskorenie) vs. **s nulovou fázou** (`filtfilt`, bez fázového posunu).
+5. Kompromis: väčšie vyhladzovanie odstraňuje šum, ale aj ničí skutočnú dynamiku.
 
-*Note:* the same white/black/grey-box vocabulary is used in **software testing**
-(testing without code knowledge vs. inspecting the source vs. partial access) —
-the underlying idea is identical: **the level of internal visibility you have
-into the thing you're analysing.** In *identification* it describes the **model**;
-in testing it describes the **code under test**.
+### Téma 6 — Modelovanie dynamických systémov  *(→ Časť G)*
+1. Dynamický vs. statický: výstup má **pamäť** (závisí od minulosti).
+2. **Impulzná odozva** a **konvolúcia** $y(t) = \int g(\tau)\,u(t-\tau)\,d\tau$.
+3. Diskrétne modely: **FIR** $y_k = \sum b_i u_{k-i}$ (všetky nuly, vždy stabilný, vysoký rád).
+4. **ARX** $y_k = -\sum a_i y_{k-i} + \sum b_i u_{k-i}$ (póly+nuly, málo parametrov).
+5. **ARMAX** = ARX + člen kĺzavého priemeru na minulých **chybách** (modeluje poruchy).
+6. ARX aj FIR sú **lineárne v parametroch** $\to$ metóda najmenších štvorcov (regresná matica z oneskorení).
+7. **Prenosová funkcia** v $z^{-1}$ (jednotkové oneskorenie); porovnanie FIR vs. ARX; stabilita.
 
-### A3. The general identification procedure (steps)?
-1. Design an experiment & collect data (choose input signal).
-2. Inspect / visualize / clean the data.
-3. Choose a model structure (static/dynamic, FIR/ARX, order).
-4. Estimate parameters (least squares).
-5. Validate the model (RMSE on independent test data, residual checks).
-6. If unsatisfactory, revise structure/order and repeat.
+### Téma 7 — Rekurzívna identifikácia  *(→ Časť R)*
+1. Dávková vs. **rekurzívna**: aktualizácia odhadu pri každej novej vzorke (online / v reálnom čase).
+2. **Štruktúra RLS**: $\theta_k = \theta_{k-1} + K_k (y_k - \phi_k^T \theta_{k-1})$
+   = starý odhad + zisk × inovácia.
+3. Kovariancia $P$ a zisk $K$ (= Kalmanov zisk); inicializácia ($P_0$ veľké).
+4. **Faktor zabúdania $\lambda$**: $1$ = štandardný RLS (= dávková MNŠ); $<1$ sleduje
+   časovo premenné parametre (kompromis sledovanie vs. šum).
+5. RLS je špeciálny prípad **Kalmanovho filtra**.
+6. Najjednoduchší špeciálny prípad: **aktualizácia posunu** (prispôsobenie iba offsetu $b$
+   podľa chyby predikcie, voliteľne filtrovaného faktorom dôvery $\delta$).
 
-### A4. Static vs dynamic model?
-- **Static:** output depends only on the *current* input — $y = f(u)$
-  (e.g. tank $q = k\sqrt{h}$, gas tank $V = f(T)$). No memory.
-- **Dynamic:** output depends on *past* inputs and/or outputs — has memory /
-  time evolution (FIR, ARX). Needed when the system has inertia/lag.
-
----
-
-## Part B — Statistics & data
-
-### B1. Mean, variance, standard deviation — definitions?
-- Mean (expected value): $\mu = \frac{1}{N}\sum_{i} x_i$.
-- Sample variance: $\sigma^2 = \frac{1}{N-1}\sum_{i}(x_i - \mu)^2$.
-- Std: $\sigma = \sqrt{\sigma^2}$, same units as the data; spread around the mean.
-- The **$N-1$** (Bessel's correction) makes the sample variance an *unbiased*
-  estimate of the true variance.
-
-### B2. PDF vs CDF?
-- **PDF** $f(x)$: probability *density*; area under it over an interval = the
-  probability of being in that interval; integrates to 1.
-- **CDF** $F(x) = P(X \le x)$: monotonically increasing from 0 to 1; it is the
-  integral of the PDF.
-- **Quantile / inverse CDF** answers "which $x$ has cumulative probability $p$".
-
-### B3. Normal (Gaussian) distribution — why does it matter?
-Defined by $\mu$ and $\sigma$. About 68% of data within $\pm 1\sigma$, 95% within
-$\pm 2\sigma$, 99.7% within $\pm 3\sigma$. Measurement noise is commonly assumed
-Gaussian, which is exactly what makes **least squares** the statistically optimal
-(maximum-likelihood) estimator.
-
-### B4. Law of large numbers (seen in Seminar 2)?
-As sample size grows, the empirical histogram converges to the true PDF and the
-sample mean converges to the true mean. More data → more reliable statistics.
-
-### B5. Mean vs median vs geometric mean — when to use which? (Seminar 4)
-- **Arithmetic mean:** best for symmetric noise; sensitive to outliers.
-- **Median:** robust to outliers / skew.
-- **Geometric mean:** for multiplicative / log-normal data (e.g. growth rates).
-A box plot compares their spread across repeated estimates.
+### Téma 8 — Praktické aspekty identifikácie  *(→ Časti G6, H, E)*
+1. **Návrh experimentu / vstupného signálu**: potreba **perzistentného buzenia** (bohaté spektrum).
+2. Typy vstupov: skok (málo frekvencií) → náhodný → **PRBS** (blízky bielemu šumu, preferovaný).
+3. Výber **periódy vzorkovania** (predchádzanie aliasingu / stiffness).
+4. **Výber rádu modelu** z **ACF/PACF** výstupu.
+5. **Validácia**: trénovacie vs. testovacie RMSE, predikcia o jeden krok dopredu vs. voľná simulácia,
+   kontrola reziduí; preučenie.
+6. Skutočný postup (Flexy², Zadanie 2): čistenie → štandardizácia → rozdelenie → FIR/ARX →
+   porovnanie.
 
 ---
 
-## Part EC — Estimation of a constant (Exam topic 2 / Lectures L03–L04)
+## Časť A — Základy
 
-### EC1. What is "estimation of a constant"?
-The simplest identification problem: estimate a single unknown true value $c$
-from $N$ noisy measurements $y_i = c + e_i$, where $e_i$ is measurement noise
-(zero-mean). It is a one-parameter special case of linear regression with
-regressor $X = \mathbf{1}_{N}$ (a column of ones).
+### A1. Čo je identifikácia systémov?
+Zostavenie **matematického modelu** systému z **nameraných vstupno-výstupných
+dát** namiesto z fyzikálnych princípov. Zvolíme *štruktúru modelu*
+(triedu rovníc) a následne *odhadneme jeho parametre* tak, aby model reprodukoval
+dáta. Je to dátami riadené (empirické / čierna skrinka) modelovanie — protiklad
+bieleho boxu (fyzikálneho) modelovania. Sivá skrinka kombinuje oba prístupy.
 
-### EC2. Show that the least-squares estimate of a constant is the mean.
-Minimise $J(c) = \sum_{i}(y_i - c)^2$. Set the derivative to zero:
+### A2. Čierna skrinka vs. sivá skrinka vs. biela skrinka?
+Tieto tri sa líšia tým, **koľko vnútorných vedomostí o systéme máte/použijete** —
+spektrum od „žiadne" až po „úplné":
+
+- **Biela skrinka** (úplná vnútorná znalosť): model odvodený z fyzikálnych zákonov
+  (bilancia hmotnosti/energie, zachovanie); štruktúra *aj* parametre majú fyzikálny
+  zmysel. *Najväčší vhľad, najväčšie úsilie/odbornosť.*
+- **Čierna skrinka** (žiadna vnútorná znalosť): štruktúra zvolená len pre pohodlnosť
+  (FIR, ARX); parametre sú len fitované čísla bez fyzikálneho zmyslu — vidíme
+  len vstupy a výstupy. *Najrýchlejší prístup, ale žiadny fyzikálny vhľad; nevieme vysvetliť
+  *prečo* to funguje.*
+- **Sivá skrinka** (čiastočná vnútorná znalosť): známa štruktúra z fyziky s
+  neznámymi parametrami fitovanými na dáta — vyvážený hybrid kombinujúci oba prístupy.
+
+**Analógia s predajným automatom:**
+- *Čierna skrinka* = **používateľ** automatu: vhodí peniaze, dostane nápoj, netuší
+  ako funguje vnútorný mechanizmus.
+- *Biela skrinka* = **technik**: preskúma každú vnútornú súčiastku, aby pochopil,
+  ako každá časť prispieva.
+- *Sivá skrinka* = **operátor**: pozná základné mechanické princípy, ale nie každý detail.
+
+| Aspekt | Biela skrinka | Sivá skrinka | Čierna skrinka |
+|--------|---------------|--------------|----------------|
+| Vnútorná znalosť | Úplná | Čiastočná | Žiadna |
+| Parametre | Fyzikálne | Zmiešané | Len fitované |
+| Úsilie / odbornosť | Vysoké | Stredné | Nízke |
+| Fyzikálny vhľad | Úplný | Čiastočný | Žiadny |
+| Príklady z kurzu | Fyzikálne modely nádrže/plynu | Známa štruktúra + MNŠ | FIR, ARX |
+
+*Poznámka:* rovnaká terminológia biela/čierna/sivá skrinka sa používa aj pri **testovaní softvéru**
+(testovanie bez znalosti kódu vs. prehliadanie zdrojového kódu vs. čiastočný prístup) —
+základná myšlienka je rovnaká: **miera vnútornej viditeľnosti do skúmaného objektu.** Pri *identifikácii* opisuje **model**; pri testovaní opisuje **testovaný kód**.
+
+### A3. Všeobecný postup identifikácie (kroky)?
+1. Navrhnúť experiment a zbierať dáta (zvoliť vstupný signál).
+2. Preskúmať / vizualizovať / vyčistiť dáta.
+3. Zvoliť štruktúru modelu (statický/dynamický, FIR/ARX, rád).
+4. Odhadnúť parametre (metóda najmenších štvorcov).
+5. Validovať model (RMSE na nezávislých testovacích dátach, kontrola reziduí).
+6. Ak nie je výsledok uspokojivý, revidovať štruktúru/rád a opakovať.
+
+### A4. Statický vs. dynamický model?
+- **Statický:** výstup závisí len od *aktuálneho* vstupu — $y = f(u)$
+  (napr. nádrž $q = k\sqrt{h}$, plynová nádrž $V = f(T)$). Bez pamäti.
+- **Dynamický:** výstup závisí od *minulých* vstupov a/alebo výstupov — má pamäť /
+  časový vývoj (FIR, ARX). Potrebný, keď má systém zotrvačnosť/oneskorenie.
+
+---
+
+## Časť B — Štatistika a dáta
+
+### B1. Priemer, rozptyl, smerodajná odchýlka — definície?
+- Priemer (stredná hodnota): $\mu = \frac{1}{N}\sum_{i} x_i$.
+- Výberový rozptyl: $\sigma^2 = \frac{1}{N-1}\sum_{i}(x_i - \mu)^2$.
+- Smerodajná odchýlka: $\sigma = \sqrt{\sigma^2}$, rovnaké jednotky ako dáta; rozptyl okolo priemeru.
+- **Menovateľ $N-1$** (Besselova korekcia) robí výberový rozptyl *nestranným*
+  odhadom skutočného rozptylu.
+
+### B2. Hustota pravdepodobnosti (PDF) vs. distribučná funkcia (CDF)?
+- **PDF** $f(x)$: hustota pravdepodobnosti; plocha pod ňou na nejakom intervale =
+  pravdepodobnosť, že sa hodnota nachádza na tom intervale; integrál = 1.
+- **CDF** $F(x) = P(X \le x)$: monotónne rastúca od 0 do 1; je to integrál hustoty pravdepodobnosti.
+- **Kvantil / inverzná CDF** odpovedá na otázku „ktoré $x$ má kumulatívnu pravdepodobnosť $p$".
+
+### B3. Normálne (Gaussovo) rozdelenie — prečo je dôležité?
+Definované pomocou $\mu$ a $\sigma$. Asi 68 % dát leží v rozsahu $\pm 1\sigma$, 95 % v rozsahu
+$\pm 2\sigma$, 99,7 % v rozsahu $\pm 3\sigma$. Merací šum sa bežne predpokladá
+Gaussov, čo je práve to, čo robí **metódu najmenších štvorcov** štatisticky optimálnym
+(odhadom maximálnej vierohodnosti) odhadcom.
+
+### B4. Zákon veľkých čísel (videný na seminári 2)?
+S rastúcim rozsahom výberu empirický histogram konverguje k skutočnej hustote pravdepodobnosti a
+výberový priemer konverguje k skutočnému priemeru. Viac dát → spoľahlivejšia štatistika.
+
+### B5. Priemer vs. medián vs. geometrický priemer — kedy ktorý použiť? (Seminár 4)
+- **Aritmetický priemer:** najlepší pre symetrický šum; citlivý na odľahlé hodnoty.
+- **Medián:** robustný voči odľahlým hodnotám / asymetrii.
+- **Geometrický priemer:** pre multiplikatívne / log-normálne dáta (napr. miery rastu).
+Krabicový graf porovnáva ich rozptyl v opakovaných odhadoch.
+
+---
+
+## Časť EC — Odhad konštanty (Téma skúšky 2 / Prednášky L03–L04)
+
+### EC1. Čo je „odhad konštanty"?
+Najjednoduchší identifikačný problém: odhadnúť jednu neznámu skutočnú hodnotu $c$
+z $N$ zašumených meraní $y_i = c + e_i$, kde $e_i$ je merací šum
+(s nulovým priemerom). Je to jednopárametrický špeciálny prípad lineárnej regresie s
+regresnou maticou $X = \mathbf{1}_{N}$ (stĺpec jednotiek).
+
+### EC2. Ukažte, že odhad konštanty metódou najmenších štvorcov je priemer.
+Minimalizujeme $J(c) = \sum_{i}(y_i - c)^2$. Položíme deriváciu rovnú nule:
 
 $$
 \frac{dJ}{dc} = -2\sum_{i}(y_i - c) = 0 \quad\Longrightarrow\quad
 \sum_{i} y_i = N c \quad\Longrightarrow\quad \hat{c} = \frac{1}{N}\sum_{i} y_i .
 $$
 
-So the LS estimate of a constant **is exactly the arithmetic mean** — consistent
-with `X\y` when $X = \mathbf{1}_{N}$.
+Odhad metódou MNŠ konštanty **je presne aritmetický priemer** — v súlade
+s `X\y`, keď $X = \mathbf{1}_{N}$.
 
-### EC3. Properties of the mean estimator?
-- **Unbiased:** $E[\hat{c}] = c$ (on average, correct).
-- **Variance:** $\mathrm{var}(\hat{c}) = \sigma^2/N$ — drops with more data.
-- **Consistent:** as $N \to \infty$, $\hat{c} \to c$ (variance $\to 0$).
-- **Standard error** $= \sigma/\sqrt{N}$: to halve the error you need **4× the
-  data** (the $\sqrt{N}$ law). This is *why* we average repeated measurements.
-- Under **Gaussian** noise the mean is also the **maximum-likelihood** estimate.
+### EC3. Vlastnosti odhadcu priemeru?
+- **Nestranný:** $E[\hat{c}] = c$ (v priemere správny).
+- **Rozptyl:** $\mathrm{var}(\hat{c}) = \sigma^2/N$ — klesá s viac dátami.
+- **Konzistentný:** pre $N \to \infty$ platí $\hat{c} \to c$ (rozptyl $\to 0$).
+- **Štandardná chyba** $= \sigma/\sqrt{N}$: na znásobenie chyby dvakrát treba **4× viac
+  dát** (zákon $\sqrt{N}$). Preto priemery opakovaných meraní potláčajú šum.
+- Pri **Gaussovom** šume je priemer aj odhadom **maximálnej vierohodnosti**.
 
-### EC4. When is the mean a bad estimator — and what to use instead?
-- With **outliers / skew**, use the **median** (robust — a few bad points barely
-  move it).
-- With **multiplicative / log-normal** data (ratios, growth rates), use the
-  **geometric mean**.
+### EC4. Kedy je priemer zlý odhadca — a čo použiť namiesto neho?
+- Pri **odľahlých hodnotách / asymetrii** použite **medián** (robustný — niekoľko zlých bodov
+  ho takmer neovplyvní).
+- Pri **multiplikatívnych / log-normálnych** dátach (pomery, miery rastu) použite
+  **geometrický priemer**.
 
-Comparing the three estimators over many repeated trials (box plots) shows the
-mean has the smallest spread for clean Gaussian noise, the median the most
-robustness to outliers (Seminar 4, the tank constant $k_{11}$).
+Porovnanie troch odhadcov v mnohých opakovaných pokusoch (krabicové grafy) ukazuje, že
+priemer má najmenší rozptyl pre čistý Gaussov šum, medián najväčšiu odolnosť voči odľahlým hodnotám
+(Seminár 4, konštanta nádrže $k_{11}$).
 
-### EC5. Confidence interval on the estimate?
-$\hat{c} \pm t\cdot\hat{\sigma}/\sqrt{N}$ ($t$ from the Student/normal
-distribution for the chosen confidence, e.g. 95%). More measurements → narrower
-interval. It quantifies how much to trust the estimate.
+### EC5. Interval spoľahlivosti odhadu?
+$\hat{c} \pm t\cdot\hat{\sigma}/\sqrt{N}$ ($t$ z Studentovho/normálneho
+rozdelenia pre zvolenú spoľahlivosť, napr. 95 %). Viac meraní → užší
+interval. Kvantifikuje, nakoľko možno odhadu dôverovať.
 
 ---
 
-## Part C — Least squares & regression
+## Časť C — Metóda najmenších štvorcov a regresia
 
-### C1. State the least-squares problem.
-Given regressor matrix $X$ (rows = measurements, columns = features) and outputs
-$y$, find parameters $p$ minimizing the sum of squared residuals
-$\min_{p}\|X p - y\|^2$. Solution = **normal equations**:
+### C1. Sformulujte problém metódy najmenších štvorcov.
+Daná regresná matica $X$ (riadky = merania, stĺpce = príznaky) a výstupy
+$y$, nájdeme parametre $p$ minimalizujúce súčet štvorcov reziduí
+$\min_{p}\|X p - y\|^2$. Riešenie = **normálne rovnice**:
 
 $$
 p = (X^T X)^{-1} X^T y .
 $$
 
-MATLAB computes this as `X\y` — internally via QR factorization, not by forming
-$X^T X$, which is more numerically stable (same answer, better algorithm).
+MATLAB to počíta ako `X\y` — interne pomocou QR faktorizácie, nie výpočtom
+$X^T X$, čo je numericky stabilnejšie (rovnaký výsledok, lepší algoritmus).
 
-### C2. Why squared errors (not absolute)?
-- Differentiable → closed-form linear solution.
-- Penalizes large errors more.
-- Maximum-likelihood estimate under Gaussian noise.
+### C2. Prečo štvorcové chyby (nie absolútne)?
+- Diferencovateľné → uzavretá lineárna forma riešenia.
+- Viac penalizuje veľké chyby.
+- Odhad maximálnej vierohodnosti pri Gaussovom šume.
 
-(Absolute error → robust regression, but no closed form.)
+(Absolútna chyba → robustná regresia, ale bez uzavrenej formy.)
 
-### C2b. When is least squares the *best* estimator? (Gauss–Markov)
-Under the **Gauss–Markov assumptions** the LS estimate is the **Best Linear
-Unbiased Estimator (BLUE)** — minimum variance among all linear unbiased
-estimators:
-1. The model is **linear in the parameters** and correctly specified.
-2. Noise has **zero mean** ($E[e] = 0$).
-3. Noise is **homoscedastic** (constant variance).
-4. Noise is **uncorrelated** across measurements.
+### C2b. Kedy je metóda najmenších štvorcov *najlepší* odhadca? (Gauss–Markov)
+Za **Gauss–Markovových predpokladov** je odhad MNŠ **najlepší lineárny nestranný odhadca (BLUE)** —
+minimálny rozptyl spomedzi všetkých lineárnych nestranných odhadcov:
+1. Model je **lineárny v parametroch** a správne špecifikovaný.
+2. Šum má **nulový priemer** ($E[e] = 0$).
+3. Šum je **homoskedastický** (konštantný rozptyl).
+4. Šum je **nekorelovaný** naprieč meraniami.
 
-(If, in addition, the noise is **Gaussian**, LS = maximum-likelihood.) When these
-break — e.g. correlated noise in dynamic data — plain LS becomes
-biased/suboptimal, motivating methods beyond ARX.
+(Ak je navyše šum **Gaussov**, MNŠ = maximálna vierohodnosť.) Keď tieto predpoklady
+nie sú splnené — napr. korelovaný šum v dynamických dátach — prostá MNŠ sa stáva
+zaujatou/suboptimálnou, čo motivuje metódy nad rámec ARX.
 
-### C3. What is the regressor / design matrix?
-The matrix whose columns are the model's basis functions evaluated at each data
-point. The model must be **linear in the parameters** for `X\y` to apply — note
-the *features themselves* can be nonlinear ($\sqrt{h}$, $T^2$, $1/T$); only the
-parameter dependence must be linear.
+### C3. Čo je regresná matica?
+Matica, ktorej stĺpce sú bázové funkcie modelu vyhodnotené v každom dátovom
+bode. Model musí byť **lineárny v parametroch**, aby sa dalo použiť `X\y` — všimnite si,
+že *samotné príznaky* môžu byť nelineárne ($\sqrt{h}$, $T^2$, $1/T$); lineárna
+musí byť iba závislosť na parametroch.
 
-### C4. Role of the intercept (bias) term?
-The `ones(size(...))` column lets the fit have a non-zero offset
-($y = p_1 x + p_0$). Omitting it forces the line through the origin (used for
-$q = k\sqrt{h}$, which must be 0 when $h = 0$).
+### C4. Úloha absolútneho člena (posunu)?
+Stĺpec `ones(size(...))` umožňuje fitu mať nenulový offset
+($y = p_1 x + p_0$). Jeho vynechanie núti priamku prechádzať cez počiatok (používa sa pre
+$q = k\sqrt{h}$, čo musí byť 0 keď $h = 0$).
 
-### C5. RMSE — what is it and why use it?
+### C5. RMSE — čo to je a prečo sa používa?
 
 $$
 \mathrm{RMSE} = \sqrt{\tfrac{1}{N}\sum_{k}(\hat{y}_k - y_k)^2} .
 $$
 
-Average prediction error in the **same units as $y$**; it equals the standard
-deviation of the residuals when their mean is $\approx 0$ (true for LS with an
-intercept). Lower = better. Used to compare competing models.
+Priemerná chyba predikcie v **rovnakých jednotkách ako $y$**; rovná sa smerodajnej
+odchýlke reziduí, keď ich priemer je $\approx 0$ (platí pre MNŠ s absolútnym členom). Nižšia = lepšia. Používa sa na porovnanie konkurenčných modelov.
 
-### C6. Parity plot — what does it show?
-Predicted vs measured with a 45° reference line. Points on the diagonal = perfect
-predictions; systematic deviation reveals bias or model-structure error.
+### C6. Paritný graf — čo ukazuje?
+Predikovaná hodnota oproti nameranej s referenčnou priamkou 45°. Body na uhlopriečke = dokonalé
+predikcie; systematická odchýlka odhalí posun alebo chybu štruktúry modelu.
 
-### C7. Why standardize data? (zero mean, unit variance)
-- Puts variables of different units/scales on equal footing.
-- Improves numerical conditioning of $X^T X$.
-- Makes regression coefficients comparable in importance.
-- Required before correlation/PCA so large-magnitude variables don't dominate.
+### C7. Prečo štandardizovať dáta? (nulový priemer, jednotková smerodajná odchýlka)
+- Stavia premenné rôznych jednotiek/škál na rovnaký základ.
+- Zlepšuje numerickú podmienosť $X^T X$.
+- Robí regresné koeficienty porovnateľnými z hľadiska dôležitosti.
+- Potrebné pred koreláciou/PCA, aby premenné s veľkou hodnotou neprevládali.
 
-Formula: $x_s = (x - \mu)/\sigma$. A constant signal can't be standardized
+Vzorec: $x_s = (x - \mu)/\sigma$. Konštantný signál sa nedá štandardizovať
 ($\sigma = 0$).
 
 ---
 
-## Part D — Correlation, covariance, PCA
+## Časť D — Korelácia, kovariancia, PCA
 
-### D1. Covariance vs correlation?
-- **Covariance** $\mathrm{cov}(x,y)$: joint variability, units =
-  units($x$)·units($y$), unbounded.
-- **Correlation** (Pearson $r$): covariance normalized by the two std devs →
-  dimensionless, in **$[-1, 1]$**. $r = +1$ perfect positive linear, $-1$ perfect
-  negative, $0$ no *linear* relation.
-- Correlation is just the covariance of the **standardized** variables.
+### D1. Kovariancia vs. korelácia?
+- **Kovariancia** $\mathrm{cov}(x,y)$: spoločná variabilita, jednotky =
+  jednotky($x$)·jednotky($y$), neohraničená.
+- **Korelácia** (Pearsonove $r$): kovariancia normalizovaná dvoma smerodajnými odchýlkami →
+  bezrozmerná, v rozsahu **$[-1, 1]$**. $r = +1$ dokonalá kladná lineárna, $-1$ dokonalá
+  záporná, $0$ žiadna *lineárna* závislosť.
+- Korelácia je len kovariancia **štandardizovaných** premenných.
 
-### D2. "Correlation does not imply causation" — relevance?
-Two variables can move together due to a common cause or coincidence. In
-identification this matters for **input selection**: a highly correlated input
-isn't necessarily a *causal driver* of the output.
+### D2. „Korelácia neznamená príčinnosť" — relevancia?
+Dve premenné sa môžu pohybovať spoločne z dôvodu spoločnej príčiny alebo náhody. Pri
+identifikácii to má vplyv na **výber vstupov**: silne korelovaný vstup nemusí byť nutne *príčinným faktorom* výstupu.
 
-### D3. What is multicollinearity and why remove correlated inputs? (Seminar 6/7)
-If two regressor columns are strongly correlated, $X^T X$ becomes near-singular →
-unstable, large, untrustworthy coefficients. Removing redundant (linearly
-dependent) inputs gives a better-conditioned, more generalizable model. This is
-the "feature selection" step.
+### D3. Čo je multikolinearita a prečo odstrániť korelované vstupy? (Semináre 6/7)
+Ak sú dva stĺpce regresnej matice silne korelované, $X^T X$ sa stáva blízko singulárnou →
+nestabilné, veľké, nespoľahlivé koeficienty. Odstrániť redundantné (lineárne
+závislé) vstupy dáva lepšie podmienený, zovšeobecniteľnejší model. Toto je
+krok „výberu príznakov".
 
-### D4. What is PCA and what is it for?
-**Principal Component Analysis** rotates the data onto orthogonal directions
-(eigenvectors of the covariance matrix) ordered by variance explained
-(eigenvalues). Uses: dimensionality reduction, decorrelation, visualization. The
-first PC is the direction of maximum variance.
+### D4. Čo je PCA a na čo slúži?
+**Analýza hlavných komponentov** rotuje dáta na ortogonálne smery
+(vlastné vektory kovarianční matice) zoradené podľa vysvetleného rozptylu
+(vlastné čísla). Využitia: redukcia dimenzie, dekorelizácia, vizualizácia.
+Prvý hlavný komponent je smer maximálneho rozptylu.
 
-### D5. Geometric meaning of covariance eigenvectors?
-They are the **axes of the data's scatter ellipse**; eigenvalues = variance along
-each axis (ellipse semi-axis lengths $\propto \sqrt{\text{eigenvalue}}$). Drawing
-the $1\sigma/2\sigma/3\sigma$ ellipses visualizes the covariance structure.
+### D5. Geometrický zmysel vlastných vektorov kovariancie?
+Sú to **osi elipsy rozptylu dát**; vlastné čísla = rozptyl pozdĺž
+každej osi (poloosi elipsy $\propto \sqrt{\text{vlastné číslo}}$). Kreslenie
+$1\sigma/2\sigma/3\sigma$ elíps vizualizuje kovarianční štruktúru.
 
-### D6. How to choose the number of principal components?
-Plot cumulative/explained variance vs PC index and find the **elbow (knee)** —
-the point of diminishing returns — keep PCs up to there.
+### D6. Ako vybrať počet hlavných komponentov?
+Vykresliť kumulatívny/vysvetlený rozptyl oproti indexu hlavného komponentu a nájsť **lakeť (koleno)** —
+bod klesajúcich výnosov — zachovať hlavné komponenty do tohto bodu.
 
-### D7. Parameter confidence ellipse and "interval contains zero" (L07)?
-The parameter covariance is $V_p = \sigma^2 (X^T X)^{-1}$ (noise variance ×
-inverse information). Treating $p \sim \mathcal{N}(\hat{p}, V_p)$, the quadratic
-form $(p-\hat{p})^T V_p^{-1}(p-\hat{p})$ follows a **chi-square** with $n_p$
-degrees of freedom, so its level set $\le \chi^2_{n_p,\alpha}$ is the
-**confidence ellipse** — the multivariate generalization of the scalar interval.
-Semi-axis lengths come from the parameter CIs; off-diagonal terms tilt the
-ellipse. Practical test: if a parameter's confidence interval **contains zero**
-(e.g. $[-1, 2]$ at 95%), the model can live **without** that parameter — it may
-be unobservable (collinearity), under-excited, or simply not causal. A clean way
-to prune overfit terms.
-
----
-
-## Part E — Training/testing & model quality
-
-### E1. Why split into training and testing datasets?
-Train estimates parameters; test gives an **honest, unbiased** estimate of
-predictive accuracy on data the model has never seen. Judging accuracy only on
-training data is over-optimistic.
-
-### E2. Overfitting vs underfitting?
-- **Overfitting:** model too complex (too many parameters/order) — fits noise;
-  low training RMSE but high testing RMSE.
-- **Underfitting:** model too simple — high error everywhere.
-
-The aim is the order that minimizes **testing** RMSE (bias–variance trade-off).
-
-### E3. How does model order relate to over/underfitting?
-Increasing order always lowers *training* error but eventually raises *testing*
-error. Choose the smallest order that captures the dynamics (parsimony /
-Occam's razor).
+### D7. Elipsa spoľahlivosti parametrov a „interval obsahuje nulu" (L07)?
+Kovariancia parametrov je $V_p = \sigma^2 (X^T X)^{-1}$ (rozptyl šumu ×
+inverzná informácia). S predpokladom $p \sim \mathcal{N}(\hat{p}, V_p)$, kvadratická
+forma $(p-\hat{p})^T V_p^{-1}(p-\hat{p})$ sleduje **chi-kvadrát** rozdelenie s $n_p$
+stupňami voľnosti, takže jej množina úrovní $\le \chi^2_{n_p,\alpha}$ je
+**elipsa spoľahlivosti** — multivariátna generalizácia skalárneho intervalu.
+Dĺžky poloosí vychádzajú z intervalov spoľahlivosti parametrov; mimidiagonálne členy nakláňajú
+elipsu. Praktický test: ak interval spoľahlivosti parametra **obsahuje nulu**
+(napr. $[-1, 2]$ pri 95 %), model môže fungovať **bez** tohto parametra — môže
+byť nepozorovateľný (kolinearita), nedostatočne budený, alebo jednoducho nekausálny. Čistý spôsob
+orezania preučených členov.
 
 ---
 
-## Part F — Signals & filtering
+## Časť E — Trénovanie/testovanie a kvalita modelu
 
-### F1. Low-pass vs high-pass filter?
-- **Low-pass** keeps slow components (trend), removes fast noise → smoothing.
-- **High-pass** keeps fast components (noise/edges), removes slow trend.
+### E1. Prečo rozdeliť dáta na trénovaciu a testovaciu množinu?
+Trénovanie odhaduje parametre; testovanie poskytuje **poctivý, nestranný** odhad
+predikčnej presnosti na dátach, ktoré model nikdy nevidel. Posudzovanie presnosti len na
+trénovacích dátach je prílišne optimistické.
 
-The cut-off (normalized) frequency sets the boundary.
+### E2. Preučenie vs. podučenie?
+- **Preučenie:** model príliš zložitý (príliš veľa parametrov/príliš vysoký rád) — fituje šum;
+  nízke trénovacie RMSE, ale vysoké testovacie RMSE.
+- **Podučenie:** model príliš jednoduchý — vysoká chyba všade.
 
-### F2. Moving-average filter — what is it?
-A FIR filter with equal weights $1/n$; averages the last $n$ samples. Larger $n$
-→ smoother but more lag and more edge distortion. It is literally a low-pass
+Cieľom je rád, ktorý minimalizuje **testovacie** RMSE (kompromis rozptyl–posun).
+
+### E3. Ako súvisí rád modelu s preučením/podučením?
+Zvyšovanie rádu vždy znižuje *trénovaciu* chybu, ale nakoniec zvyšuje *testovaciu*
+chybu. Zvoliť najmenší rád, ktorý zachytí dynamiku (parsimónia /
+Occamova britva).
+
+---
+
+## Časť F — Signály a filtrácia
+
+### F1. Dolnopriepustný vs. hornopriepustný filter?
+- **Dolnopriepustný filter** zachová pomalé zložky (trend), odstraňuje rýchly šum → vyhladzovanie.
+- **Hornopriepustný filter** zachová rýchle zložky (šum/hrany), odstraňuje pomalý trend.
+
+Medzná (normalizovaná) frekvencia určuje hranicu.
+
+### F2. Filter kĺzavého priemeru — čo to je?
+FIR filter s rovnakými váhami $1/n$; priemery posledných $n$ vzoriek. Väčšie $n$
+→ hladšie, ale väčšie oneskorenie a väčšie skreslenie na okrajoch. Je to doslova dolnopriepustný
 filter.
 
-### F3. Causal filter vs zero-phase filter?
-- **Causal** (`filter`) uses only past samples → introduces a **time delay**.
-- **Zero-phase** (`filtfilt`, forward+backward) removes the delay → output
-  aligned in time. Used to build the *smoothed testing output* in Assignment 2
-  so it stays time-aligned with the input.
+### F3. Kauzálny filter vs. filter s nulovou fázou?
+- **Kauzálny** (`filter`) používa len minulé vzorky → vnáša **časové oneskorenie**.
+- **S nulovou fázou** (`filtfilt`, dopredu+dozadu) odstraňuje oneskorenie → výstup
+  zarovnaný v čase. Používa sa na zostavenie *vyhladzeného testovacieho výstupu* v Zadaní 2,
+  aby zostal časovo zarovnaný so vstupom.
 
-### F4. Why filter / smooth before identification?
-Noise corrupts parameter estimates; smoothing yields a cleaner reference output.
-But over-smoothing destroys real dynamics — trade-off.
+### F4. Prečo filtrovať / vyhladzovať pred identifikáciou?
+Šum narúša odhady parametrov; vyhladzovanie poskytuje čistejší referenčný výstup.
+Nadmerné vyhladzovanie však ničí skutočnú dynamiku — kompromis.
 
 ---
 
-## Part G — Dynamic identification (the core)
+## Časť G — Dynamická identifikácia (jadro)
 
-### G1. What does convolution describe? (Seminar 9)
-A linear time-invariant system's output is the convolution of its **impulse
-response** $g(t)$ with the input:
+### G1. Čo opisuje konvolúcia? (Seminár 9)
+Výstup lineárneho časovo invariantného systému je konvolúcia jeho **impulznej
+odozvy** $g(t)$ so vstupom:
 
 $$
 y(t) = \int_0^{t} g(\tau)\,u(t-\tau)\,d\tau .
 $$
 
-In discrete time this becomes a weighted sum of past inputs — the basis of the
-FIR model.
+V diskrétnom čase sa toto stáva váženou sumou minulých vstupov — základ modelu FIR.
 
-### G2. Define the FIR model and its meaning.
-**Finite Impulse Response:** $y_k = \sum_{i=1}^{m} b_i\,u_{k-i}$. Output is a
-weighted sum of the last $m$ inputs; the weights $b_i$ *are* the (sampled)
-impulse response. No feedback → always stable. Written as $X p = y$ and solved by
-least squares; $X$ is the (lower-triangular, shifted) matrix of past inputs.
+### G2. Definujte model FIR a jeho zmysel.
+**Finite Impulse Response (konečná impulzná odozva):** $y_k = \sum_{i=1}^{m} b_i\,u_{k-i}$. Výstup je
+vážená suma posledných $m$ vstupov; váhy $b_i$ *sú* (vzorkovanou)
+impulznou odozvou. Bez spätnej väzby → vždy stabilný. Zapísané ako $X p = y$ a riešené
+metódou najmenších štvorcov; $X$ je (dolno-trojuholníková, posunutá) matica minulých vstupov.
 
-### G3. Define the ARX model.
-**Auto-Regressive with eXogenous input:**
+### G3. Definujte model ARX.
+**Auto-Regressive with eXogenous input (autoregresívny s exogénnym vstupom):**
 
 $$
 y_k = -\sum_{i=1}^{n} a_i\,y_{k-i} + \sum_{i=1}^{m} b_i\,u_{k-i} .
 $$
 
-Output depends on past **outputs** (the AR part, $a$) and past **inputs** (the
-exogenous part, $b$). Transfer function in $z$:
+Výstup závisí od minulých **výstupov** (AR časť, $a$) a minulých **vstupov** (exogénna časť, $b$). Prenosová funkcia v $z$:
 
 $$
 G(z^{-1}) = \frac{\sum_i b_i z^{-i}}{1 + \sum_i a_i z^{-i}} .
 $$
 
-Still **linear in parameters** → least squares. $n$ = output order, $m$ = input
-order, with $n \ge m$.
+Stále **lineárny v parametroch** → metóda najmenších štvorcov. $n$ = rád výstupu, $m$ = rád vstupu,
+pričom $n \ge m$.
 
-### G4. FIR vs ARX — compare.
+### G4. FIR vs. ARX — porovnanie.
 | | FIR | ARX |
 |---|---|---|
-| Uses past outputs | No | Yes (feedback) |
-| Structure | All-zero (numerator only) | Poles + zeros |
-| Stability | Always stable | Can be unstable (poles) |
-| Parameters needed | Many (high order ~50) | Few |
-| Captures slow decay | Needs long tail | Implicit via poles |
-| Typical accuracy | Lower | Higher (fewer params, lower RMSE) |
+| Používa minulé výstupy | Nie | Áno (spätná väzba) |
+| Štruktúra | Všetky nuly (len čitateľ) | Póly + nuly |
+| Stabilita | Vždy stabilný | Môže byť nestabilný (póly) |
+| Počet potrebných parametrov | Veľa (vysoký rád ~50) | Málo |
+| Zachytáva pomalé doznievanie | Potrebuje dlhý chvost | Implicitne cez póly |
+| Typická presnosť | Nižšia | Vyššia (menej parametrov, nižšie RMSE) |
 
-ARX is more *parsimonious*: feedback models the impulse-response decay with a few
-poles, whereas FIR must spell out the whole tail.
+ARX je *parsimoniálnejší*: spätná väzba modeluje doznievanie impulznej odozvy niekoľkými
+pólmi, zatiaľ čo FIR musí vypísať celý chvost.
 
-### G5. Why does FIR need such a high order (e.g. 50)?
-It has no recursion, so each impulse-response sample needs its own coefficient.
-A system whose response decays slowly needs many $b$ terms to represent the
-"memory". ARX gets the same memory cheaply through the recursive $a_i y_{k-i}$
-terms.
+### G5. Prečo FIR potrebuje tak vysoký rád (napr. 50)?
+Nemá rekurziu, takže každá vzorka impulznej odozvy potrebuje vlastný koeficient.
+Systém, ktorého odozva doznievava pomaly, potrebuje veľa členov $b$ na reprezentáciu
+„pamäte". ARX dosahuje rovnakú pamäť lacno cez rekurzívne členy $a_i y_{k-i}$.
 
-**Quantitative version (good board point):** a FIR of order $m$ only remembers
-the last $m$ samples — a **memory window $\tau = m\cdot T_s$**. This must span the
-system's **settling time**. Example (Assignment 2): $m = 50$, $T_s = 0.02$ s $\to$
-$\tau = 1$ s of memory; if the plant settles slower, the FIR is underfit.
-Sweeping $m$ up to ~1000 barely lowers RMSE — proof that adding FIR coefficients
-is an inefficient substitute for ARX's feedback.
+**Kvantitatívna verzia (dobrý bod na tabuľu):** FIR rádu $m$ si pamätá len
+posledných $m$ vzoriek — **pamäťové okno $\tau = m\cdot T_s$**. To musí pokryť
+**čas ustálenia** systému. Príklad (Zadanie 2): $m = 50$, $T_s = 0{,}02$ s $\to$
+$\tau = 1$ s pamäte; ak sa systém ustáľuje pomalšie, FIR je podučený.
+Zvyšovanie $m$ až na ~1000 takmer nezníži RMSE — dôkaz, že pridávanie FIR koeficientov
+je neefektívna náhrada spätnej väzby ARX.
 
-### G6. How do you choose ARX orders $n$ and $m$? (ACF/PACF)
-- **ACF** (autocorrelation): how the output correlates with its own past →
-  indicates overall memory / MA ($b$) behavior.
-- **PACF** (partial autocorrelation): correlation at a lag with intermediate
-  lags removed → the lag after which PACF falls inside the confidence band gives
-  the **AR order $n$**. Choose $m \le n$ to avoid overfitting.
+### G6. Ako vybrať rády ARX $n$ a $m$? (ACF/PACF)
+- **ACF** (autokorelačná funkcia): ako výstup koreluje so svojou vlastnou minulosťou →
+  indikuje celkovú pamäť / správanie MA ($b$).
+- **PACF** (parciálna autokorelačná funkcia): korelácia pri danom oneskorení s odstránenými
+  medziľahlými oneskoreniami → oneskorenie, po ktorom PACF klesne do pásma spoľahlivosti, dáva
+  **AR rád $n$**. Zvoliť $m \le n$, aby sa predišlo preučeniu.
 
-### G7. What is the z-transform / $z^{-1}$ operator?
-$z^{-1}$ is the **unit (one-sample) delay** operator: $z^{-1} y_k = y_{k-1}$. It
-turns difference equations into algebraic transfer functions $G(z^{-1}) = Y/U$.
-$z^{-n_k}$ represents a pure input **time delay** of $n_k$ samples.
+### G7. Čo je Z-transformácia / operátor $z^{-1}$?
+$z^{-1}$ je operátor **jednotkového (jednvzorkovacieho) oneskorenia**: $z^{-1} y_k = y_{k-1}$. Mení
+diferenčné rovnice na algebraické prenosové funkcie $G(z^{-1}) = Y/U$.
+$z^{-n_k}$ predstavuje čisté **časové oneskorenie vstupu** o $n_k$ vzoriek.
 
-### G7b. What is the ARMAX model and when do you need it?
-**Auto-Regressive Moving Average with eXogenous input** — ARX plus a
-moving-average term on the past **prediction errors**:
+### G7b. Čo je model ARMAX a kedy ho potrebujeme?
+**Auto-Regressive Moving Average with eXogenous input** — ARX plus
+člen kĺzavého priemeru na minulých **chybách predikcie**:
 
 $$
 y_k = -\sum_i a_i\,y_{k-i} + \sum_i b_i\,u_{k-i} + \sum_i c_i\,e_{k-i} .
 $$
 
-The three parts: AR (past outputs, $a$), exogenous input (past inputs, $b$), and
-the new MA part (past errors $e_{k-i}$, weights $c$). Why it helps: plain ARX/FIR
-**ignore disturbances** (a leaking valve, a changed feed quality). The MA term
-lets the $c$ coefficients **absorb the systematic disturbance errors**, freeing
-$a$ and $b$ to learn the *true* plant dynamics. Unlike train-once ARX, ARMAX
-**corrects itself online** (a moving average of recent errors). Cost: usually
-needs **nonlinear optimization** to fit; to predict ahead (future $e_k$ unknown)
-you assume $e_k$ is zero-mean Gaussian noise and build $\pm\sigma$ disturbance
-scenarios.
+Tri časti: AR (minulé výstupy, $a$), exogénny vstup (minulé vstupy, $b$) a
+nová MA časť (minulé chyby $e_{k-i}$, váhy $c$). Prečo pomáha: prostý ARX/FIR
+**ignoruje poruchy** (netesniaci ventil, zmenená kvalita suroviny). MA člen
+umožňuje koeficientom $c$ **absorbovať systematické chyby poruchy**, čím oslobodzuje
+$a$ a $b$ na naučenie sa *skutočnej* dynamiky zariadenia. Na rozdiel od jednorazovo natrénovaného ARX, ARMAX
+**sám sa opravuje online** (kĺzavý priemer nedávnych chýb). Cena: zvyčajne
+vyžaduje **nelineárnu optimalizáciu** na fitovanie; na predikciu dopredu (budúce $e_k$ neznáme)
+predpokladáme, že $e_k$ je Gaussov šum s nulovým priemerom a zostavujeme scenáre poruchy $\pm\sigma$.
 
-### G8. One-step-ahead prediction vs simulation?
-- **One-step-ahead (OSA):** predict $y_k$ using *measured* past outputs $y_{k-i}$
-  (regressor uses real data) — what `Phi*theta` computes.
-- **Simulation (free-run):** feed the model's *own* past predictions back; only
-  the input is given (`lsim`/`sim`). Simulation is the tougher, more honest test.
-- **Why it matters when comparing models:** OSA always looks better than
-  simulation (it gets the true recent output for free). A very low ARX *test*
-  RMSE (e.g. 0.02 in Assignment 2) partly reflects OSA on smoothed data. To
-  compare FIR and ARX fairly, evaluate **both the same way** — otherwise
-  ARX-by-OSA vs FIR-by-simulation flatters the ARX.
+### G8. Predikcia o jeden krok dopredu vs. simulácia?
+- **O jeden krok dopredu (OSA):** predikuje $y_k$ pomocou *nameraných* minulých výstupov $y_{k-i}$
+  (regresná matica používa skutočné dáta) — čo počíta `Phi*theta`.
+- **Simulácia (voľný beh):** model spätne dostáva vlastné minulé predikcie; zadaný je len
+  vstup (`lsim`/`sim`). Simulácia je náročnejší, poctivejší test.
+- **Prečo na tom záleží pri porovnávaní modelov:** OSA vyzerá vždy lepšie ako
+  simulácia (dostáva skutočný nedávny výstup zadarmo). Veľmi nízke ARX *testovacie*
+  RMSE (napr. 0,02 v Zadaní 2) čiastočne odráža OSA na vyhladených dátach. Na férové
+  porovnanie FIR a ARX vyhodnoťte **oba rovnakým spôsobom** — inak ARX-cez-OSA vs. FIR-cez-simuláciu zvýhodňuje ARX.
 
 ---
 
-## Part R — Recursive estimation (Lecture L11)
+## Časť R — Rekurzívna identifikácia (Prednáška L11)
 
-### R1. What is recursive estimation and why use it?
-Updating the parameter estimate **sample-by-sample** as new data arrives, instead
-of re-solving the full batch least squares each time. Motivation:
-- **Online / real-time** identification (adaptive control).
-- **Time-varying systems** — track parameters that drift.
-- **Memory/computation** — no need to store or reprocess all past data.
+### R1. Čo je rekurzívna identifikácia a prečo sa používa?
+Aktualizácia odhadu parametrov **vzorku po vzorke** pri príchode nových dát, namiesto
+opakovaného riešenia plnej dávkovej metódy najmenších štvorcov. Motivácia:
+- **Online / v reálnom čase** identifikácia (adaptívne riadenie).
+- **Časovo premenné systémy** — sledovanie parametrov, ktoré sa menia.
+- **Pamäť/výpočet** — nie je potrebné uchovávať ani znova spracovávať všetky minulé dáta.
 
-### R2. State the Recursive Least Squares (RLS) update in words.
-For each new sample: compute the **prediction error (innovation)**
-$e_k = y_k - \phi_k^T \theta_{k-1}$ (measured minus predicted), then correct the
-estimate $\theta_k = \theta_{k-1} + K_k e_k$, where the **gain** $K_k$ comes from
-the current covariance $P$. Finally update $P$. Structure = **"old estimate +
-gain × prediction error."**
+### R2. Sformulujte aktualizáciu rekurzívnej metódy najmenších štvorcov (RLS) slovne.
+Pre každú novú vzorku: vypočítame **chybu predikcie (inováciu)**
+$e_k = y_k - \phi_k^T \theta_{k-1}$ (namerané mínus predikované), potom opravíme
+odhad $\theta_k = \theta_{k-1} + K_k e_k$, kde **zisk** $K_k$ vychádza z
+aktuálnej kovariancia $P$. Nakoniec aktualizujeme $P$. Štruktúra = **„starý odhad +
+zisk × chyba predikcie."**
 
-Formulas:
+Vzorce:
 
 $$
 \begin{aligned}
@@ -541,155 +529,151 @@ P_k &= \frac{1}{\lambda}\bigl(P_{k-1} - K_k\,\phi_k^T P_{k-1}\bigr)
 \end{aligned}
 $$
 
-### R3. What is the forgetting factor $\lambda$?
-A weight $\lambda \in (0, 1]$ that exponentially discounts older data.
-- $\lambda = 1$: standard RLS — all data weighted equally; converges to the
-  **same result as batch LS**.
-- $\lambda < 1$ (typ. 0.95–0.99): old data "forgotten" → the estimator can
-  **follow time-varying parameters**. Smaller $\lambda$ = faster tracking but
-  noisier (variance ↑).
+### R3. Čo je faktor zabúdania $\lambda$?
+Váha $\lambda \in (0, 1]$, ktorá exponenciálne diskontuje staršie dáta.
+- $\lambda = 1$: štandardný RLS — všetky dáta sú rovnako vážené; konverguje k
+  **rovnakému výsledku ako dávková MNŠ**.
+- $\lambda < 1$ (typicky 0,95–0,99): staré dáta sú „zabudnuté" → odhadca môže
+  **sledovať časovo premenné parametre**. Menšie $\lambda$ = rýchlejšie sledovanie, ale
+  väčší šum (rozptyl ↑).
 
-This is the bias–variance / tracking–noise trade-off.
+Toto je kompromis posun–rozptyl / sledovanie–šum.
 
-### R4. What is the matrix $P$ and the gain $K$?
-- $P$ = **covariance of the parameter estimate** (proportional to $(X^T X)^{-1}$);
-  it shrinks as more data builds confidence. Initialized large (e.g. $10^6 I$) to
-  signal low initial confidence and allow fast convergence.
-- $K$ = **gain** (the Kalman gain): scales how much the latest prediction error
-  corrects the estimate. Large when uncertain, small once confident.
+### R4. Čo je matica $P$ a zisk $K$?
+- $P$ = **kovariancia odhadu parametrov** (úmerná $(X^T X)^{-1}$);
+  klesá, keď viac dát buduje dôveru. Inicializovaná veľko (napr. $10^6 I$), aby
+  signalizovala nízku počiatočnú dôveru a umožnila rýchlu konvergenciu.
+- $K$ = **zisk** (Kalmanov zisk): škáluje, nakoľko najnovšia chyba predikcie
+  opravuje odhad. Veľký keď sme neistí, malý keď sme istí.
 
-### R5. Relationship of RLS to batch least squares and the Kalman filter?
-- With $\lambda = 1$, RLS after $N$ samples = batch LS `X\y` exactly — same
-  answer, computed incrementally.
-- RLS is a **special case of the Kalman filter** (estimating constant parameters
-  instead of a moving state); the gain $K$ is the Kalman gain.
+### R5. Vzťah RLS k dávkovej metóde najmenších štvorcov a Kalmanovmu filtru?
+- S $\lambda = 1$, RLS po $N$ vzorkách = dávková MNŠ `X\y` presne — rovnaký
+  výsledok, vypočítaný inkrementálne.
+- RLS je **špeciálnym prípadom Kalmanovho filtra** (odhad konštantných parametrov
+  namiesto pohybujúceho sa stavu); zisk $K$ je Kalmanov zisk.
 
-### R6. What is the "innovation"?
-$e_k = y_k - \phi_k^T \theta_{k-1}$ — the part of the new measurement **not
-predicted** by the current model, i.e. the genuinely new information. RLS moves
-the estimate in proportion to it.
+### R6. Čo je „inovácia"?
+$e_k = y_k - \phi_k^T \theta_{k-1}$ — časť novej vzorky **nepredikovaná**
+aktuálnym modelom, t.j. skutočne nová informácia. RLS posúva odhad v pomere k nej.
 
-### R7. Bias update — the simplest recursive scheme (L11).
-If a deployed model develops an almost **constant systematic error** (e.g. a
-changed feed/supplier, mild nonlinearity) but the **slope is still correct**, you
-adapt only the **offset $b$**, not the verified slopes — industry prefers this.
-Update by the prediction error: $b_k = b_{k-1} + (y_{k-1} - \hat{y}_{k-1})$.
-Reacting to one point is myopic, so filter it with a trust gain
+### R7. Aktualizácia posunu — najjednoduchšia rekurzívna schéma (L11).
+Ak nasadený model vykazuje takmer **konštantnú systematickú chybu** (napr. zmenená
+surovina/dodávateľ, mierna nelinearita), ale **smernice sú stále správne**, prispôsobíme
+len **offset $b$**, nie overené smernice — priemysel to preferuje.
+Aktualizácia podľa chyby predikcie: $b_k = b_{k-1} + (y_{k-1} - \hat{y}_{k-1})$.
+Reagovanie na jeden bod je krátkozraké, preto ho filtrujeme faktorom dôvery
 $\delta \in [0,1]$:
 
 $$
-b_k = \delta\,b_{k-1} + (1-\delta)\,(\text{new bias}) .
+b_k = \delta\,b_{k-1} + (1-\delta)\,(\text{nový posun}) .
 $$
 
-$\delta \to 1$ = distrust measurements (slow drift to a new operating point);
-$\delta = 0$ = follow the latest point fully. Same shape as a P controller
-(estimate ← estimate + gain × error); the scalar slope version (RLS with $b = 0$)
-is $a_N = a_{N-1} + \frac{x_N}{\sum_k x_k^2}(y_N - a_{N-1}x_N)$, whose gain shrinks
-automatically as data accumulates — add a **forgetting window** to keep adapting.
+$\delta \to 1$ = nedôverovať meraniam (pomalý drift k novému pracovnému bodu);
+$\delta = 0$ = nasledovať posledný bod úplne. Rovnaký tvar ako P regulátor
+(odhad ← odhad + zisk × chyba); skalárna verzia pre smernici (RLS s $b = 0$)
+je $a_N = a_{N-1} + \frac{x_N}{\sum_k x_k^2}(y_N - a_{N-1}x_N)$, ktorej zisk sa automaticky zmenšuje
+s akumuláciou dát — pridať **okno zabúdania** na zachovanie adaptácie.
 
 ---
 
-## Part H — Experiment design
+## Časť H — Návrh experimentu
 
-### H1. What makes a good identification input signal?
-It must be **persistently exciting** — rich enough in frequencies to excite all
-the system's modes. A constant or single step reveals little; you need variety in
-amplitude and frequency.
+### H1. Čo robí identifikačný vstupný signál dobrým?
+Musí byť **perzistentne budiaci** — dostatočne bohatý vo frekvenciách, aby vzbudil všetky
+módy systému. Konštanta alebo jediný skok odhalí málo; potrebná je varieta v
+amplitúde a frekvencii.
 
-### H2. Compare step, random, and PRBS inputs. (Seminars 9–11)
-- **Step / staircase:** simple, shows gain & time constants, but excites few
-  frequencies.
-- **Random uniform levels:** broad excitation, but power spread unevenly.
-- **PRBS (pseudo-random binary sequence):** switches between two levels
-  pseudo-randomly; near-white spectrum, optimal power, **reproducible** → the
-  preferred input for dynamic identification.
+### H2. Porovnajte skok, náhodný a PRBS vstup. (Semináre 9–11)
+- **Skok / schodový priebeh:** jednoduchý, ukazuje zosilnenie a časové konštanty, ale buzí málo
+  frekvencií.
+- **Náhodné rovnomerné úrovne:** široké budenie, ale výkon rozložený nerovnomerne.
+- **PRBS (pseudonáhodná binárna sekvencia):** prepína medzi dvomi úrovňami
+  pseudonáhodne; blízko biele spektrum, optimálny výkon, **reprodukovateľný** → preferovaný vstup pri dynamickej identifikácii.
 
-### H3. Sampling time $T_s$ — why does it matter?
-Too large → aliasing, miss fast dynamics; too small → numerically stiff,
-noise-dominated, huge data. Should resolve the system's dominant time constant
-(rule of thumb: several samples per time constant).
+### H3. Perióda vzorkovania $T_s$ — prečo je dôležitá?
+Príliš veľká → aliasing, zmeškanie rýchlej dynamiky; príliš malá → numericky stiff,
+dominancia šumu, obrovské množstvo dát. Mala by rozlišovať dominantnú časovú konštantu systému
+(pravidlo palca: niekoľko vzoriek na časovú konštantu).
 
-### H4. What is the role of `rng(100)`?
-Fixes the random-number seed so simulations with random inputs/noise are
-**reproducible** — essential for comparing results and grading.
+### H4. Aká je úloha `rng(100)`?
+Fixuje náhodné semeno, aby simulácie s náhodným vstupom/šumom boli
+**reprodukovateľné** — nevyhnutné na porovnávanie výsledkov a hodnotenie.
 
-### H5. Why remove "bad" sections of data before identifying?
-Least squares assumes a **consistent input→output relationship across the whole
-record**. Sections where that breaks — e.g. a dead-zero startup where the input
-is already on but the output hasn't responded, or a saturated/zero-sensor region
-at the end — inject a **structural bias into the regressor matrix**: the model is
-forced to explain output that the input didn't cause. Result: worse fit, higher
-RMSE. Trimming these non-representative regions (keeping only clean,
-input-driven behavior) is why data cleaning comes before model fitting.
+### H5. Prečo odstrániť „zlé" úseky dát pred identifikáciou?
+Metóda najmenších štvorcov predpokladá **konzistentný vzťah vstup→výstup naprieč celým
+záznamom**. Úseky, kde to nie je splnené — napr. nulový štart, kde je vstup aktívny,
+ale výstup ešte nereagoval, alebo nasýtená/nulová oblasť senzora na konci — vkladajú
+**štrukturálny posun do regresnej matice**: model je nútený vysvetľovať výstup, ktorý vstup nespôsobil.
+Výsledok: horší fit, vyššie RMSE. Orezanie týchto nepredstaviteľných regiónov (zachovanie len čistého,
+vstupom riadeného správania) je dôvodom, prečo čistenie dát prichádza pred fitovaním modelu.
 
-### H6. How do you validate that standardization didn't distort the data?
-Plot the standardized value against the original value — it must be a **straight
-line** (standardization is a purely *linear* $(x-\mu)/\sigma$ map). A straight
-line confirms no nonlinear distortion was introduced; numerically, check
+### H6. Ako overiť, že štandardizácia nenarušila dáta?
+Vykresliť štandardizovanú hodnotu oproti pôvodnej hodnote — musí to byť **priamka**
+(štandardizácia je čisto *lineárna* mapa $(x-\mu)/\sigma$). Priamka potvrdzuje, že nebolo zavedené žiadne nelineárne skreslenie; numericky skontrolovať
 $\mathrm{mean} \approx 0$, $\mathrm{std} \approx 1$.
 
-### H7. Static vs dynamic, and the linearity check (L10)?
-Plan step changes of, say, $\tfrac13, \tfrac23, 1$ and read the **steady-state**
-outputs:
-- **Proportional** outputs → a **static gain** suffices (no dynamic model needed).
-- **Non-proportional but same-sign** gain → nonlinear but **bearable** (integral
-  control can handle it).
-- **Gain that changes sign** → **red alert**: strongly nonlinear, essentially
-  uncontrollable with a linear controller (even LQR fails).
-- **Immediate scaled step, no transient** → no pole/zero info → use a static
-  model; fitting ARMAX here gives meaningless numbers the test data will expose.
+### H7. Statický vs. dynamický model a kontrola linearity (L10)?
+Naplánujte skokové zmeny, napr. $\tfrac13, \tfrac23, 1$ a prečítajte **ustálené**
+výstupy:
+- **Proporcionálne** výstupy → postačuje **statické zosilnenie** (nie je potrebný dynamický model).
+- **Neproporcionálne, ale rovnaké znamienko** zosilnenia → nelineárne, ale **zvládnuteľné** (integrálne
+  riadenie to zvládne).
+- **Zosilnenie, ktoré mení znamienko** → **červená výstraha**: silne nelineárne, v podstate
+  neriaditeľné lineárnym regulátorom (ani LQR zlyhá).
+- **Okamžitý škálovaný skok, bez prechodového deja** → žiadna informácia o póloch/nulách → použiť statický
+  model; fitovanie ARMAX tu dáva bezmyselné čísla, ktoré testovacie dáta odhalia.
 
-This is why the deciding step changes must be in the **original experiment design**.
+Toto je dôvod, prečo rozhodujúce skokové zmeny musia byť súčasťou **pôvodného návrhu experimentu**.
 
-### H8. How do you identify an *unstable* plant (closed-loop ID)?
-You can't run an open-loop experiment on an unstable system, and you need a model
-to design a stabilizing controller — a **chicken-and-egg** problem. If the plant
-already runs in production, a stabilizing controller likely exists. Then put
-**controller + plant in one box** and identify the **closed loop** (reference →
-response), because open-loop steady-state data reveals nothing about poles/delays.
-Example: a P controller $K_R$ on $K/(Ts+1)$ (positive pole, $T < 0$) gives the
-closed-loop characteristic equation $Ts + 1 + K_R K = 0$; choosing $K_R$
-stabilizes it, and the reference→response relation (two unknowns) is fitted as a
-discrete **ARX** model. A bad experiment can fit a *stable* model to an unstable
-plant — a reason to loop back and redesign.
-
----
-
-## Part I — The two assignments (be ready to discuss yours)
-
-### I1. Assignment 1 — static identification.
-Fit static input–output relations (e.g. tank $q = k\sqrt{h}$, gas-tank
-$V = f(T)$) by least squares; compare candidate structures
-(linear/quadratic/inverse) with RMSE and parity plots; study the effect of
-measurement noise on the estimate.
-
-### I2. Assignment 2 — dynamic identification of the Flexy² device.
-Flexy²: $u$ = fan speed (input), $n$ = noise level, $y$ = flex-sensor bend
-(output). Workflow: load & interpolate (ZOH) → remove bad regions (zero-fan,
-saturated bend) → standardize (use $u$, not the constant $n$) → train = noisy /
-test = zero-phase-smoothed output → FIR(50) → ARX (order from ACF/PACF) → compare
-RMSE. Expected conclusion: **ARX more accurate with fewer parameters**.
-
-### I3. Why use the constant $n$ channel or not?
-$n$ is (near) constant → zero variance → carries no dynamic information and can't
-be standardized. So $u$ (fan speed) is the input used to identify the dynamics.
+### H8. Ako identifikovať *nestabilný* systém (identifikácia v uzavretej slučke)?
+Na nestabilnom systéme nemôžete robiť experiment v otvorenej slučke a potrebujete model
+na návrh stabilizujúceho regulátora — problém **sliepky a vajca**. Ak systém
+už beží vo výrobe, pravdepodobne existuje stabilizujúci regulátor. Potom vložte
+**regulátor + systém do jednej krabice** a identifikujte **uzavretú slučku** (referencia →
+odozva), pretože údaje z ustáleného stavu v otvorenej slučke nič nehovoria o póloch/oneskoreniach.
+Príklad: P regulátor $K_R$ na $K/(Ts+1)$ (kladný pól, $T < 0$) dáva
+charakteristickú rovnicu uzavretej slučky $Ts + 1 + K_R K = 0$; voľba $K_R$
+ho stabilizuje a vzťah referencia→odozva (dve neznáme) sa fituje ako diskrétny **ARX**
+model. Zlý experiment môže nafitnúť *stabilný* model na nestabilný systém — dôvod
+pre vrátenie sa a prepracovanie návrhu.
 
 ---
 
-## Quick rapid-fire recall
+## Časť I — Dve zadania (buďte pripravení diskutovať o svojom)
 
-- Least squares solution → $p = (X^T X)^{-1} X^T y$ = `X\y`.
-- RMSE = std of residuals, units of $y$.
-- Standardize → $(x-\mu)/\sigma$; correlation $\in [-1,1]$.
-- PCA = eigenvectors of covariance, ordered by variance.
-- FIR = past **inputs** only, all-zero, high order, always stable.
-- ARX = past inputs **and outputs**, poles+zeros, low order, can be unstable.
-- ARMAX = ARX + MA on past **errors** ($c_i e_{k-i}$) → models disturbances, self-corrects.
-- $z^{-1}$ = unit delay.
-- PACF → AR order $n$; ACF → MA/memory.
-- PRBS = best persistently-exciting input.
-- Train fits, test judges; gap = overfitting.
-- RLS = "old estimate + gain × innovation"; $\lambda = 1 \Rightarrow$ batch LS; $\lambda < 1 \Rightarrow$ tracks drift.
-- RLS gain $K$ = Kalman gain; $P$ = estimate covariance (starts large).
-- Bias update = simplest recursive scheme: shift only the offset by the prediction error.
-- Unstable plant → identify the **closed loop** (controller + plant in one box).
+### I1. Zadanie 1 — statická identifikácia.
+Fitovanie statických vstupno-výstupných vzťahov (napr. nádrž $q = k\sqrt{h}$, plynová nádrž
+$V = f(T)$) metódou najmenších štvorcov; porovnávanie kandidátnych štruktúr
+(lineárna/kvadratická/inverzná) pomocou RMSE a paritných grafov; štúdium vplyvu
+merací šum na odhad.
+
+### I2. Zadanie 2 — dynamická identifikácia zariadenia Flexy².
+Flexy²: $u$ = rýchlosť ventilátora (vstup), $n$ = úroveň šumu, $y$ = ohyb flexibilného senzora
+(výstup). Postup: načítanie a interpolácia (ZOH) → odstrániť zlé regióny (nulový ventilátor,
+nasýtený ohyb) → štandardizácia (použiť $u$, nie konštantné $n$) → trénovanie = zašumený /
+testovanie = výstup vyhladený s nulovou fázou → FIR(50) → ARX (rád z ACF/PACF) → porovnanie
+RMSE. Očakávaný záver: **ARX presnejší s menej parametrami**.
+
+### I3. Prečo použiť alebo nepoužiť kanál konštanty $n$?
+$n$ je (takmer) konštantné → nulový rozptyl → nenesie žiadne dynamické informácie a nedá sa
+štandardizovať. Preto sa ako vstup na identifikáciu dynamiky používa $u$ (rýchlosť ventilátora).
+
+---
+
+## Rýchle opakovanie
+
+- Riešenie metódy najmenších štvorcov → $p = (X^T X)^{-1} X^T y$ = `X\y`.
+- RMSE = smerodajná odchýlka reziduí, jednotky $y$.
+- Štandardizácia → $(x-\mu)/\sigma$; korelácia $\in [-1,1]$.
+- PCA = vlastné vektory kovariancie, zoradené podľa rozptylu.
+- FIR = len minulé **vstupy**, všetky nuly, vysoký rád, vždy stabilný.
+- ARX = minulé vstupy **aj výstupy**, póly+nuly, nízky rád, môže byť nestabilný.
+- ARMAX = ARX + MA na minulých **chybách** ($c_i e_{k-i}$) → modeluje poruchy, sám sa opravuje.
+- $z^{-1}$ = jednotkové oneskorenie.
+- PACF → AR rád $n$; ACF → MA/pamäť.
+- PRBS = najlepší perzistentne budiaci vstup.
+- Trénovanie fituje, testovanie hodnotí; rozdiel = preučenie.
+- RLS = „starý odhad + zisk × inovácia"; $\lambda = 1 \Rightarrow$ dávková MNŠ; $\lambda < 1 \Rightarrow$ sleduje drift.
+- Zisk RLS $K$ = Kalmanov zisk; $P$ = kovariancia odhadu (začína veľká).
+- Aktualizácia posunu = najjednoduchšia rekurzívna schéma: posun iba offsetu podľa chyby predikcie.
+- Nestabilný systém → identifikovať **uzavretú slučku** (regulátor + systém v jednej krabici).

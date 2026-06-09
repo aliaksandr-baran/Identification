@@ -1,172 +1,167 @@
 ---
 lecture: L07
-title: "Practical Aspects of Linear Regression"
-course: Identification
+title: "Praktické aspekty lineárnej regresie"
+course: Identifikácia
 source: "https://www.youtube.com/watch?v=HqCN0mFgmTQ"
 ---
 
-# L07 — Practical Aspects of Linear Regression
+# L07 — Praktické aspekty lineárnej regresie
 
-> Formulas verified against the titled slide deck (*Identification L07 — Practical
-> aspects of lin reg*). On camera the lecturer was unsure about the constant in the
-> parameter-covariance result; the slide gives the clean
-> $V_P = \sigma_y^2 (X^TX)^{-1}$, used below.
+> Vzorce overené podľa príslušnej sady snímok (*Identification L07 — Practical
+> aspects of lin reg*). Počas záznamu si prednášateľ nebol istý konštantou vo výsledku
+> kovariančnej matice parametrov; snímka uvádza čistý tvar
+> $V_P = \sigma_y^2 (X^TX)^{-1}$, ktorý je použitý nižšie.
 
-This lecture is mostly practical. The running example is a **distillation column**
-with many measured temperatures, pressures, and sometimes compositions; a typical
-goal is to predict the **composition** of a distillate or bottom stream, which
-physical chemistry (vapour–liquid equilibria) says should be correlated with
-temperature and pressure. The problem is an **abundance** of measurements.
+Táto prednáška je prevažne praktická. Priebežným príkladom je **destilačná kolóna**
+s mnohými meranými teplotami, tlakmi a niekedy aj zloženiami; typickým cieľom je
+predpovedať **zloženie** destilátu alebo spodného prúdu, čo fyzikálna chémia
+(rovnováhy para–kvapalina) uvádza ako korelované s teplotou a tlakom. Problémom je
+**nadbytok** meraní.
 
-## Choosing the model terms
+## Výber členov modelu
 
-The prediction model is $\hat{y} = X p$. Columns of $X$ can be temperature at the
-first tray, temperature at the second tray, pressure at the top, pressure at the
-bottom, and so on — including **nonlinear transformations**: products, the
-distillate-to-feed ratio $D/F$, or $e^{T}$ (Arrhenius law). A simpler version is a
-**polynomial** in one variable:
+Predikčný model je $\hat{y} = X p$. Stĺpce $X$ môžu byť teplota na prvom tanieri,
+teplota na druhom tanieri, tlak na vrchu, tlak na dne atď. — vrátane **nelineárnych
+transformácií**: súčinov, pomeru destilátu k nástrektu $D/F$ alebo $e^{T}$
+(Arrheniov zákon). Jednoduchšou verziou je **polynóm** v jednej premennej:
 
 $$
 \hat{y} = p_0 + p_1 x + p_2 x^2 + p_3 x^3 + \dots
 $$
 
-(Two variables would add cross terms.) The question is how to **select** reasonable
-terms.
+(Pri dvoch premenných by pribudli krížové členy.) Otázkou je, ako **vybrať** rozumné
+členy.
 
-## Correlation vs. dependence
+## Korelácia verzus závislosť
 
-Building on last time's correlation concept: is "correlated" the same as
-"dependent"? No — it is a **one-sided implication** (slide):
+Nadväzujúc na pojem korelácie z minulej prednášky: je „korelovaný" to isté čo
+„závislý"? Nie — ide o **jednostrannú implikáciu** (snímka):
 
 $$
-\text{correlation} \;\Longleftarrow\; \text{dependence (causality)}
+\text{korelácia} \;\Longleftarrow\; \text{závislosť (kauzalita)}
 $$
 
-If variables are **dependent**, that **implies** correlation (we should see it in
-the correlation coefficient). But **correlation does not imply dependence** —
-recall the students-abroad example, where the numbers were correlated only because
-the COVID pandemic dropped them all at once.
+Ak sú premenné **závislé**, z toho **plynie** korelácia (mali by sme ju vidieť
+v korelačnom koeficiente). **Korelácia však neznamená závislosť** — spomeňme si
+na príklad so študentmi v zahraničí, kde boli čísla korelované iba preto, že
+pandémia COVID ich všetky naraz znížila.
 
-### Correlation among inputs is unwanted; with the output it is desired
+### Korelácia medzi vstupmi je nežiaduca; so výstupom je žiaduca
 
-- **$x_1, x_2$ correlated — unwanted.** Correlation *among the independent
-  variables* (collinearity) is a problem.
-- **$x_1, y$ correlated — desired.** We *want* an input to correlate with the
-  output we predict; otherwise the parameter could take an essentially random
-  value unrelated to reality.
+- **$x_1, x_2$ korelované — nežiaduce.** Korelácia *medzi nezávislými premennými*
+  (kolinearita) je problém.
+- **$x_1, y$ korelované — žiaduce.** *Chceme*, aby vstup koreloval s výstupom, ktorý
+  predpovedáme; inak by parameter mohol nadobudnúť v podstate náhodnú hodnotu
+  nesúvisiacu s realitou.
 
-### Why collinearity is harmful
+### Prečo je kolinearita škodlivá
 
-Suppose a two-input model $\hat{y} = p_1 x_1 + p_2 x_2$, but unknown to us
-$x_1 = k\,x_2$ (two nearby distillation trays are strongly correlated, or the
-experiment was run by always increasing temperature and pressure together).
-Substituting:
+Predpokladajme model s dvomi vstupmi $\hat{y} = p_1 x_1 + p_2 x_2$, pričom nám nie
+je známe, že $x_1 = k\,x_2$ (dva blízke tanier destilačnej kolóny sú silne
+korelované, alebo bol experiment vedený tak, že teplota a tlak sa vždy zvyšovali
+spolu). Dosadením:
 
 $$
 \hat{y} = p_1 k\, x_2 + p_2 x_2 = (p_1 k + p_2)\, x_2
 $$
 
-Only **one** effective parameter exists. If, say, $k = 1$ and the true value of the
-bracket is $3$, then any $p_1, p_2$ with $p_1 + p_2 = 3$ is a valid regression
-result — $(1, 2)$, $(\tfrac{1}{2}, 2\tfrac{1}{2})$, $(-5, 8)$, … — an unwanted
-**extra degree of freedom** that makes the "physical" parameters meaningless.
+Existuje iba **jeden** efektívny parameter. Ak napr. $k = 1$ a skutočná hodnota závorky
+je $3$, potom akékoľvek $p_1, p_2$ s $p_1 + p_2 = 3$ je platným výsledkom regresie —
+$(1, 2)$, $(\tfrac{1}{2}, 2\tfrac{1}{2})$, $(-5, 8)$, … — nežiaduci **extra stupeň
+voľnosti**, ktorý robí „fyzikálne" parametre bezvýznamnými.
 
-Geometrically (3D): the data lie along a line in the $x_1$–$x_2$ plane, and **any
-plane rotated about that line** fits equally well — the fit is non-unique. When the
-points are well spread, it is hard to wiggle the plane away from the data. The
-remedy: build the covariance matrix, check correlations, and **remove correlated
-independent variables**, keeping $x_1, x_2$ as independent as possible.
+Geometricky (3D): dáta ležia pozdĺž priamky v rovine $x_1$–$x_2$ a **ľubovoľná
+rovina otočená okolo tejto priamky** fituje rovnako dobre — fit nie je jednoznačný.
+Keď sú body dobre rozprestreté, je ťažké rovinu od dát odkloniť. Liek: zostrojíme
+kovariančnú maticu, skontrolujeme korelácie a **odstránime korelované nezávislé
+premenné**, pričom $x_1, x_2$ zachovávame čo najnezávislejšie.
 
-## Polynomial fitting, overfitting and extrapolation
+## Polynomický fit, preučenie a extrapolácia
 
-For a one-variable polynomial fit of scattered data:
+Pri polynomickom fite jednej premennej na rozptýlené dáta:
 
-- A **linear** fit may not be bad — the residuals can look like normal
-  measurement noise.
-- A **quadratic** fit may track most points.
-- An **octic** (8th-degree) fit passes through almost every point — but it is
-  **fitting the noise**, which we do not want. We want to fit the *information* in
-  the data, not the noise.
+- **Lineárny** fit nemusí byť zlý — reziduá môžu vyzerať ako normálny šum merania.
+- **Kvadratický** fit môže sledovať väčšinu bodov.
+- **Oktický** fit (8. stupňa) prechádza takmer každým bodom — ale **fituje šum**,
+  čo nechceme. Chceme fitovať *informáciu* obsiahnutú v dátach, nie šum.
 
-**Do not extrapolate.** Outside the training range the high-degree polynomial
-escapes wildly. Even a **linear** model can be extrapolated only a little (e.g.
-doubling the interval is already too far). Collect data over the **full range**
-where the model must be valid — otherwise a change in plant operation (different
-crude oil, a different supplier's raw material) makes the model fail and "your boss
-tells you it doesn't work."
+**Neextrapolujte.** Mimo trénovacieho rozsahu polynóm vysokého stupňa divoko uniká.
+Dokonca **lineárny** model možno extrapolovať len málo (napr. zdvojnásobenie
+intervalu je už príliš ďaleko). Zbierajte dáta v **celom rozsahu**, kde musí model
+platiť — inak zmena prevádzky zariadenia (iná ropa, surovina od iného dodávateľa)
+spôsobí, že model zlyhá a „šéf vám povie, že to nefunguje."
 
-Why try polynomials at all? Because of the **Taylor expansion** — any nonlinear
-function can be approximated by a polynomial, so polynomials are good
-approximators. With physical insight (distillation) one can guess the shape
-(exponential, logarithmic); for things like Bitcoin price the underlying reality is
-much harder to know.
+Prečo vôbec skúšať polynómy? Kvôli **Taylorovmu rozvoju** — každú nelineárnu funkciu
+možno aproximovať polynómom, takže polynómy sú dobrými aproximátormi. S fyzikálnou
+intuíciou (destilácia) možno odhadnúť tvar (exponenciálny, logaritmický); pri
+veciach ako cena Bitcoinu je skutočná podstata oveľa ťažšie poznateľná.
 
-## Cross validation
+## Krížová validácia
 
-To choose model complexity, use **cross validation**: split the data (slide ratio
-**50 : 30 : 20**) into
+Na výber zložitosti modelu používame **krížovú validáciu**: dáta rozdelíme (pomer
+zo snímky **50 : 30 : 20**) na
 
-- **Training (TR)** — used to compute the parameter values;
-- **Validation (V)** — used to decide the model order/complexity;
-- **Testing (TS)** — typically ~20%, locked "in a vault" before anything else and
-  used only for the **final** performance stamp (as if the model went live).
+- **Trénovacie (TR)** — použité na výpočet hodnôt parametrov;
+- **Validačné (V)** — použité na rozhodnutie o ráde/zložitosti modelu;
+- **Testovacie (TS)** — typicky ~20 %, uzamknuté „v trezore" pred všetkým ostatným
+  a použité iba na **záverečné** hodnotenie výkonnosti (akoby model prešiel do
+  prevádzky).
 
-Plotting a performance measure (e.g. RMSE) against model complexity $n_p$ (number
-of parameters):
+Vynesieme výkonnostný ukazovateľ (napr. RMSE) v závislosti od zložitosti modelu
+$n_p$ (počtu parametrov):
 
-- **Training** error **decreases monotonically** as terms are added — optimization
-  keeps pleasing us, even fitting noise (the octic fit), so training alone never
-  reveals the best model.
-- **Testing / validation** error **decreases then increases**, revealing an optimal
-  complexity $n_p^{*}$. Since the real testing data are hidden, the **validation**
-  data simulate them for the order-selection decision.
+- **Trénovacia** chyba **monotónne klesá** s pridávaním členov — optimalizácia nás
+  stále teší, aj pri fitovaní šumu (oktický fit), takže samotné trénovacie dáta
+  najlepší model nikdy neodhalí.
+- **Testovacia / validačná** chyba **najprv klesá, potom rastie**, čím odhalí
+  optimálnu zložitosť $n_p^{*}$. Keďže skutočné testovacie dáta sú skryté,
+  **validačné** dáta ich pri rozhodovaní o ráde simulujú.
 
-## Assessment criteria
+## Kritériá hodnotenia
 
-Do not rely on a single number; check several for each candidate model.
+Nespoliehajte sa na jedno číslo; pre každý kandidátny model skontrolujte niekoľko.
 
-### Root mean squared error (RMSE)
+### Koreň strednej kvadratickej chyby (RMSE)
 
 $$
 \text{RMSE} = \sqrt{\frac{1}{N}\sum_{k=1}^{N}\big(y_k - \hat{y}_k\big)^2}
 $$
 
-(sometimes RMSPE, root mean squared **prediction** error). It lives in the units
-of the data — "our model is off by 0.01 bar."
+(niekedy RMSPE, koreň strednej kvadratickej **predikčnej** chyby). Žije v jednotkách
+dát — „náš model sa mýli o 0,01 bar."
 
-### Coefficient of determination $R^2$
+### Koeficient determinácie $R^2$
 
-Compares the model against simply fitting a **constant** (the mean of the data):
+Porovnáva model s jednoduchým fitom **konštantou** (priemerom dát):
 
 $$
 R^2 = 1 - \frac{\sum_{k=1}^{N}(y_k - \hat{y}_k)^2}{\sum_{k=1}^{N}(y_k - \bar{y})^2}
 $$
 
-The denominator's constant fit is the average $\bar{y}$. When the model's residual
-sum (numerator) is small relative to the constant-fit sum (denominator),
-$R^2 \to 1$. By construction $R^2 \in [0, 1]$ (1 = perfect, 0 = no better than a
-constant). A **negative** $R^2$ signals an **error** in fitting the model.
+Konštantný fit v menovateli je priemer $\bar{y}$. Keď je reziduálny súčet modelu
+(čitateľ) malý voči súčtu konštantného fitu (menovateľ), $R^2 \to 1$. Konštrukčne
+$R^2 \in [0, 1]$ (1 = dokonalý, 0 = nič lepšie ako konštanta). **Záporný** $R^2$
+signalizuje **chybu** pri fitovaní modelu.
 
-### Parity plot
+### Paritný graf
 
-Plot **prediction vs. measurement** (a parity / correlation plot). Useful even
-when more than two or three independent variables make other plots impractical.
+Vynesieme **predikciu oproti meraniu** (paritný / korelačný graf). Užitočný aj vtedy,
+keď viac ako dve alebo tri nezávislé premenné robia iné grafy nepraktickými.
 
-- Points on the **diagonal** $\hat{y} = y$ (up to noise) — **good**, very
-  desirable.
-- A consistent **offset with a correct trend** (predict larger → measure larger,
-  but shifted) — a **missing regressor / input**: some dependence (e.g. on
-  pressure) was disregarded.
-- An **okayish-then-deviating** shape — likely **nonlinear behavior** not included
-  in the model.
+- Body na **diagonále** $\hat{y} = y$ (s výnimkou šumu) — **dobré**, veľmi žiaduce.
+- Konzistentný **posun pri správnom trende** (predpoveď väčšia → meranie väčšie,
+  ale posunuté) — **chýbajúci regresor / vstup**: nejaká závislosť (napr. od tlaku)
+  bola opomenutá.
+- Tvar **dobrý a potom sa odchyľujúci** — pravdepodobne **nelineárne správanie**
+  nezahrnuté v modeli.
 
-## Confidence intervals of the parameters
+## Intervaly spoľahlivosti parametrov
 
-For lots of data the statistics work well, and confidence intervals can flag an
-**overfitted** parameter: if the interval **contains zero**, the model can live
-without that parameter with the same probability level.
+Pri dostatku dát štatistika funguje dobre a intervaly spoľahlivosti môžu
+signalizovať **preučený** parameter: ak interval **obsahuje nulu**, model sa môže
+zaobísť bez tohto parametra pri rovnakej úrovni pravdepodobnosti.
 
-Build the **parameter covariance matrix** analogously to the data covariance:
+Zostrojíme **kovariančnú maticu parametrov** analogicky ku kovariancii dát:
 
 $$
 V_P = E[P P^T], \qquad
@@ -175,51 +170,52 @@ V_P = \begin{pmatrix} \sigma_{p_1}^2 & \sigma_{p_1 p_2} & \cdots \\
                       \vdots & & \ddots \end{pmatrix}
 $$
 
-($P$ is $n_p \times 1$, so $P P^T$ is the $n_p \times n_p$ matrix.) Substituting
-$P = (X^T X)^{-1} X^T y$ and its transpose $P^T = y^T X (X^T X)^{-1}$ (using
-symmetry of $X^T X$):
+($P$ je $n_p \times 1$, teda $P P^T$ je matica $n_p \times n_p$.) Dosadíme
+$P = (X^T X)^{-1} X^T y$ a jeho transponovaný $P^T = y^T X (X^T X)^{-1}$
+(s využitím symetrie $X^T X$):
 
 $$
 V_P = E\!\left[(X^T X)^{-1} X^T y\, y^T X (X^T X)^{-1}\right]
 $$
 
-Assume **independent, constant measurement noise**, so $E[y y^T] = V_y =
-\sigma_y^2 I$. Pulling out $\sigma_y^2$, the inner $X^T X$ cancels with one
-$(X^T X)^{-1}$ (an $A^{-1} A$ pair):
+Predpokladáme **nezávislý, konštantný šum merania**, teda $E[y y^T] = V_y =
+\sigma_y^2 I$. Vytiahnutím $\sigma_y^2$ sa vnútorné $X^T X$ skráti s jedným
+$(X^T X)^{-1}$ (pár $A^{-1} A$):
 
 $$
 V_P = \sigma_y^2\, (X^T X)^{-1}
 $$
 
-**Interpretation:** parameter uncertainty grows with the noise $\sigma_y^2$, and —
-because of the inverse — **shrinks as more measurements** make $X^T X$ grow (just
-like estimating a constant). It also depends on the **experiment design** (the
-choice of independent data): if the points lie on a line, $X^T X$ is not
-invertible (the collinearity problem above).
+**Interpretácia:** neistota parametrov rastie so šumom $\sigma_y^2$ a — kvôli
+inverzii — **klesá s pribúdajúcimi meraniami**, keď $X^T X$ rastie (podobne ako pri
+odhade konštanty). Závisí tiež od **návrhu experimentu** (výberu nezávislých dát):
+ak body ležia na priamke, $X^T X$ nie je invertovateľná (vyššie opísaný problém
+kolinearity).
 
-### The parameter distribution and confidence ellipse
+### Rozdelenie parametrov a elipsa spoľahlivosti
 
-Treating $P$ as a random vector, $P \sim N(\hat{P}, V_P)$, the multivariate
-Gaussian PDF (the matrix generalization of the scalar
-$\frac{1}{\sqrt{2\pi}\,\sigma}e^{-(x-\bar{x})^2/2\sigma^2}$) is:
+Ak $P$ chápeme ako náhodný vektor, $P \sim N(\hat{P}, V_P)$, hustota
+pravdepodobnosti viacrozmerného Gaussovho rozdelenia (maticová generalizácia skalárneho
+$\frac{1}{\sqrt{2\pi}\,\sigma}e^{-(x-\bar{x})^2/2\sigma^2}$) je:
 
 $$
 \text{pdf}(p) = \frac{1}{(\sqrt{2\pi})^{n_p}\,\lvert V_P^{1/2}\rvert}\,
   e^{-\frac{1}{2}(p - \hat{P})^T V_P^{-1}(p - \hat{P})}
 $$
 
-Here $2\pi$ carries an exponent (normalization in several variables) and the scalar
-$\sigma$ becomes a **matrix square root** combined with a **determinant** to give a
-single number. The exponent is a **quadratic form** with $V_P^{-1}$ in place of
-dividing by the variance.
+Tu $2\pi$ nesie exponent (normalizácia vo viacerých premenných) a skalárne $\sigma$
+sa stáva **maticovou odmocninou** kombinovanou s **determinantom**, čím dostaneme
+jedno číslo. Exponent je **kvadratická forma** s $V_P^{-1}$ namiesto delenia
+rozptylom.
 
-Shining a "torch" along the $p_1$ axis projects (marginalizes) the multidimensional
-bell back to a 1-D Gaussian for $p_1$ (and likewise $p_2$). The **level sets** of
-the PDF are **ellipses**; a contour plot shows that, e.g., the **spread of $p_1$ is
-much larger than that of $p_2$** — the data/model determined $p_2$ more accurately.
+„Svietenie baterkou" pozdĺž osi $p_1$ premieta (marginalizuje) viacdimenzionálny
+zvon späť na jednorozmerné Gaussovo rozdelenie pre $p_1$ (a obdobne pre $p_2$).
+**Vrstevnice** hustoty pravdepodobnosti sú **elipsy**; graf vrstevníc ukazuje
+napríklad, že **rozptyl $p_1$ je oveľa väčší ako rozptyl $p_2$** — dáta/model
+určili $p_2$ presnejšie.
 
-As in the scalar case, the quadratic form follows a **chi-square** distribution
-with $n_p$ degrees of freedom, giving the **confidence region** (slide):
+Rovnako ako v skalárnom prípade kvadratická forma sleduje **chí-kvadrát** rozdelenie
+s $n_p$ stupňami voľnosti, čím dostaneme **oblasť spoľahlivosti** (snímka):
 
 $$
 (p - \hat{P})^T V_P^{-1}(p - \hat{P}) \sim \chi^2_{n_p}
@@ -229,48 +225,48 @@ $$
 (p - \hat{P})^T V_P^{-1}(p - \hat{P}) \le \big(\chi^2_{n_p,\alpha}\big)^{-1}
 $$
 
-This is the matrix analogue of a circle $p_1^2 + p_2^2 = r^2$ generalized to an
-ellipse $\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1$: the semi-axis lengths come from
-the confidence intervals (radii), and the off-diagonal entries **tilt / rotate**
-the ellipse. (Plotting this ellipse is an exercise; details next time.)
+Toto je maticová analógia kružnice $p_1^2 + p_2^2 = r^2$ zovšeobecnená na elipsu
+$\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1$: dĺžky poloosí pochádzajú z intervalov
+spoľahlivosti (polomerov) a mimdiagonálne prvky elipsu **naklonia / otočia**.
+(Vykreslenie tejto elipsy je cvičenie; podrobnosti nabudúce.)
 
-**Warning sign — interval contains zero.** If a 95% confidence interval is, e.g.,
-$p \in [-1, 2]$, then all values between $-1$ and $2$ are 95% probable, **including
-zero**. The model may be able to live without that parameter — the variable could
-be unobservable (linear dependence), under-revealed by the data, or simply have no
-causal effect on the output.
+**Varovný signál — interval obsahuje nulu.** Ak je 95% interval spoľahlivosti
+napr. $p \in [-1, 2]$, potom všetky hodnoty medzi $-1$ a $2$ sú s 95% pravdepodobné,
+**vrátane nuly**. Model sa môže zaobísť bez tohto parametra — premenná môže byť
+nepozorovateľná (lineárna závislosť), nedostatočne odhalená dátami alebo jednoducho
+nemá žiadny kauzálny vplyv na výstup.
 
-## Principal Component Analysis (PCA)
+## Analýza hlavných komponentov (PCA)
 
-A method used very frequently in data analysis, shown by example. Take 100
-black-and-white face images (Steven Tyler, George Bush, Robbie Williams, …), each
-pixel valued in $[0, 1]$ (0 = black, 1 = white). With ~10,000 pixels per image, the
-data matrix is
+Metóda veľmi často používaná v analýze dát, ukázaná na príklade. Vezmeme 100
+čiernobielych fotografií tvárí (Steven Tyler, George Bush, Robbie Williams, …),
+každý pixel s hodnotou v $[0, 1]$ (0 = čierna, 1 = biela). Pri ~10 000 pixeloch na
+snímku je dátová matica
 
 $$
 X \in \mathbb{R}^{100 \times 10000}
 $$
 
-— only **100 observations** but **10,000 variables**. A pixel-wise prediction model
+— iba **100 pozorovaní**, ale **10 000 premenných**. Predikčný model po pixeloch
 
 $$
 \hat{y} = p_1 x_1 + p_2 x_2 + \dots + p_{10000}\, x_{10000}
 $$
 
-would need 10,000 parameters, but you cannot learn 10,000 parameters from 100 data
-points (as fitting a line needs at least two points, 10,000 parameters need at
-least 10,000 points).
+by potreboval 10 000 parametrov, ale z 100 dátových bodov sa nedá naučiť 10 000
+parametrov (rovnako ako na fit priamky treba aspoň dva body, na 10 000 parametrov
+treba aspoň 10 000 bodov).
 
-**PCA** does statistics on the data and constructs a small number of **independent,
-most-probable combinations** of pixels — here **36 "eigenface" components**
-$\tilde{x}_1, \dots, \tilde{x}_{36}$ (e.g. the first captures the common background
-color). The reduced model then needs only **36 parameters**:
+**PCA** vykoná štatistiku na dátach a zostrojí malý počet **nezávislých, najpravdepodobnejších
+kombinácií** pixelov — tu **36 komponentov „eigentváre"**
+$\tilde{x}_1, \dots, \tilde{x}_{36}$ (napr. prvý zachytáva spoločnú farbu pozadia).
+Redukovaný model potom potrebuje iba **36 parametrov**:
 
 $$
 \hat{y} = p_1 \tilde{x}_1 + \dots + p_{36}\,\tilde{x}_{36}
 $$
 
-Reconstructing the images from these components gives recognizable approximations —
-enough, for instance, to tell two people apart — **without** fitting 10,000
-parameters (most of which would have a zero-containing confidence interval). The
-underlying math is relatively easy and is left for next time.
+Rekonštrukcia snímok z týchto komponentov dáva rozpoznateľné aproximácie — dostatočné
+napríklad na rozlíšenie dvoch ľudí — **bez** fitovania 10 000 parametrov (väčšina z
+nich by mala interval spoľahlivosti obsahujúci nulu). Základná matematika je pomerne
+jednoduchá a je ponechaná na nabudúce.

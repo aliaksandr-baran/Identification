@@ -1,298 +1,297 @@
 ---
 lecture: L02
-title: "Introduction to Statistics"
-course: Identification
+title: "Úvod do štatistiky"
+course: Identifikácia
 source: "https://www.youtube.com/watch?v=laEQig6EanE"
 ---
 
-# L02 — Introduction to Statistics
+# L02 — Úvod do štatistiky
 
-> Formulas and the Slovak terminology below are typeset as stated in the
-> lecture; where the caption garbled them they were reconstructed from the
-> lecturer's own slide deck (*Ident 24 02 2026*), noted inline.
+> Vzorce a slovenská terminológia nižšie sú zapísané tak, ako boli uvedené na
+> prednáške; kde ich titulky skomolili, boli rekonštruované z vlastných snímkov
+> prednášajúceho (*Ident 24 02 2026*) a poznačené priamo v texte.
 
-## Why statistics — modelling noisy data
+## Prečo štatistika — modelovanie zašumených dát
 
-Last time we saw that our world is rich with data, but **this data is not always
-reliable** — there is always some noise in the measurements (seen in many lab
-exercises). Sometimes it is a **systematic error** (e.g. somebody did not
-calibrate a device); there is also the standard error that comes from many small
-errors accumulating into measurement noise. Despite these problems we should be
-able to make sense of the data — to find a **model**, some function or algorithm
-that makes sense of the data.
+Minule sme videli, že náš svet je plný dát, ale **tieto dáta nie sú vždy
+spoľahlivé** — v meraniach je vždy nejaký šum (viditeľný v mnohých laboratórnych
+cvičeniach). Niekedy ide o **systematickú chybu** (napr. niekto neprekalibroval
+prístroj); existuje aj štandardná chyba vznikajúca z množstva malých chýb, ktoré
+sa kumulujú do šumu merania. Napriek týmto problémom by sme mali byť schopní dátam
+porozumieť — nájsť **model**, nejakú funkciu alebo algoritmus, ktorý dátam dáva
+zmysel.
 
-This is what **data-based modelling** is about, and **system identification** is
-part of it (hence the course title). System identification specifically concerns
-**dynamic systems**; we will not start with dynamic systems right away but move
-into them slowly.
+O tom je **modelovanie na základe dát**, a **identifikácia systémov** je jeho
+súčasťou (odtiaľ názov predmetu). Identifikácia systémov sa týka špeciálne
+**dynamických systémov**; nezačneme s nimi hneď, ale budeme do nich prechádzať
+postupne.
 
-Recap of model types (from the "modeling in process industry" class): the
-**first-principles models** come from the principles of physics. In this course
-we live in the world of **data-based models** — static and dynamic, linear and
-nonlinear — and a little about **state estimation** (a technique that processes
-the data and removes some noise).
+Rekapitulácia typov modelov (z predmetu „modelovanie v procesnom priemysle"):
+**modely z prvých princípov** vychádzajú z fyzikálnych zákonov. V tomto predmete
+žijeme vo svete **modelov založených na dátach** — statických aj dynamických,
+lineárnych aj nelineárnych — a trochu sa venujeme aj **odhadovaniu stavu** (technika,
+ktorá spracúva dáta a odstraňuje časť šumu).
 
-Today's question: **how can we model the noise / uncertainty in the data**, and
-make sense of the data even before building a model? One way is to understand
-**probability** and do some **statistics**. (The lecturer notes these slides were
-originally made for the European Researchers' Night to show school kids how
-probability works.)
+Dnešná otázka: **ako môžeme modelovať šum/neistotu v dátach** a pochopiť dáta ešte
+pred tým, ako postavíme model? Jednou z ciest je porozumieť **pravdepodobnosti** a
+robiť trochu **štatistiky**. (Prednášajúci poznamenáva, že tieto snímky boli
+pôvodne pripravené pre Noc výskumníkov, aby ukázali deťom, ako pravdepodobnosť
+funguje.)
 
-The lecturer also mentions a talk by a Slovak scientist
-<!-- unclear: name in caption "mikal vco"; described as a co-founder of Google DeepMind -->
-about **large language models (LLMs)**, making the point that **LLMs are just
-applied statistics** — trained with mean values, standard deviations and
-probability. A side remark: if we could train such a model multiple times, we
-could even get a **confidence** in its answers; today there is no one telling you
-that a ChatGPT output is, say, 80% vs 20% likely to be correct.
+Prednášajúci tiež spomína prednášku slovenského vedca
+<!-- unclear: meno v titulkoch „mikal vco"; opisovaný ako spoluzakladateľ Google DeepMind -->
+o **veľkých jazykových modeloch (LLM)**, pričom zdôrazňuje, že **LLM sú len
+aplikovaná štatistika** — trénované pomocou stredných hodnôt, smerodajných odchýlok
+a pravdepodobnosti. Poznámka na okraj: keby sme mohli takýto model trénovať
+viackrát, mohli by sme dokonca dostať **interval spoľahlivosti** pre jeho odpovede;
+dnes vám nikto nepovedal, že výstup ChatGPT má napr. 80 % vs. 20 % šancu byť správny.
 
-## Probability and the dice experiment
+## Pravdepodobnosť a experiment s kockou
 
-**Probability** (known from high school) expresses that an event can happen with
-a certain likelihood, in mathematical terms from **0 to 1**. A good testing
-device is a **dice**.
+**Pravdepodobnosť** (známa zo strednej školy) vyjadruje, že udalosť môže nastať
+s určitou pravdepodobnosťou, v matematickom vyjadrení od **0 do 1**. Dobrým
+testovacím zariadením je **kocka**.
 
-Building on the histogram idea from last week, the lecturer builds a histogram of
-dice outcomes (1–6):
+Nadväzujúc na myšlienku histogramu z minulého týždňa, prednášajúci buduje histogram
+výsledkov hodov kockou (1–6):
 
-- A few **physical** rolls in class do **not** look uniform (e.g. several twos, a
-  couple of ones). The reason is that **the number of experiments is not
-  sufficient** — this points toward the **law of large numbers**.
-- In **MATLAB**, simulating a *fair* dice:
-  - **20** attempts: still very uneven (six may appear in almost half the cases).
-  - **100** attempts: a different picture, no single number dominant.
-  - **1,000 / 10,000 / 100,000 / 1,000,000 / 6,000,000** attempts: the columns
-    progressively even out. At **6 million** rolls each number appears about
-    **1 million** times — every outcome is equally likely.
+- Niekoľko **fyzických** hodov v triede nevyzerá rovnomerne (napr. niekoľko dvojiek,
+  pár jednotiek). Dôvod je, že **počet experimentov nie je dostatočný** — to poukazuje
+  na **zákon veľkých čísel**.
+- V **MATLAB**-e, pri simulácii *spravodlivej* kocky:
+  - **20** pokusov: stále veľmi nerovnomerne (šestka sa môže objaviť takmer v
+    polovici prípadov).
+  - **100** pokusov: iný obraz, žiadne číslo nedominuje.
+  - **1 000 / 10 000 / 100 000 / 1 000 000 / 6 000 000** pokusov: stĺpce sa
+    postupne vyrovnávajú. Pri **6 miliónoch** hodov sa každé číslo objaví asi
+    **1 milión** krát — každý výsledok je rovnako pravdepodobný.
 
-We then **normalize** the histogram — we do not care about absolute counts, only
-about the **proportions / ratios**. The probability of an event (e.g. throwing a
-three) is the **number of successful occurrences divided by the number of
-attempts**. The lecturer notes that if the dice were **unfair**, some numbers
-would occur more frequently, but you cannot tell that from a small number of
-experiments.
+Potom histogram **normalizujeme** — nezaujíma nás absolútny počet, len
+**podiely/pomery**. Pravdepodobnosť udalosti (napr. hodenie trojky) je **počet
+úspešných výskytov vydelený počtom pokusov**. Prednášajúci poznamenáva, že keby
+kocka bola **nefér**, niektoré čísla by sa vyskytovali častejšie, ale z malého
+počtu experimentov to nemožno zistiť.
 
-## Sum of several dice → the bell curve
+## Súčet viacerých kociek → zvonová krivka
 
-A standard detour: throw **two dice at the same time** and look not at the
-individual numbers but at their **sum**.
+Klasický odbočný príklad: hodiť **dvoma kockami naraz** a pozerať sa nie na
+jednotlivé čísla, ale na ich **súčet**.
 
-- One dice gives 6 outcomes; two dice give **36 possible outcomes** for the pair.
-- The sums are **not** uniform: e.g. a sum of **3** occurs only twice, but a sum
-  of **7** dominates because it can be made as 6+1, 5+2, 4+3, … So the model of
-  this game is no longer uniform — **7** is the most likely sum.
+- Jedna kocka dáva 6 výsledkov; dve kocky dávajú **36 možných výsledkov** pre dvojicu.
+- Súčty **nie sú** rovnomerne rozdelené: napr. súčet **3** nastane len dvakrát,
+  ale súčet **7** dominuje, lebo ho možno dosiahnuť ako 6+1, 5+2, 4+3, … Takže
+  model tejto hry už nie je rovnomerný — **7** je najpravdepodobnejší súčet.
 
-Continuing the game with **three dice**: lowest sum is 1+1+1 = **3**, highest is
-6+6+6 = **18**; sums of 10 and 11 become most likely. With **four, five, six, …,
-up to ~20 dice**, a clear **shape appears**. With ~20 dice, the most probable sum
-is around **70** (ten times the two-dice peak of 7).
+Pokračujeme hrou s **troma kockami**: najmenší súčet je 1+1+1 = **3**, najväčší
+6+6+6 = **18**; súčty 10 a 11 sa stávajú najpravdepodobnejšími. So **štyrmi, piatimi,
+šiestimi, … až ~20 kockami** sa objaví zreteľný **tvar**. Pri ~20 kockách je
+najpravdepodobnejší súčet okolo **70** (desaťnásobok vrcholu dvoch kociek, t. j. 7).
 
-This shape is the **bell curve** — the **Gaussian curve**, with a known equation.
-The Germans even put it on their currency: **Carl Friedrich Gauss** and the bell
-curve appeared on the **10 Deutsche Mark** note.
+Tento tvar je **zvonová krivka** — **Gaussova krivka** so známou rovnicou. Nemci ju
+dokonca dali na svoju menu: **Carl Friedrich Gauss** a zvonová krivka sa objavili na
+bankovke **10 nemeckých mariek**.
 
-## The probability density function (PDF)
+## Hustota pravdepodobnosti (PDF)
 
-The bell curve is a **probability density function**, abbreviated **PDF** (not
-"portable document format"). A PDF exists for any distribution — even the
-**uniform distribution** (the dice), which is not the "e-to-the-power" function.
+Zvonová krivka je **hustota pravdepodobnosti**, skrátene **PDF** (nie „portable
+document format"). PDF existuje pre akékoľvek rozdelenie — dokonca aj pre
+**rovnomerné rozdelenie** (kocka), ktoré nie je funkciou „e na nejakú mocninu".
 
-The PDF tells us the **likeliness of an event occurring**. For a dice (6 discrete
-outcomes) this is easy to interpret, but for a continuous quantity like the
-**temperature in the room** the idea of "probability of measuring exactly
-25.7284…°" becomes distorted — there will be a way to handle that (the CDF).
+PDF hovorí, **aká je pravdepodobnosť výskytu udalosti**. Pre kocku (6 diskrétnych
+výsledkov) je to ľahko interpretovateľné, ale pre spojitú veličinu ako
+**teplota v miestnosti** sa myšlienka „pravdepodobnosť namerania presne
+25,7284…°" stáva skreslená — bude na to riešenie (distribučná funkcia).
 
-### Normal / Gaussian distribution
+### Normálne/Gaussovo rozdelenie
 
-"Normal" and "Gaussian" are synonyms (Germans tend to say *Gaussian*; others say
-*normal*). We say a random variable $X$ (capital $X$; Slovak *premenná*) **obeys**
-a normal distribution, written — note the whole world, even the Germans, write a
-capital **N**, not G:
+„Normálne" a „Gaussovo" sú synonymá (Nemci zvyknú hovoriť *Gaussovo*; iní hovoria
+*normálne*). Hovoríme, že náhodná premenná $X$ (veľké $X$; po slovensky *premenná*)
+**sa riadi** normálnym rozdelením, zapísané — pozor, celý svet, dokonca aj Nemci,
+píše veľké **N**, nie G:
 
 $$
 X \sim N(\mu, \sigma^2)
 $$
 
-with two parameters $\mu$ and $\sigma$ (slide: written with $\bar{x}$;
-$X \sim N(\bar{x}, \sigma^2)$ with parameters $\bar{x}$ and $\sigma^2$).
+s dvoma parametrami $\mu$ a $\sigma$ (na snímku: zapísané s $\bar{x}$;
+$X \sim N(\bar{x}, \sigma^2)$ s parametrami $\bar{x}$ a $\sigma^2$).
 
-The parameters and their Slovak names (confirmed from the slide):
+Parametre a ich slovenské názvy (potvrdené zo snímku):
 
-- $\mu$ (also written $\bar{x}$) — the **mean** / **mean value** / **expected
-  value**. The lecturer likes the English "expected value," even written as an
-  operator $\mu = E[X]$. Slovak: **stredná hodnota**. If the data are
-  normally distributed, the expected value is the number you expect from the next
-  trial (next dice throw, temperature, exam result). For the two-dice game the
-  mean is **7**.
-- $\sigma$ — the **standard deviation**. Slovak: **smerodajná odchýlka**.
-- $\sigma^2$ — the **variance** (a very helpful concept). Slovak: **rozptyl**.
+- $\mu$ (tiež písané $\bar{x}$) — **priemer** / **stredná hodnota** / **stredná
+  očakávaná hodnota**. Prednášajúci preferuje anglický výraz „expected value", dokonca
+  zapísaný ako operátor $\mu = E[X]$. Po slovensky: **stredná hodnota**. Ak sú dáta
+  normálne rozdelené, stredná hodnota je číslo, ktoré očakávame od ďalšieho pokusu
+  (ďalší hod kockou, teplota, výsledok skúšky). Pre hru s dvoma kockami je priemer
+  **7**.
+- $\sigma$ — **smerodajná odchýlka**.
+- $\sigma^2$ — **rozptyl** (veľmi užitočný pojem).
 
-The PDF of the normal distribution (the function from the German banknote;
-confirmed from the slide):
+PDF normálneho rozdelenia (funkcia z nemeckej bankovky; potvrdená zo snímku):
 
 $$
 f(x) = \frac{1}{\sigma\sqrt{2\pi}}\, e^{-\frac{(x-\mu)^2}{2\sigma^2}}
 $$
 
-This PDF, $f(x)$, tells us **how proportionally likely** the outcome $x$ is.
+Táto PDF, $f(x)$, nám hovorí, **ako relatívne pravdepodobný** je výsledok $x$.
 
-### Building the curve from simpler functions
+### Zostrojenie krivky z jednoduchších funkcií
 
-To understand this scary-looking function, the lecturer looks at the simpler case
-$\mu = 0$ and $\sigma = 1$ — the **standard normal / standard Gaussian
-distribution**. Then:
+Na pochopenie tejto zložite vyzerajúcej funkcie sa prednášajúci pozrie na
+jednoduchší prípad $\mu = 0$ a $\sigma = 1$ — **štandardné normálne/Gaussovo
+rozdelenie**. Potom:
 
 $$
 f(x) = \frac{1}{\sqrt{2\pi}}\, e^{-\frac{1}{2}x^2}
 $$
 
-He sketches it in three steps (the slide shows the same three-panel build-up):
+Nakreslí ho v troch krokoch (snímok zobrazuje rovnakú trojpanelovú postupnosť):
 
-1. Plot $x^2$ — a parabola with its minimum (value 0) at $x = 0$ (the mean).
-2. Negate it: $-x^2$ — now **concave**, with a **maximum** at $x = 0$.
-3. Apply the **exponential** $e^{(\cdot)}$. Since $-x^2$ takes only **negative
-   values**, we stay on the part of the exponential between **1** (at the maximum,
-   $e^0 = 1$) and **0** (the values tend to zero, i.e. an **infimum** at the
-   tails, never actually reached). The maximum stays at $x = 0$ because the
-   exponential is an increasing function. The factor $\tfrac{1}{2}$ only controls
-   how fast it decays. The result is the **Gaussian curve**.
+1. Vykresliť $x^2$ — parabola s minimom (hodnota 0) v $x = 0$ (priemer).
+2. Negovať: $-x^2$ — teraz **konkávna**, s **maximom** v $x = 0$.
+3. Aplikovať **exponenciálu** $e^{(\cdot)}$. Keďže $-x^2$ nadobúda len **záporné
+   hodnoty**, zostávame na časti exponenciály medzi **1** (v maxime, $e^0 = 1$)
+   a **0** (hodnoty smerujú k nule, t. j. **infimum** na chvostoch, nikdy nedosiahnuté).
+   Maximum zostáva v $x = 0$, lebo exponenciála je rastúca funkcia. Faktor
+   $\tfrac{1}{2}$ len riadi rýchlosť poklesu. Výsledkom je **Gaussova krivka**.
 
-## Why the constant $\tfrac{1}{\sqrt{2\pi}}$ — integrating to 1
+## Prečo konštanta $\tfrac{1}{\sqrt{2\pi}}$ — integrál rovný 1
 
-A PDF is **not the probability itself yet**. For the dice we can ask, e.g., "how
-likely is an **even** number?" — sum the individual probabilities:
-$\tfrac{1}{6} + \tfrac{1}{6} + \tfrac{1}{6} = \tfrac{1}{2}$ (an **OR** of events
-→ a sum of probabilities; this is a **joint** vs. simple-sum distinction the
-lecturer flags). Summing over **all** dice outcomes,
-$6 \times \tfrac{1}{6} = 1$.
+PDF **nie je priamo pravdepodobnosť**. Pre kocku sa môžeme pýtať napr. „aká je
+pravdepodobnosť **párneho** čísla?" — sčítame jednotlivé pravdepodobnosti:
+$\tfrac{1}{6} + \tfrac{1}{6} + \tfrac{1}{6} = \tfrac{1}{2}$ (operácia **ALEBO** pre
+udalosti → súčet pravdepodobností; toto je rozlíšenie **spojenej** a jednoduchej
+sumy, na ktoré prednášajúci upozorňuje). Sčítaním cez **všetky** výsledky kocky
+dostaneme $6 \times \tfrac{1}{6} = 1$.
 
-For a continuous PDF the analogue of "going through all possibilities and
-summing" is **integration**. So a valid PDF must integrate to one. Testing the
-standard-normal exponential alone in MATLAB:
+Pre spojitú PDF je analógiou „prejsť cez všetky možnosti a sčítať" **integrácia**.
+Platná PDF teda musí integrovať na jedna. Testovanie samotnej štandardnej normálnej
+exponenciály v MATLAB-e:
 
 $$
-\int_{-\infty}^{\infty} e^{-\frac{1}{2}x^2}\, dx = \sqrt{2\pi} \approx 2.5066
+\int_{-\infty}^{\infty} e^{-\frac{1}{2}x^2}\, dx = \sqrt{2\pi} \approx 2{,}5066
 $$
 
-That is exactly why the normalizing constant $\tfrac{1}{\sqrt{2\pi}}$ (more
-generally $\tfrac{1}{\sigma\sqrt{2\pi}}$) is there — so the **total probability is
-1**. The slide states the general properties:
+Práve preto je tam normalizačná konštanta $\tfrac{1}{\sqrt{2\pi}}$ (všeobecnejšie
+$\tfrac{1}{\sigma\sqrt{2\pi}}$) — aby **celková pravdepodobnosť bola 1**. Snímok
+uvádza všeobecné vlastnosti:
 
 $$
 f(x) \ge 0, \qquad F(\infty) = \int_{-\infty}^{\infty} f(x)\, dx = 1
 $$
 
-The interpretation: *some* event must happen — the temperature in the room is
-either $-\infty$, some finite number, or $+\infty$ — so the total probability is 1.
+Interpretácia: *nejaká* udalosť musí nastať — teplota v miestnosti je buď
+$-\infty$, nejaké konečné číslo, alebo $+\infty$ — takže celková pravdepodobnosť
+je 1.
 
-## The cumulative distribution function (CDF)
+## Distribučná funkcia (CDF)
 
-To get a **probability** (not just a density) we use the **cumulative
-distribution function**, **CDF**. Slovak: **distribučná funkcia**.
+Aby sme dostali **pravdepodobnosť** (nie len hustotu), používame **distribučnú
+funkciu**, **CDF**. Po slovensky: **distribučná funkcia**.
 
-Notation contrast: the PDF written $f(x)$ (lowercase $f$) gives the density /
-relative probability; the CDF written $F$ (capital) gives the **probability
-itself**. The CDF is defined as the probability that $X$ is less than or equal to
-some value $z$ (a particular value of $x$):
+Kontrast v zápise: PDF zapísaná ako $f(x)$ (malé $f$) dáva hustotu/relatívnu
+pravdepodobnosť; CDF zapísaná ako $F$ (veľké) dáva **pravdepodobnosť samotnú**.
+CDF je definovaná ako pravdepodobnosť, že $X$ je menšie alebo rovné nejakej hodnote
+$z$ (konkrétna hodnota $x$):
 
 $$
 F(z) = \Pr(X \le z) = \int_{-\infty}^{z} f(x)\, dx
 $$
 
-We must start the integral at one end, so we begin at $-\infty$. This computes the
-**area under the PDF curve** up to $z$ — the same principle as summing
-$\tfrac{1}{6}+\tfrac{1}{6}+\tfrac{1}{6}$ on the dice to get $P(X \le 3) =
-\tfrac{1}{2}$, but now in the **continuous** world (thermometer, battery charge,
-etc.).
+Integrál musíme začínať na jednom konci, teda začíname od $-\infty$. Tým vypočítame
+**plochu pod krivkou PDF** až po $z$ — rovnaký princíp ako súčet
+$\tfrac{1}{6}+\tfrac{1}{6}+\tfrac{1}{6}$ na kocke pre $P(X \le 3) = \tfrac{1}{2}$,
+ale teraz v **spojitom** svete (teplomer, nabíjanie batérie atď.).
 
-Sketching the CDF point by point (slide shows the integral form):
+Skicovanie CDF bod po bode (snímok zobrazuje integrálnu formu):
 
-- It is **0** at one end and **asymptotically 1** at the other (after integrating
-  the whole curve, $P(X \le 10{,}000°) \approx 1$). It never goes negative because
-  the PDF is always positive (no cancelling of areas).
-- It is the **integral** of the PDF, so the PDF is its **derivative**: small
-  slopes at the tails, **maximum slope (inflection point)** at the mean.
-- For a chosen $z_1$ (e.g. 10°), $F(z_1)$ reads off, say, **0.2 (20%)** — the
-  probability the temperature is $z_1$ or less. Taking $z_2 = \mu$ (the mean)
-  gives about **0.5**; a higher $z_3$ gives more.
+- Na jednom konci je **0** a na druhom **asymptoticky 1** (po zintegrovaní celej
+  krivky, $P(X \le 10\,000°) \approx 1$). Nikdy nejde do záporných hodnôt, lebo
+  PDF je vždy kladná (plochy sa nerušia).
+- Je to **integrál** PDF, teda PDF je jej **derivácia**: malé sklony na chvostoch,
+  **maximálny sklon (inflexný bod)** v strednej hodnote.
+- Pre zvolené $z_1$ (napr. 10°) prečítame $F(z_1)$, povedzme **0,2 (20%)** —
+  pravdepodobnosť, že teplota je $z_1$ alebo menej. Pre $z_2 = \mu$ (stredná hodnota)
+  dostaneme asi **0,5**; vyššie $z_3$ dáva viac.
 
-### From CDF to interval probabilities
+### Od distribučnej funkcie k pravdepodobnostiam intervalov
 
-What we usually want is the probability that $X$ falls in an **interval**, which
-is the difference of two CDF values, equivalently a definite integral (slide):
+Zvyčajne chceme pravdepodobnosť, že $X$ padne do **intervalu**, čo je rozdiel dvoch
+hodnôt CDF, resp. určitý integrál (snímok):
 
 $$
 P(a \le x \le b) = \int_{a}^{b} f(x)\, dx
 $$
 
-To do this in practice you **collect data**, estimate the two parameters (mean and
-variance/standard deviation) of the curve, and then ask such questions. Example
-discussed: measuring everyone's **height** in the room. As with the dice we do not
-get a uniform distribution — we **fit a normal distribution** to the data, get the
-mean and standard deviation, and then ask questions like "who is between 174 and
-178 cm?". Note the probability of **exactly** one point (e.g. exactly 25°) is
-**zero**, because the integral over a single point is zero — so we always ask
-about a small interval (e.g. $25 \pm 0.1$).
+V praxi na to **zbierame dáta**, odhadneme dva parametre (priemer a
+rozptyl/smerodajnú odchýlku) krivky a potom kladieme takéto otázky. Diskutovaný
+príklad: meranie **výšky** každého v miestnosti. Rovnako ako pri kocke nezísame
+rovnomerné rozdelenie — **fitujeme normálne rozdelenie** na dáta, dostaneme priemer
+a smerodajnú odchýlku a potom sa pýtame napríklad „kto má výšku medzi 174 a
+178 cm?". Pravdepodobnosť **presne** jedného bodu (napr. presne 25°) je **nula**,
+lebo integrál cez jeden bod je nula — preto sa vždy pýtame na malý interval
+(napr. $25 \pm 0{,}1$).
 
-A unit remark: in $\frac{(x-\mu)^2}{2\sigma^2}$, $x$ and $\sigma$ must "live in the
-same world" — if $x$ is temperature in Kelvin, the numerator is Kelvin² and the
-denominator (via $\sigma$) is also Kelvin², so the exponent is **dimensionless**.
-This lets us **standardize**: subtract the mean and measure distance in multiples
-of $\sigma$.
+Poznámka k jednotkám: v $\frac{(x-\mu)^2}{2\sigma^2}$ musia $x$ a $\sigma$ „žiť
+v rovnakom svete" — ak je $x$ teplota v Kelvinoch, čitateľ je v Kelvinoch² a
+menovateľ (cez $\sigma$) tiež v Kelvinoch², takže exponent je **bezrozmerný**.
+To nám umožňuje **štandardizovať**: odčítame strednú hodnotu a meriame vzdialenosť
+v násobkoch $\sigma$.
 
-## The 68–95–99.7 rule (sigma intervals)
+## Pravidlo 68–95–99,7 (sigmaové intervaly)
 
-Measuring distance from the mean in **standard deviations** gives the famous
-interval probabilities (computed in MATLAB by integrating the standard-normal PDF
-between the limits; confirmed on the slide):
-
-$$
-P(\mu - \sigma \le x \le \mu + \sigma) = 68.27\%
-$$
+Meranie vzdialenosti od strednej hodnoty v **smerodajných odchýlkach** dáva
+slávne pravdepodobnosti intervalov (vypočítané v MATLAB-e integrovaním štandardnej
+normálnej PDF medzi hranicami; potvrdené na snímku):
 
 $$
-P(\mu - 2\sigma \le x \le \mu + 2\sigma) = 95.45\%
+P(\mu - \sigma \le x \le \mu + \sigma) = 68{,}27\%
 $$
 
 $$
-P(\mu - 3\sigma \le x \le \mu + 3\sigma) = 99.73\%
+P(\mu - 2\sigma \le x \le \mu + 2\sigma) = 95{,}45\%
 $$
 
-So $\pm 1\sigma \approx 68\%$, $\pm 2\sigma \approx 95\%$, $\pm 3\sigma \approx
-99.7\%$. The lecturer notes this is **general** — once you know the mean and
-(most importantly) the standard deviation, it holds for any normal distribution.
-For control design you might not care about the 5% of cases outside $\pm 2\sigma$.
-He also mentions that at **CERN** a "discovery" (e.g. Higgs boson, or the
-faster-than-light-neutrino claim) is declared at about **6 standard deviations**.
+$$
+P(\mu - 3\sigma \le x \le \mu + 3\sigma) = 99{,}73\%
+$$
 
-## Estimating the parameters from data
+Teda $\pm 1\sigma \approx 68\%$, $\pm 2\sigma \approx 95\%$, $\pm 3\sigma \approx
+99{,}7\%$. Prednášajúci poznamenáva, že toto je **všeobecné** — akonáhle poznáme
+strednú hodnotu a (čo je najdôležitejšie) smerodajnú odchýlku, platí pre
+akékoľvek normálne rozdelenie. Pre návrh regulácie nemusíme dbať na 5 % prípadov
+mimo $\pm 2\sigma$. Tiež spomína, že v **CERN**-e sa „objav" (napr. Higgsov bozón,
+alebo tvrdenie o neutrínoch rýchlejších ako svetlo) vyhlasuje pri asi
+**6 smerodajných odchýlkach**.
 
-Finally, how to compute the parameters from $n$ samples $x_1, x_2, \dots, x_n$.
-The hat denotes a **sampled** estimate (based on observations, not the exact
-value):
+## Odhadovanie parametrov z dát
 
-**Sample mean** — the arithmetic average (sum the values, divide by the number of
-trials), same idea as the $\tfrac{1}{6}$ dice probability:
+Nakoniec, ako vypočítať parametre z $n$ vzoriek $x_1, x_2, \dots, x_n$.
+Strieška označuje **výberový** odhad (na základe pozorovaní, nie presnej hodnoty):
+
+**Výberový priemer** — aritmetický priemer (sčítame hodnoty, vydelíme počtom
+pokusov), rovnaká myšlienka ako pravdepodobnosť $\tfrac{1}{6}$ pri kocke:
 
 $$
 \bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i
 $$
 
-**Variance / standard deviation** — described verbally as **the average of how
-much the samples differ from the mean**, and because that difference can be
-positive or negative, the **square** is used (the lecturer does not write the
-explicit denominator; the slide leaves it as "$\sigma^2 = \dots$"):
+**Rozptyl/smerodajná odchýlka** — slovne opísaný ako **priemer toho, o koľko sa
+vzorky líšia od priemeru**, a keďže tento rozdiel môže byť kladný alebo záporný,
+používa sa **druhá mocnina** (prednášajúci nepíše explicitný menovateľ; snímok
+ho ponecháva ako „$\sigma^2 = \dots$"):
 
-<!-- unclear: lecturer states "average of the squared differences from the mean" but does not specify the denominator (n vs n-1) -->
+<!-- unclear: prednášajúci uvádza „priemer druhých mocnín odchýlok od priemeru", ale nešpecifikuje menovateľ (n vs n-1) -->
 
 $$
 \sigma^2 \approx \frac{1}{n}\sum_{i=1}^{n} (x_i - \bar{x})^2
 $$
 
-The standard deviation is then the average distance of the data (heights,
-temperatures, …) from their mean value.
+Smerodajná odchýlka je potom priemerná vzdialenosť dát (výšky, teploty, …) od ich
+strednej hodnoty.
 
-He closes the LLM analogy: ChatGPT's answer is like **one sample** drawn from some
-population (answers found online, some checked by experts) — but you cannot easily
-get its variance, because each "sample" is one training of ~40 billion parameters
-costing millions of dollars, so nobody pays for the multiple trainings needed.
+Záver analógie s LLM: odpoveď ChatGPT je ako **jedna vzorka** odobratá z nejakého
+základného súboru (odpovede nájdené online, niektoré overené expertmi) — ale
+rozptyl ľahko nezískate, lebo každá „vzorka" je jedno trénovanie ~40 miliárd
+parametrov za milióny dolárov, takže nikto nefinancuje viaceré trénovania, ktoré
+by boli potrebné.

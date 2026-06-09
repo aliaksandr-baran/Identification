@@ -1,39 +1,40 @@
 ---
 lecture: L04
-title: "Estimation of a Constant #2"
-course: Identification
+title: "Odhad konštanty #2"
+course: Identifikácia
 source: "https://www.youtube.com/watch?v=PXgpgTrh07Y"
 ---
 
-# L04 — Estimation of a Constant #2
+# L04 — Odhad konštanty #2
 
-## Recap of the setup
+## Rekapitulácia nastavenia
 
-We continue the statistical approach to estimating a constant. We have measured
-data assumed to come from a **normal distribution** with some constant mean and
-some standard deviation, whose values we do not know. From this we recall the
-**PDF** — how likely it is to observe $y_k$ if we knew the mean and standard
-deviation — and its sister function, the **likelihood function** $L$, which swaps
-the roles: with $y_k$ given (e.g. we measured 1.6 or 1.1), the mean and standard
-deviation become the parameters, and we ask how likely those parameter values are.
+Pokračujeme v štatistickom prístupe k odhadovaniu konštanty. Namerali sme dáta,
+o ktorých predpokladáme, že pochádzajú z **normálneho rozdelenia** s nejakou
+konštantnou strednou hodnotou a nejakou smerodajnou odchýlkou, ktorých hodnoty
+nepoznáme. Z toho si pripomenieme **PDF** — ako pravdepodobné je pozorovanie $y_k$,
+keby sme poznali strednú hodnotu a smerodajnú odchýlku — a jej sesterskú funkciu,
+**funkciu vierohodnosti** $L$, ktorá vymieňa úlohy: keď je $y_k$ zadané (napr.
+sme namerali 1,6 alebo 1,1), stredná hodnota a smerodajná odchýlka sa stávajú
+parametrami a pýtame sa, aká vierohodná je tá-ktorá hodnota parametrov.
 
-Because all data $y_k$ come from the same process (the same two parameters), the
-**joint probability** is the **product** of the likelihoods.
+Keďže všetky dáta $y_k$ pochádzajú z rovnakého procesu (rovnaké dva parametre),
+**spojená pravdepodobnosť** je **súčin** vierohodností.
 
-## Maximizing the likelihood — the log trick
+## Maximalizácia vierohodnosti — trik s logaritmom
 
-We maximize the joint likelihood over $\bar{y}$ and $\sigma$:
+Maximalizujeme spojenú vierohodnosť vzhľadom na $\bar{y}$ a $\sigma$:
 
 $$
 \max_{\bar{y},\,\sigma}\;\prod_{k=1}^{N}
   \frac{1}{\sigma\sqrt{2\pi}}\, e^{-\frac{(y_k-\bar{y})^2}{2\sigma^2}}
 $$
 
-Differentiating a **product** (product rule, with $N-1$ undifferentiated terms) is
-unpleasant. The trick: take the **logarithm**, which turns a product into a sum,
-because $\ln(a\cdot b) = \ln a + \ln b$. The natural logarithm is convenient since
-$\ln(e^x) = x$, so the exponential disappears. Applying $\ln$ turns the product
-$\prod$ into a sum $\sum$:
+Derivovanie **súčinu** (pravidlo súčinu s $N-1$ nediferencovanými členmi) je
+nepríjemné. Trik: vezmeme **logaritmus**, ktorý premení súčin na súčet, lebo
+$\ln(a\cdot b) = \ln a + \ln b$. Prirodzený logaritmus je výhodný, keďže
+$\ln(e^x) = x$, takže exponenciála zmizne. Aplikovaním $\ln$ sa súčin $\prod$
+premení na sumu $\sum$:
 
 $$
 \max_{\bar{y},\,\sigma}\;\sum_{k=1}^{N}
@@ -41,16 +42,16 @@ $$
         - \frac{(y_k-\bar{y})^2}{2\sigma^2}\right]
 $$
 
-**Does the log change the location of the optimum?** No — applying a **monotonic
-(increasing)** function preserves which value is larger, so the extrema stay at the
-same place (the curve looks different but the argmax/argmin is unchanged). If the
-transforming function were decreasing we would need a minus sign. The original
-objective need not be monotonic; only the transforming function must be.
+**Mení logaritmus polohu optima?** Nie — aplikovanie **monotónnej (rastúcej)**
+funkcie zachováva, ktorá hodnota je väčšia, takže extrémy zostávajú na rovnakom
+mieste (krivka vyzerá inak, ale argmax/argmin je nezmenený). Keby bola transformujúca
+funkcia klesajúca, museli by sme pridať znamienko mínus. Pôvodná účelová funkcia
+nemusí byť monotónna; monotónna musí byť len transformujúca funkcia.
 
-**Convert max to min** (as in the optimization class) by negating the objective —
-this has nothing to do with monotonicity. Rewriting $\frac{1}{\sigma\sqrt{2\pi}}
-= (\sigma\sqrt{2\pi})^{-1}$, the inner $\ln$ contributes $-\ln(\sigma\sqrt{2\pi})$,
-and after the overall minus we get $+\ln(\sigma\sqrt{2\pi})$:
+**Prevod max na min** (ako na predmete optimalizácie) negovaním účelovej funkcie —
+to nemá nič spoločné s monotónnosťou. Prepísaním $\frac{1}{\sigma\sqrt{2\pi}}
+= (\sigma\sqrt{2\pi})^{-1}$ vnútorný $\ln$ prispieva $-\ln(\sigma\sqrt{2\pi})$,
+a po celkovom mínuse dostaneme $+\ln(\sigma\sqrt{2\pi})$:
 
 $$
 \min_{\bar{y},\,\sigma}\;\sum_{k=1}^{N}
@@ -58,14 +59,14 @@ $$
         + \frac{(y_k-\bar{y})^2}{2\sigma^2}\right]
 $$
 
-This already contains the familiar **sum of squares** $\sum (y_k - \bar{y})^2$
-from the optimization-based (least-squares) approach.
+Toto už obsahuje dobre známy **súčet štvorcov** $\sum (y_k - \bar{y})^2$
+z optimalizačného (metóda najmenších štvorcov) prístupu.
 
-## Estimating the mean
+## Odhadovanie strednej hodnoty
 
-Call the objective $F$. Take $\dfrac{\partial F}{\partial \bar{y}} = 0$. The first
-term does not involve $\bar{y}$, so (same as last lecture, with constant
-$\tfrac{1}{2\sigma^2}$ that cancels against the zero right-hand side):
+Označme účelovú funkciu $F$. Nastavíme $\dfrac{\partial F}{\partial \bar{y}} = 0$.
+Prvý člen $\bar{y}$ neobsahuje, takže (rovnako ako na minulej prednáške, s konštantou
+$\tfrac{1}{2\sigma^2}$, ktorá sa skráti s pravou stranou rovnicou nula):
 
 $$
 0 = \sum_{k=1}^{N} (y_k - \bar{y})
@@ -73,23 +74,22 @@ $$
   \hat{y} = \frac{1}{N}\sum_{k=1}^{N} y_k
 $$
 
-So the **arithmetic mean is also the maximum-likelihood (statistically most
-probable) estimate**, not just the least-squares optimum — which is why the
-function $L$ is called the *likelihood* function.
+Teda **aritmetický priemer je zároveň odhad maximálnej vierohodnosti (štatisticky
+najpravdepodobnejší odhad)**, nielen optimum metódy najmenších štvorcov — preto sa
+funkcia $L$ nazýva funkciou *vierohodnosti*.
 
-## Estimating the standard deviation
+## Odhadovanie smerodajnej odchýlky
 
-Now take $\dfrac{\partial F}{\partial \sigma} = 0$. Split the log of the product
-$\ln(\sigma\sqrt{2\pi}) = \ln\sqrt{2\pi} + \ln\sigma$, so
+Teraz nastavíme $\dfrac{\partial F}{\partial \sigma} = 0$. Rozložíme logaritmus
+súčinu $\ln(\sigma\sqrt{2\pi}) = \ln\sqrt{2\pi} + \ln\sigma$, takže
 
 $$
 F = \sum_{k=1}^{N}\Big[\ln\sqrt{2\pi} + \ln\sigma
       + \tfrac{1}{2}(y_k-\bar{y})^2\,\sigma^{-2}\Big]
 $$
 
-The derivative of a sum is the sum of derivatives: the constant $\ln\sqrt{2\pi}$
-gives 0, $\ln\sigma$ gives $\tfrac{1}{\sigma}$, and the last term gives
-$-\dfrac{(y_k-\bar{y})^2}{\sigma^3}$:
+Derivácia sumy je suma derivácií: konštanta $\ln\sqrt{2\pi}$ dáva 0, $\ln\sigma$
+dáva $\tfrac{1}{\sigma}$ a posledný člen dáva $-\dfrac{(y_k-\bar{y})^2}{\sigma^3}$:
 
 $$
 \frac{\partial F}{\partial \sigma}
@@ -97,9 +97,9 @@ $$
       - \frac{(y_k-\bar{y})^2}{\sigma^{3}}\right] = 0
 $$
 
-Multiply through by $\sigma^3$. The term $\sum_{k=1}^{N}\sigma^2 = N\sigma^2$
-(summing a $k$-independent term $N$ times), while the sum of squares must stay
-inside the sum (it depends on $k$):
+Vynásobíme $\sigma^3$. Člen $\sum_{k=1}^{N}\sigma^2 = N\sigma^2$
+(sčítame $k$-nezávislý člen $N$-krát), zatiaľ čo súčet štvorcov musí zostať
+vo vnútri sumy (závisí od $k$):
 
 $$
 N\sigma^2 = \sum_{k=1}^{N}(y_k-\bar{y})^2
@@ -107,37 +107,34 @@ N\sigma^2 = \sum_{k=1}^{N}(y_k-\bar{y})^2
   \sigma^2 = \frac{1}{N}\sum_{k=1}^{N}(y_k-\bar{y})^2
 $$
 
-equivalently $\sigma = \sqrt{\dfrac{1}{N}\sum_{k=1}^{N}(y_k-\bar{y})^2}$ (Slovak:
-*rozptyl* = variance). This is essentially the **recycled definition of the
-variance** (the average distance of the data from the mean), which gives the
-Gaussian bell its width.
+ekvivalentne $\sigma = \sqrt{\dfrac{1}{N}\sum_{k=1}^{N}(y_k-\bar{y})^2}$ (po slovensky:
+*rozptyl* = variance). Ide v podstate o **znovu použitú definíciu rozptylu**
+(priemerná vzdialenosť dát od strednej hodnoty), ktorá dáva Gaussovmu zvonu jeho šírku.
 
-### Bessel's correction
+### Besselova korekcia
 
-This estimate of $\sigma^2$ is **not quite good**: we already "spent" one **degree
-of freedom** by estimating the mean from the same data (using the arithmetic
-average). So out of $N$ data points, one is already gone, and the proper estimate
-divides by $N-1$:
+Tento odhad $\sigma^2$ **nie je celkom správny**: jeden **stupeň voľnosti** sme
+už „minuli" odhadovaním strednej hodnoty z tých istých dát (pomocou aritmetického
+priemeru). Takže z $N$ dátových bodov jeden už odpadol a správny odhad delí $N-1$:
 
 $$
 \sigma^2 = \frac{1}{N-1}\sum_{k=1}^{N}(y_k-\bar{y})^2
 $$
 
-Dividing by $N-1$ instead of $N$ makes the number slightly **bigger**, so as not
-to **underestimate** the noise (the "standardized error" you may recall from high
-school). This is called **Bessel's correction**.
+Delenie $N-1$ namiesto $N$ robí číslo mierne **väčším**, aby sme **nepodcenili**
+šum (tzv. „štandardizovaná chyba", ktorú si možno pamätáte zo strednej školy).
+Toto sa nazýva **Besselova korekcia**.
 
-## Statistics of the estimation error — unbiasedness
+## Štatistika chyby odhadu — nestrannosť
 
-Now we ask the question optimization cannot answer: from one set of measurements,
-**how far off is the estimate?** Define the **estimation error** as the difference
-between the true constant $\bar{y}$ and the estimate $\hat{y}$. This error $e$ also
-has a **normal distribution**; we seek its **mean** and **standard deviation**.
+Teraz si kladieme otázku, na ktorú optimalizácia nedokáže odpovedať: z jednej sady
+meraní, **ako ďaleko od pravdy je odhad?** Definujeme **chybu odhadu** ako rozdiel
+medzi pravou konštantou $\bar{y}$ a odhadom $\hat{y}$. Táto chyba $e$ má tiež
+**normálne rozdelenie**; hľadáme jej **strednú hodnotu** a **smerodajnú odchýlku**.
 
-The **expected-value operator** $E[\cdot]$ just returns the mean and is **linear**,
-so it splits over sums and pulls out constants. The true mean of a constant is the
-constant itself, $E[\bar{y}] = \bar{y}$, and each measurement has $E[y_k] =
-\bar{y}$:
+**Operátor strednej hodnoty** $E[\cdot]$ jednoducho vracia priemer a je **lineárny**,
+teda rozkladá sa cez sumy a vyťahuje konštanty. Pravá stredná hodnota konštanty je
+konštanta sama, $E[\bar{y}] = \bar{y}$, a každé meranie má $E[y_k] = \bar{y}$:
 
 $$
 E[e] = E[\bar{y} - \hat{y}]
@@ -145,39 +142,38 @@ E[e] = E[\bar{y} - \hat{y}]
   = \bar{y} - \frac{1}{N}\,N\,\bar{y} = 0
 $$
 
-So as the number of measurements increases, the **estimation error converges to
-zero** and the estimate converges to the true value. This property is named: the
-arithmetic mean is an **unbiased estimate**
-<!-- unclear: lecturer says "in Slovak it's called very nice wording" but the Slovak term is not captured -->.
-The **geometric mean**, by contrast, is a **biased** estimate (it has a certain
-offset).
+Teda s rastúcim počtom meraní **chyba odhadu konverguje k nule** a odhad konverguje
+k pravej hodnote. Táto vlastnosť sa pomenúva: aritmetický priemer je **nestranný
+odhad**
+<!-- unclear: prednášajúci hovorí „po slovensky sa to volá veľmi pekne", ale slovenský termín nebol zachytený -->.
+**Geometrický priemer** je naproti tomu **zaujatý** odhad (má určitý posun).
 
-## Variance of the estimation error — consistency
+## Rozptyl chyby odhadu — konzistentnosť
 
-Next, the **variance of the estimation error**:
+Ďalej skúmame **rozptyl chyby odhadu**:
 
 $$
 \mathrm{var}(e) = E\!\left[(\bar{y} - \hat{y})^2\right]
   = E\!\left[\Big(\bar{y} - \tfrac{1}{N}\textstyle\sum_{k=1}^{N} y_k\Big)^2\right]
 $$
 
-Factor $\tfrac{1}{N}$ out of the square: using $\bar{y} = \tfrac{N}{N}\bar{y}$,
-write $\bar{y} - \tfrac{1}{N}\sum y_k = \tfrac{1}{N}\sum_{k=1}^{N}(\bar{y}-y_k)$,
-so the square gives $\tfrac{1}{N^2}\big(\sum_{k=1}^{N}(\bar{y}-y_k)\big)^2$.
+Vytkneme $\tfrac{1}{N}$ zo štvorca: pomocou $\bar{y} = \tfrac{N}{N}\bar{y}$
+napíšeme $\bar{y} - \tfrac{1}{N}\sum y_k = \tfrac{1}{N}\sum_{k=1}^{N}(\bar{y}-y_k)$,
+takže štvorec dáva $\tfrac{1}{N^2}\big(\sum_{k=1}^{N}(\bar{y}-y_k)\big)^2$.
 
-The obstacle: this is the **square of a sum**, not the sum of squares — and in
-general $(a+b)^2 \ne a^2 + b^2$ because of the **cross terms** (e.g. $y_1 y_2$).
-But here we take the **expectation** (average), and we invoke an **independence
-assumption** (★): the expected product of any two distinct measurements is zero,
+Prekážka: ide o **štvorec sumy**, nie súčet štvorcov — a všeobecne platí
+$(a+b)^2 \ne a^2 + b^2$ kvôli **krížovým členom** (napr. $y_1 y_2$).
+Tu však berieme **strednú hodnotu** (priemer) a uplatňujeme **predpoklad
+nezávislosti** (★): stredná hodnota súčinu akýchkoľvek dvoch rôznych meraní je nula,
 
 $$
 E[y_i\,y_j] = 0 \quad (i \ne j),
 $$
 
-which holds when the **samples / noise are independent** — the noise now does not
-influence the noise later (and vice versa), a reasonable assumption (to be
-justified in a later lecture). With independence, the cross terms vanish, so the
-square of the sum equals the sum of the squares inside the expectation:
+čo platí, keď sú **vzorky/šum nezávislé** — šum teraz neovplyvňuje neskorší šum
+(a naopak), čo je rozumný predpoklad (odôvodnený na neskoršej prednáške). Pri
+nezávislosti krížové členy zmiznú, a štvorec sumy sa v rámci strednej hodnoty rovná
+súčtu štvorcov:
 
 $$
 \mathrm{var}(e)
@@ -186,80 +182,80 @@ $$
   = \frac{\sigma^2}{N}
 $$
 
-because $\sum_{k=1}^{N} E[(\bar{y}-y_k)^2] = \sum \sigma^2 = N\sigma^2$ (the
-variance of the measurement noise). So:
+lebo $\sum_{k=1}^{N} E[(\bar{y}-y_k)^2] = \sum \sigma^2 = N\sigma^2$ (rozptyl šumu
+merania). Teda:
 
 $$
 \sigma_e^2 = \frac{\sigma^2}{N}, \qquad \sigma_e = \frac{\sigma}{\sqrt{N}}
 $$
 
-**Interpretation — consistency.** $\sigma$ is how noisy the sensor is; $\sigma_e$
-is how far off the estimate of the constant is. The **more samples we take, the
-smaller the error** — this is not automatic, it is a **property of the arithmetic
-mean**, and the estimator is then called **consistent** (with 100 measurements the
-error is smaller than with 10). This is the smooth shrinking of the arithmetic
-mean's oscillations seen last time, unlike the median's sudden jumps.
+**Interpretácia — konzistentnosť.** $\sigma$ je mierou zašumenia senzora; $\sigma_e$
+je mierou odchýlky odhadu konštanty. **Čím viac vzoriek vezmeme, tým menšia je
+chyba** — to nie je automatické, je to **vlastnosť aritmetického priemeru**, a odhad
+sa potom nazýva **konzistentný** (so 100 meraniami je chyba menšia ako s 10). To je
+plynulé zmršťovanie osciláciía aritmetického priemeru videné minule, na rozdiel od
+náhlych skokov mediánu.
 
-**Practical rule.** Since $\sigma_e = \sigma/\sqrt{N}$, the error in physical units
-improves with the **square root** of the number of measurements. Example: a sensor
-with standard deviation $\sigma = 1$, wanting an estimate precision of $0.1$ —
-improving by a factor of **10** requires at least $10^2 = $ **100 measurements**.
+**Praktické pravidlo.** Keďže $\sigma_e = \sigma/\sqrt{N}$, chyba vo fyzikálnych
+jednotkách sa zlepšuje s **odmocninou** počtu meraní. Príklad: senzor so smerodajnou
+odchýlkou $\sigma = 1$, požadovaná presnosť odhadu $0{,}1$ — zlepšenie desaťnásobne
+vyžaduje aspoň $10^2 = $ **100 meraní**.
 
-## Distribution of the error and the chi-square distribution
+## Rozdelenie chyby a chí-kvadrát rozdelenie
 
-We have now characterized the estimation error: $e \sim N(0, \sigma_e^2)$. Taking
-more measurements keeps the mean at zero but **narrows** the Gaussian bell (more
-certainty about the estimated mean).
+Teraz sme charakterizovali chybu odhadu: $e \sim N(0, \sigma_e^2)$. Viac meraní
+udržiava strednú hodnotu na nule, ale **zužuje** Gaussov zvon (väčšia istota o
+odhadovanej strednej hodnote).
 
-One more distribution: if a variable $X$ is normally distributed (say zero mean),
-what is the distribution of $X^2$? Negative values play no role (a square cannot be
-negative), so the distribution is one-sided. This is the **chi-square**
-distribution (Slovak: *chí kvadrát*). It has a parameter: summing $n$ squared
-normal variables,
+Jedno ďalšie rozdelenie: ak je premenná $X$ normálne rozdelená (povedzme nulová
+stredná hodnota), aké je rozdelenie $X^2$? Záporné hodnoty nehrajú úlohu (štvorec
+nemôže byť záporný), takže rozdelenie je jednostranné. Toto je **chí-kvadrát
+rozdelenie** (po slovensky: *chí kvadrát*). Má parameter: po sčítaní $n$
+štvorcov normálnych premenných,
 
 $$
 \sum_{i=1}^{n} X_i^2 \sim \chi^2 \text{ with } n \text{ degrees of freedom},
 $$
 
-where $n$ counts how many normal variables were squared and summed. This will be
-useful later when estimating several parameters (not just one constant).
+kde $n$ počíta, koľko normálnych premenných bolo umocnených a sčítaných. To bude
+užitočné neskôr pri odhadovaní viacerých parametrov (nielen jednej konštanty).
 
-## Confidence interval for the constant
+## Interval spoľahlivosti pre konštantu
 
-Normalize the error so it has zero mean and unit standard deviation, then square
-it — a single squared normal value has a chi-square distribution with **1** degree
-of freedom:
+Normalizujeme chybu tak, aby mala nulovú strednú hodnotu a jednotkovú smerodajnú
+odchýlku, potom ju umocníme — jedna umocnená normálna hodnota má chí-kvadrát
+rozdelenie s **1** stupňom voľnosti:
 
 $$
 \left(\frac{\bar{y} - \hat{y}}{\sigma_e}\right)^2 \sim \chi^2_{1}
 $$
 
-Using the **cumulative distribution function** of the chi-square distribution we
-can build a **confidence interval**, exactly as in the statistics introduction.
-For an $\alpha$ confidence level, let the **quantile** (inverse CDF) be denoted
-$\chi^2_{\alpha}$ (a number obtained from one MATLAB command). Then
+Pomocou **distribučnej funkcie** chí-kvadrát rozdelenia môžeme zostrojiť **interval
+spoľahlivosti**, presne ako pri úvode do štatistiky. Pre hladinu spoľahlivosti
+$\alpha$ označíme **kvantil** (inverznú CDF) ako $\chi^2_{\alpha}$ (číslo získané
+jedným príkazom MATLAB-u). Potom
 
 $$
 \left(\frac{\bar{y} - \hat{y}}{\sigma_e}\right)^2 \le \chi^2_{\alpha}
 $$
 
-Taking the square root of the inequality (as $x^2 \le 4 \Rightarrow |x| \le 2$):
+Vezmeme odmocninu nerovnosti (keďže $x^2 \le 4 \Rightarrow |x| \le 2$):
 
 $$
 -\sqrt{\chi^2_{\alpha}} \;\le\; \frac{\bar{y} - \hat{y}}{\sigma_e}
   \;\le\; \sqrt{\chi^2_{\alpha}}
 $$
 
-and rearranging gives the interval for the true constant $\bar{y}$:
+a úpravou dostaneme interval pre pravú konštantu $\bar{y}$:
 
 $$
 \hat{y} - \sigma_e\sqrt{\chi^2_{\alpha}} \;\le\; \bar{y}
   \;\le\; \hat{y} + \sigma_e\sqrt{\chi^2_{\alpha}}
 $$
 
-Every quantity on the left and right is computable **from data**: $\hat{y}$ is the
-arithmetic average, $\sigma_e$ is the estimated standard deviation of the error
-(the one with $\sqrt{N}$), and $\chi^2_{\alpha}$ is a statistical-function value
-from MATLAB. So we can easily find how far the estimate is from reality (e.g. the
-true value lies between $-0.01$ and $+0.01$ around the estimate), and **taking more
-measurements makes this interval smaller and smaller**.
+Každá veličina na ľavej a pravej strane je vypočítateľná **z dát**: $\hat{y}$ je
+aritmetický priemer, $\sigma_e$ je odhadovaná smerodajná odchýlka chyby (tá s
+$\sqrt{N}$) a $\chi^2_{\alpha}$ je hodnota štatistickej funkcie z MATLAB-u. Ľahko
+tak zistíme, ako ďaleko je odhad od skutočnosti (napr. pravá hodnota leží medzi
+$-0{,}01$ a $+0{,}01$ okolo odhadu), a **viac meraní tento interval zmenšuje a
+zmenšuje**.

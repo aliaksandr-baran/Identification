@@ -1,65 +1,65 @@
-# System Identification — Lecture Notes & Exam Prep
+# Identifikácia systémov — Poznámky z prednášok a príprava na skúšku
 
-Strict-fidelity Markdown notes for the **System Identification** course
-(*Identifikácia*, UIAM FCHPT STU), reconstructed from the **Ident_2025** YouTube
-lecture playlist, plus study material for the exam.
+Poznámky s prísnou vernosťou zdrojovému materiálu pre kurz **Identifikácia systémov**
+(*Identifikácia*, UIAM FCHPT STU), zrekonštruované z YouTube playlistu prednášok
+**Ident_2025**, doplnené o študijný materiál na skúšku.
 
-> The notes are built **only** from what each lecturer actually says in the video
-> (caption transcripts), with formulas cross-checked against the lecturer's own
-> slide PDFs. No outside facts or invented examples were added. Where a caption
-> garbled a formula or name, an inline `<!-- unclear: ... -->` comment marks it
-> instead of guessing.
+> Poznámky sú zostavené **výlučne** z toho, čo každý prednášajúci v danom videu skutočne hovorí
+> (prepisy titulkov), pričom vzorce sú overené podľa vlastných PDF prezentácií prednášajúceho.
+> Neboli pridané žiadne externé fakty ani vymyslené príklady. Kde titulok skomolil
+> vzorec alebo meno, je to na danom mieste označené komentárom `<!-- unclear: ... -->`
+> namiesto hádania.
 
-## Lectures
+## Prednášky
 
-One Markdown file per video, in [`lectures/`](lectures/). All lectures are in
-**English**.
+Jeden súbor Markdown na každé video, v priečinku [`lectures/`](lectures/). Všetky prednášky sú
+v **angličtine** (zdrojové prepisy titulkov sú v angličtine; poznámky sú napísané po **slovensky**).
 
-| # | Notes | Video |
-|---|-------|-------|
-| L01 | [Introduction to Identification. Data Visualization.](lectures/L01_Introduction_to_Identification.md) | [PZz7OA9_4Gw](https://www.youtube.com/watch?v=PZz7OA9_4Gw) |
-| L02 | [Introduction to Statistics](lectures/L02_Introduction_to_Statistics.md) | [laEQig6EanE](https://www.youtube.com/watch?v=laEQig6EanE) |
-| L03 | [Estimation of a Constant #1](lectures/L03_Estimation_of_a_Constant_1.md) | [G6Auo4Mw_V0](https://www.youtube.com/watch?v=G6Auo4Mw_V0) |
-| L04 | [Estimation of a Constant #2](lectures/L04_Estimation_of_a_Constant_2.md) | [PXgpgTrh07Y](https://www.youtube.com/watch?v=PXgpgTrh07Y) |
-| L05 | [Linear Regression #1](lectures/L05_Linear_Regression_1.md) | [J6QAT6-BkDY](https://www.youtube.com/watch?v=J6QAT6-BkDY) |
-| L06 | [Linear Regression #2](lectures/L06_Linear_Regression_2.md) | [DLTnS_SWr_k](https://www.youtube.com/watch?v=DLTnS_SWr_k) |
-| L07 | [Practical Aspects of Linear Regression](lectures/L07_Practical_Aspects_of_Linear_Regression.md) | [HqCN0mFgmTQ](https://www.youtube.com/watch?v=HqCN0mFgmTQ) |
-| L08 | [Filtration of Dynamic Signals](lectures/L08_Filtration_of_Dynamic_Signals.md) | [nAS4yAqv5ak](https://www.youtube.com/watch?v=nAS4yAqv5ak) |
-| L09 | [Identification of Dynamic Systems](lectures/L09_Identification_of_Dynamic_Systems.md) | [WEGsY_W654g](https://www.youtube.com/watch?v=WEGsY_W654g) |
-| L10 | [Practical Aspects of Identification](lectures/L10_Practical_Aspects_of_Identification.md) | [uuRbAaWFfmQ](https://www.youtube.com/watch?v=uuRbAaWFfmQ) |
-| L11 | [Recursive Estimation](lectures/L11_Recursive_Estimation.md) | [cTlkFkwKV4U](https://www.youtube.com/watch?v=cTlkFkwKV4U) |
+| # | Poznámky | Video |
+|---|----------|-------|
+| L01 | [Úvod do identifikácie. Vizualizácia dát.](lectures/L01_Introduction_to_Identification.md) | [PZz7OA9_4Gw](https://www.youtube.com/watch?v=PZz7OA9_4Gw) |
+| L02 | [Úvod do štatistiky](lectures/L02_Introduction_to_Statistics.md) | [laEQig6EanE](https://www.youtube.com/watch?v=laEQig6EanE) |
+| L03 | [Odhad konštanty #1](lectures/L03_Estimation_of_a_Constant_1.md) | [G6Auo4Mw_V0](https://www.youtube.com/watch?v=G6Auo4Mw_V0) |
+| L04 | [Odhad konštanty #2](lectures/L04_Estimation_of_a_Constant_2.md) | [PXgpgTrh07Y](https://www.youtube.com/watch?v=PXgpgTrh07Y) |
+| L05 | [Lineárna regresia #1](lectures/L05_Linear_Regression_1.md) | [J6QAT6-BkDY](https://www.youtube.com/watch?v=J6QAT6-BkDY) |
+| L06 | [Lineárna regresia #2](lectures/L06_Linear_Regression_2.md) | [DLTnS_SWr_k](https://www.youtube.com/watch?v=DLTnS_SWr_k) |
+| L07 | [Praktické aspekty lineárnej regresie](lectures/L07_Practical_Aspects_of_Linear_Regression.md) | [HqCN0mFgmTQ](https://www.youtube.com/watch?v=HqCN0mFgmTQ) |
+| L08 | [Filtrácia dynamických signálov](lectures/L08_Filtration_of_Dynamic_Signals.md) | [nAS4yAqv5ak](https://www.youtube.com/watch?v=nAS4yAqv5ak) |
+| L09 | [Identifikácia dynamických systémov](lectures/L09_Identification_of_Dynamic_Systems.md) | [WEGsY_W654g](https://www.youtube.com/watch?v=WEGsY_W654g) |
+| L10 | [Praktické aspekty identifikácie](lectures/L10_Practical_Aspects_of_Identification.md) | [uuRbAaWFfmQ](https://www.youtube.com/watch?v=uuRbAaWFfmQ) |
+| L11 | [Rekurzívny odhad](lectures/L11_Recursive_Estimation.md) | [cTlkFkwKV4U](https://www.youtube.com/watch?v=cTlkFkwKV4U) |
 
-Course arc: **statistics → estimating a constant → linear regression → its
-practical aspects → filtering → dynamic-system models (FIR/ARX/ARMAX) → practical
-identification → recursive estimation**.
+Oblúk kurzu: **štatistika → odhad konštanty → lineárna regresia → jej
+praktické aspekty → filtrácia → modely dynamických systémov (FIR/ARX/ARMAX) → praktická
+identifikácia → rekurzívny odhad**.
 
-## Exam preparation
+## Príprava na skúšku
 
-Three study files for the exam (oral theory + practical MATLAB). All formulas are
-typeset in LaTeX so they render on GitHub and Obsidian:
+Tri študijné súbory na skúšku (ústna teória + praktický MATLAB). Všetky vzorce sú
+sadzané v LaTeXu, takže sa správne zobrazia na GitHube aj v Obsidiane:
 
-- [`Exam_Prep_1_Practical_MATLAB.md`](Exam_Prep_1_Practical_MATLAB.md) — reusable
-  MATLAB templates for the full identification workflow (load → clean →
-  standardize → split → least squares → RMSE → compare), FIR/ARX/ARMAX, RLS.
-- [`Exam_Prep_2_Oral_Theory.md`](Exam_Prep_2_Oral_Theory.md) — explain-in-words Q&A
-  behind every concept, plus per-topic "talk tracks".
-- [`Exam_Prep_3_Topic_Sheets.md`](Exam_Prep_3_Topic_Sheets.md) — one printable sheet
-  per exam topic: what to put on the board, formulas, likely follow-ups.
+- [`Exam_Prep_1_Practical_MATLAB.md`](Exam_Prep_1_Practical_MATLAB.md) — opakovateľne použiteľné
+  MATLAB šablóny pre celý pracovný postup identifikácie (načítanie → čistenie →
+  štandardizácia → rozdelenie → metóda najmenších štvorcov → RMSE → porovnanie), FIR/ARX/ARMAX, RLS.
+- [`Exam_Prep_2_Oral_Theory.md`](Exam_Prep_2_Oral_Theory.md) — otázky a odpovede vysvetľujúce
+  každý koncept vlastnými slovami, vrátane „osnov výkladu" pre každú tému.
+- [`Exam_Prep_3_Topic_Sheets.md`](Exam_Prep_3_Topic_Sheets.md) — jeden vytlačiteľný list
+  pre každú tému skúšky: čo napísať na tabuľu, vzorce, pravdepodobné doplňujúce otázky.
 
-## Repository layout
+## Štruktúra repozitára
 
 ```
-lectures/        L01–L11 Markdown notes (the main deliverable)
-transcripts/     raw .vtt caption downloads (en-orig + en) used to build the notes
-Prednásky/       the lecturers' slide PDFs, used to verify/repair garbled formulas
-Exam_Prep_*.md   exam study guides
-clean_vtt.py     strips VTT timestamps/tags and de-duplicates rolling captions
+lectures/        L01–L11 poznámky v Markdown (hlavný výstup)
+transcripts/     surové .vtt titulky (en-orig + en) použité na zostavenie poznámok
+Prednásky/       PDF prezentácií prednášajúcich, použité na overenie/opravu skomolených vzorcov
+Exam_Prep_*.md   študijné príručky na skúšku
+clean_vtt.py     odstraňuje VTT časové značky/tagy a odstraňuje duplicity z posúvajúcich sa titulkov
 ```
 
-## How the notes were built
+## Ako boli poznámky zostavené
 
-1. **Download captions** with `yt-dlp` (auto-generated subtitles; the videos are
-   public, so no login is needed):
+1. **Stiahnutie titulkov** pomocou `yt-dlp` (automaticky generované titulky; videá sú
+   verejné, takže nie je potrebné prihlásenie):
 
    ```bash
    yt-dlp --skip-download --write-auto-subs --sub-langs "en-orig,en.*" \
@@ -67,41 +67,41 @@ clean_vtt.py     strips VTT timestamps/tags and de-duplicates rolling captions
      "https://www.youtube.com/playlist?list=PLXyoIl3CJDekre01DKPmvoHd768rc1BBH"
    ```
 
-2. **Clean** each transcript: `python clean_vtt.py` strips cue timestamps and the
-   inline word tags, then collapses the rolling-caption duplication into continuous
-   text (output goes to `transcripts/clean/`, which is git-ignored).
+2. **Čistenie** každého prepisu: `python clean_vtt.py` odstraňuje časové značky titulov a
+   vnorené slovo-úrovňové tagy, potom zlučuje opakujúce sa posúvajúce sa titulky do súvislého
+   textu (výstup ide do `transcripts/clean/`, ktorý je ignorovaný gitom).
 
-3. **Write the notes** from the cleaned text, following each lecture's actual flow.
-   Formulas are typeset in LaTeX only where the lecturer states them, and verified
-   against the matching slide deck in `Prednásky/` where one exists (L01, L02, L05,
-   L06, L07, L08, L09, L11). L03, L04 and L10 had no matching slides and are
-   transcript-only.
+3. **Písanie poznámok** z vyčisteného textu podľa skutočného postupu každej prednášky.
+   Vzorce sú sadzané v LaTeXu len tam, kde ich prednášajúci uvádza, a overené
+   oproti príslušnej prezentácii v `Prednásky/`, kde taká existuje (L01, L02, L05,
+   L06, L07, L08, L09, L11). L03, L04 a L10 nemali zodpovedajúce prezentácie a sú
+   len na základe prepisu.
 
-## Notes on the source material
+## Poznámky k zdrojovému materiálu
 
-- Every video had usable captions; none were missing.
-- All transcripts are **English** (the `en-orig` track) — there are no Slovak
-  captions, though Slovak technical terms the lecturer says are kept in place.
-- `<!-- unclear -->` markers are rare (mostly garbled proper nouns in L01); their
-  low density means the transcripts are good quality.
+- Každé video malo použiteľné titulky; žiadne nechýbali.
+- Všetky prepisy sú v **angličtine** (stopa `en-orig`) — slovenské titulky neexistujú,
+  hoci slovenské odborné termíny, ktoré prednášajúci vysloví, sú ponechané na mieste.
+- Značky `<!-- unclear -->` sú zriedkavé (väčšinou skomolené vlastné mená v L01); ich
+  nízka hustota znamená, že prepisy sú dobrej kvality.
 
-## Math rendering
+## Zobrazovanie matematiky
 
-All Markdown here — the lecture notes **and** the three exam-prep guides —
-typesets math with `$ … $` (inline) and `$$ … $$` (display) so it renders on both
-**GitHub** and **Obsidian**. Two rules keep the display blocks GitHub-safe:
+Všetky súbory Markdown — poznámky z prednášok **aj** tri príručky na prípravu na skúšku —
+sadzajú matematiku pomocou `$ … $` (inline) a `$$ … $$` (zobrazenie), takže sa správne zobrazí na oboch
+platformách — **GitHub** aj **Obsidian**. Dve pravidlá zaručujú kompatibilitu blokov so zobrazenín na GitHube:
 
-- **Avoid GitHub's disallowed macros** (e.g. `\mathrm` instead of `\operatorname`).
-- **Never leave a bare `=` (or `-`) alone on a line inside a `$$` block.** GitHub
-  parses block structure *before* math, so a lone `=` is read as a setext `<h1>`
-  underline and the whole equation renders as a giant heading (with the LaTeX
-  shown literally). Keep the `=` on the same line as its left-hand side, or use
-  `&=` inside `\begin{aligned} … \end{aligned}`.
+- **Vyhýbať sa nedovoleným makrám GitHubu** (napr. `\mathrm` namiesto `\operatorname`).
+- **Nikdy nenechať osamotené `=` (alebo `-`) na riadku vo vnútri bloku `$$`.** GitHub
+  parsuje blokovú štruktúru *pred* matematikou, takže osamotené `=` sa interpretuje ako setext `<h1>`
+  podčiarknutie a celá rovnica sa zobrazí ako obrovský nadpis (s doslovne zobrazeným LaTeXom). Udržujte `=`
+  na rovnakom riadku ako jeho ľavá strana, alebo použite
+  `&=` vo vnútri `\begin{aligned} … \end{aligned}`.
 
-The lecture notes also use Obsidian-compatible YAML frontmatter.
+Poznámky z prednášok tiež používajú YAML frontmatter kompatibilný s Obsidianom.
 
-## Attribution
+## Zdroj
 
-Source: the **Ident_2025** lecture playlist (System Identification, UIAM FCHPT
-STU Bratislava). These are unofficial student notes derived from the public
-lecture recordings; all course content belongs to its authors.
+Zdroj: playlist prednášok **Ident_2025** (Identifikácia systémov, UIAM FCHPT
+STU Bratislava). Sú to neoficiálne študentské poznámky odvodené z verejných
+záznamov prednášok; všetok obsah kurzu patrí jeho autorom.

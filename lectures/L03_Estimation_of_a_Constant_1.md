@@ -1,261 +1,257 @@
 ---
 lecture: L03
-title: "Estimation of a Constant #1"
-course: Identification
+title: "Odhad konštanty #1"
+course: Identifikácia
 source: "https://www.youtube.com/watch?v=G6Auo4Mw_V0"
 ---
 
-# L03 — Estimation of a Constant #1
+# L03 — Odhad konštanty #1
 
-## Warm-up: guessing the parameters of generated data
+## Rozcvička: odhadovanie parametrov vygenerovaných dát
 
-Building on the previous exercises (generating random numbers and plotting them):
-given several samples — rolling a dice, measuring a temperature, a pressure,
-anything — each experiment is marked with its value. Looking at such generated
-data (1,000 samples), what mean and standard deviation generated it?
+Nadväzujúc na predchádzajúce cvičenia (generovanie náhodných čísel a ich
+vykresľovanie): máme niekoľko vzoriek — hody kockou, meranie teploty, tlaku, čohokoľvek —
+každý experiment je označený svojou hodnotou. Pozrieme sa na takto vygenerované dáta
+(1 000 vzoriek) — aká stredná hodnota a smerodajná odchýlka ich vygenerovala?
 
-- The **mean** looks like it should be around **1**.
-- For the **standard deviation**, use the **3σ band**: from last week, within
-  $\pm 3\sigma$ lie about **99.73%** of values, so almost all values should lie in
-  that band. If the full spread is about **0.6** (half is **0.3**), and that
-  equals **three** standard deviations, then **one** standard deviation is
-  **0.1** — which is exactly what generated the distribution.
+- **Priemer** vyzerá, že by mal byť okolo **1**.
+- Pre **smerodajnú odchýlku** použijeme **pás 3σ**: z minulého týždňa, v rámci
+  $\pm 3\sigma$ leží asi **99,73 %** hodnôt, teda takmer všetky hodnoty by mali ležať
+  v tomto páse. Ak je celkový rozptyl asi **0,6** (polovica je **0,3**) a to sa
+  rovná **trom** smerodajným odchýlkam, potom **jedna** smerodajná odchýlka je
+  **0,1** — čo je presne to, čo rozdelenie vygenerovalo.
 
-## The problem: estimation of a constant
+## Problém: odhad konštanty
 
-This is the **estimation of a constant** (essentially finding the **mean**), and
-also studying the **properties** of that mean as we take **more and more
-samples**.
+Ide o **odhad konštanty** (v podstate nájdenie **priemeru**) a súčasne o skúmanie
+**vlastností** tohto priemeru pri **čoraz väčšom počte vzoriek**.
 
-We measure data and want to compute a single constant. We can estimate the mean
-"on the fly": take the first 10 samples and estimate the mean, then 50 samples,
-etc., and watch how the estimate tends toward the true mean. Notation: the true
-constant $\bar{y}$ (or $\hat{y}$, the hat denoting an **estimate**), which changes
-with time as more samples arrive.
+Meriame dáta a chceme vypočítať jednu konštantu. Priemer môžeme odhadovať
+„za behu": vezmeme prvých 10 vzoriek a odhadneme priemer, potom 50 vzoriek atď., a
+sledujeme, ako sa odhad blíži k pravej strednej hodnote. Zápis: pravá konštanta
+$\bar{y}$ (resp. $\hat{y}$, strieška označuje **odhad**), ktorá sa mení v čase
+s pribúdajúcimi vzorkami.
 
-### Statistical model
+### Štatistický model
 
-If the data obey a normal distribution — i.e. any discrepancy/error comes from a
-Gaussian/normal distribution — the model is a simple **statistical model**: the
-true constant equals the estimated mean plus some error (because we did not run a
-million experiments):
+Ak sa dáta riadia normálnym rozdelením — t. j. každá odchýlka/chyba pochádza
+z Gaussovho/normálneho rozdelenia — model je jednoduchý **štatistický model**: pravá
+konštanta sa rovná odhadovanej strednej hodnote plus nejaká chyba (lebo sme
+nevykonali milión experimentov):
 
 $$
 y = \bar{y} + e
 $$
 
-The measurements are normally distributed about a mean value $\bar{y}$ (whose true
-value we may never reach) with some variance/standard deviation. By taking care of
-the mean (estimating it), the **error** is then normal with **zero mean** and some
-standard deviation:
+Merania sú normálne rozdelené okolo strednej hodnoty $\bar{y}$ (ktorej pravú hodnotu
+možno nikdy nedosiahneme) s nejakým rozptylom/smerodajnou odchýlkou. Keď sa
+postaráme o strednú hodnotu (odhadneme ju), **chyba** je potom normálna s **nulovou
+strednou hodnotou** a nejakou smerodajnou odchýlkou:
 
 $$
 e \sim N(0, \sigma^2)
 $$
 
-### Notation for samples in time
+### Zápis vzoriek v čase
 
-Measurements arrive at times $t_1, t_2, t_3, \dots$; using the subscript notation
-you will soon see in Theory of Automatic Control (discrete-time systems), we drop
-the explicit time and just write experiment number 1, 2, 3, …
+Merania prichádzajú v časoch $t_1, t_2, t_3, \dots$; používajúc indexovú notáciu,
+ktorú čoskoro uvidíte v Teórii automatického riadenia (diskrétne systémy v čase),
+vypustíme explicitný čas a jednoducho píšeme číslo experimentu 1, 2, 3, …
 
-If there were **no noise**, every experiment would consistently measure the true
-constant (e.g. the current room temperature). With noise, the points scatter, and
-the mean of, say, three measurements does not land exactly on $\bar{y}$ — if two
-of the points lie above the true value, the estimated mean is slightly off.
+Keby **nebol žiadny šum**, každý experiment by konzistentne meral pravú konštantu
+(napr. aktuálnu teplotu v miestnosti). So šumom sa body rozptyľujú a priemer povedzme
+troch meraní nepristane presne na $\bar{y}$ — ak dva body ležia nad pravou hodnotou,
+odhadovaný priemer je mierne posunutý.
 
-## Where this is used
+## Kde sa to používa
 
-- **Torricelli's law / a valve constant.** With a tank we can measure the height
-  $H$ and an outflow $Q$. We may not know the valve constant, so we set up several
-  experiments, measure $H$ and $Q$ each time, and compute the constant as
+- **Torricelliho zákon / konštanta ventilu.** S nádržou môžeme merať výšku
+  $H$ a odtok $Q$. Konštantu ventilu nepoznáme, preto nastavíme niekoľko experimentov,
+  zakaždým zmeráme $H$ a $Q$ a konštantu vypočítame ako
 
 $$
 C = \frac{Q}{\sqrt{H}}
 $$
 
-  Different experiments give scattered values; we want the statistically best one.
+  Rôzne experimenty dávajú rôzne hodnoty; chceme štatisticky najlepšiu z nich.
 
-- **Static gain / time constants of a transfer function.** From several step
-  tests (or steady-state input/output pairs), the **static gain** is
+- **Statické zosilnenie / časové konštanty prenosovej funkcie.** Z niekoľkých
+  schodových testov (alebo dvojíc vstup/výstup v ustálenom stave) je **statické
+  zosilnenie**
 
 $$
 Z = \frac{\Delta y}{\Delta u}
 $$
 
-  i.e. a column of input changes and a column of output changes. For a nonlinear
-  system the time constant is not even unique, and with measurement noise the data
-  again do not show one consistent value.
+  t. j. stĺpec zmien vstupu a stĺpec zmien výstupu. Pre nelineárny systém časová
+  konštanta nie je ani jedinečná, a so šumom merania dáta opäť neukazujú jednu
+  konzistentnú hodnotu.
 
-## Three ways to get a single representative number
+## Tri spôsoby, ako získať jedno reprezentatívne číslo
 
-Given data $y_1, y_2, \dots, y_N$ and wanting a single number that ideally
-predicts the outcome, we consider three "means."
+Máme dáta $y_1, y_2, \dots, y_N$ a chceme jedno číslo, ktoré ideálne predpovedá
+výsledok. Uvažujeme tri „priemery".
 
-### Arithmetic mean
+### Aritmetický priemer
 
 $$
 \hat{y} = \frac{1}{N}\sum_{i=1}^{N} y_i
 $$
 
-(the same formula as last time).
+(rovnaký vzorec ako minule).
 
-### Geometric mean
+### Geometrický priemer
 
-Instead of adding, we **multiply** the numbers and take the $N$-th root (so the
-unit of the estimate matches):
+Namiesto sčítavania čísla **násobíme** a beriete $N$-tu odmocninu (aby jednotka
+odhadu zodpovedala):
 
 $$
 \hat{y} = \sqrt[N]{\,y_1 \cdot y_2 \cdots y_N\,}
 $$
 
-A property used in Theory of Automatic Control (whether the step response of two
-tanks can be periodic): the **arithmetic mean is always greater than or equal to
-the geometric mean** ($\text{AM} \ge \text{GM}$).
+Vlastnosť využívaná v Teórii automatického riadenia (či môže byť odozva na skok
+dvoch nádrží periodická): **aritmetický priemer je vždy väčší alebo rovný
+geometrickému priemeru** ($\text{AM} \ge \text{GM}$).
 
-### Median
+### Medián
 
-The **median** (which got media attention as the *7-day median* of COVID-19
-incidence) is found by an algorithm rather than a closed formula:
+**Medián** (ktorý sa dostal do médií ako *7-dňový medián* výskytu COVID-19) sa
+nachádza algoritmicky, nie uzavretým vzorcom:
 
-1. **Sort** the measurements into $\tilde{y}_1, \tilde{y}_2, \dots$
-2. If $N$ is **odd**, take the middle element at position $\dfrac{N+1}{2}$.
-   (Check: $N = 3 \Rightarrow (3+1)/2 = 2$, the second element.)
-3. If $N$ is **even**, take the **average of the two middle elements**, at
-   positions $\dfrac{N}{2}$ and $\dfrac{N}{2}+1$:
+1. **Zoradiť** merania do $\tilde{y}_1, \tilde{y}_2, \dots$
+2. Ak je $N$ **nepárne**, vezmeme stredný prvok na pozícii $\dfrac{N+1}{2}$.
+   (Kontrola: $N = 3 \Rightarrow (3+1)/2 = 2$, druhý prvok.)
+3. Ak je $N$ **párne**, vezmeme **priemer dvoch stredných prvkov** na pozíciách
+   $\dfrac{N}{2}$ a $\dfrac{N}{2}+1$:
 
 $$
 y_m = \frac{\tilde{y}_{N/2} + \tilde{y}_{N/2 + 1}}{2}
 $$
 
-## Comparing the three estimators
+## Porovnanie troch odhadov
 
-### One run ("on the fly")
+### Jeden beh („za behu")
 
-On the same dataset, the arithmetic mean (blue), geometric mean (red) and median
-(yellow) are each recomputed from **all samples seen so far** (e.g. the value at
-40 uses the first 400 samples <!-- unclear: lecturer says "at 40 we take 400 previous samples" -->).
+Na rovnakom datasete sa aritmetický priemer (modrá), geometrický priemer (červená)
+a medián (žltá) zakaždým prepočítavajú zo **všetkých doteraz videných vzoriek**
+(napr. hodnota pri 40 používa prvých 400 vzoriek <!-- unclear: prednášajúci hovorí „pri 40 berieme 400 predchádzajúcich vzoriek" -->).
 
-Observations:
-- In the **beginning**, with few samples, all three **oscillate** relative to the
-  scale.
-- After some time they all settle and are "doing their jobs"; the **noise is much
-  larger than the error of the estimate**, so even with few samples they are not
-  far off.
-- Zooming in (band ~0.94 to ~1.06): the condition $\text{AM} \ge \text{GM}$ holds
-  — the **red (geometric) curve is always below the blue (arithmetic)**.
-- The **arithmetic mean** does the best job overall and **meanders less and less**
-  / becomes more confident as more samples are taken. By contrast the **median**
-  settles but then gets "knocked off" by disturbances (violent behaviour) that the
-  arithmetic mean shrugs off, because the median is based on only one or two
-  numbers while the arithmetic and geometric means take **every** number into
-  account.
+Pozorovania:
+- Na **začiatku**, s malým počtom vzoriek, všetky tri **oscilovania** relatívne
+  k mierke.
+- Po čase sa všetky ustália a „robia svoju prácu"; **šum je oveľa väčší ako chyba
+  odhadu**, takže aj s malým počtom vzoriek nie sú ďaleko od hodnoty.
+- Priblížením (pás ~0,94 až ~1,06): podmienka $\text{AM} \ge \text{GM}$ platí —
+  **červená (geometrická) krivka je vždy pod modrou (aritmetickou)**.
+- **Aritmetický priemer** si počína celkovo najlepšie a **čoraz menej sa vychyľuje**
+  / stáva sa istejším s pribúdajúcimi vzorkami. Naproti tomu **medián** sa ustáli,
+  ale potom ho „vykoľají" poruchy (násilné správanie), ktoré aritmetický priemer
+  ignoruje, pretože medián je založený len na jednom alebo dvoch číslach, kým
+  aritmetický a geometrický priemer zohľadňuje **každé** číslo.
 
-A suggested overall measure of quality: the **integral of the difference with
-respect to 1** (the true value).
+Navrhovaná celková miera kvality: **integrál rozdielu voči 1** (pravej hodnote).
 
-### Statistics over many runs (box plots)
+### Štatistika cez mnoho behov (krabicové grafy)
 
-To be fair, instead of one "race" we generate **1,000 data points** and compute
-the three estimators, and repeat this **1,000 times** (code is in the e-learning).
-This is real statistics — 1,000 races.
+Aby sme boli spravodliví, namiesto jedného „pretehu" vygenerujeme **1 000 dátových
+bodov**, vypočítame tri odhady a celé to zopakujeme **1 000-krát** (kód je
+v e-learningu). To sú skutočné štatistiky — 1 000 pretekov.
 
-The results are shown as **box plots**, obtained from the histogram of the 1,000
-estimates:
-- The **central line** is the most probable estimate (mean of the histogram).
-- The **box edges** mark where the **cumulative distribution function** reaches
-  **0.25** and **0.75** — i.e. 25% of race results lie below the lower edge and
-  25% above the upper edge, so the box contains the central **50%**.
-- The **whiskers** (black bars) show the spread / range of outcomes (e.g. a run
-  where the median ended at 0.983, failing to estimate 1).
+Výsledky sú zobrazené ako **krabicové grafy**, získané z histogramu 1 000 odhadov:
+- **Stredná čiara** je najpravdepodobnejší odhad (priemer histogramu).
+- **Hrany krabice** označujú, kde **distribučná funkcia** dosiahne
+  **0,25** a **0,75** — t. j. 25 % výsledkov pretekov leží pod dolnou hranou a
+  25 % nad hornou, takže krabica obsahuje centrálnych **50 %**.
+- **Fúzy** (čierne pruhy) ukazujú rozptyl/rozsah výsledkov (napr. beh, kde medián
+  skončil na 0,983 a neodhadol hodnotu 1).
 
-Reading the box plots:
-- **Arithmetic mean** — best: most probable value reaches **1**, and there is a
-  **50% chance** the error is within about **±0.003**.
-- **Geometric mean** — essentially a copy of the arithmetic case shifted to
-  slightly **lower** values (again $\text{AM} \ge \text{GM}$), similar range.
-- **Median** — worst in one respect: although its most probable value is also 1,
-  it is more probable to have a **larger error** than the arithmetic mean, and its
-  **spread is the largest** (possible to be off by nearly 0.02). This wide spread
-  is attributed to the median's "teeth" behaviour: a single sample can change
-  which numbers are picked into the formula.
+Čítanie krabicových grafov:
+- **Aritmetický priemer** — najlepší: najpravdepodobnejšia hodnota dosiahne **1**
+  a existuje **50 % šanca**, že chyba je v rámci asi **±0,003**.
+- **Geometrický priemer** — v podstate kópia aritmetického prípadu posunutá na
+  mierne **nižšie** hodnoty (opäť $\text{AM} \ge \text{GM}$), podobný rozsah.
+- **Medián** — najhorší v jednom ohľade: hoci jeho najpravdepodobnejšia hodnota je
+  tiež 1, je pravdepodobnejšie dosiahnuť **väčšiu chybu** ako pri aritmetickom
+  priemere a jeho **rozptyl je najväčší** (možno sa minúť o takmer 0,02). Tento
+  veľký rozptyl sa pripisuje „zubatému" správaniu mediánu: jedna vzorka môže zmeniť,
+  ktoré čísla vstúpia do vzorca.
 
-## Optimization-based approach: least squares
+## Prístup cez optimalizáciu: metóda najmenších štvorcov
 
-Before the fully statistical approach, formulate the problem as **least-squares
-estimation**. With $N$ data points, find the estimate $\hat{y}$ that minimizes the
-sum of squared residuals:
+Pred plne štatistickým prístupom formulujeme problém ako **odhad metódou najmenších
+štvorcov**. Pre $N$ dátových bodov nájdeme odhad $\hat{y}$, ktorý minimalizuje
+súčet štvorcov reziduálov:
 
 $$
 \min_{\hat{y}} \sum_{i=1}^{N} (y_i - \hat{y})^2
 $$
 
-This is a **scalar, unconstrained optimization problem with one variable**. Solve
-it **analytically** by setting the derivative to zero (not a gradient — that is
-for multidimensional problems):
+Ide o **skalárnu, neobmedzenú optimalizačnú úlohu s jednou premennou**. Riešime
+ju **analyticky** nastavením derivácie na nulu (nie gradient — ten je pre
+multidimenzionálne problémy):
 
 $$
 \frac{d}{d\hat{y}} \sum_{i=1}^{N} (y_i - \hat{y})^2
   = \sum_{i=1}^{N} 2\,(y_i - \hat{y})(-1) = 0
 $$
 
-The derivative of a sum is the sum of the derivatives. Pull the constant $2$ and
-$-1$ out of the sum; since the right-hand side is zero we can divide by $-2$:
+Derivácia súčtu je súčet derivácií. Vytkneme konštantu $2$ a $-1$ zo sumy; keďže
+pravá strana je nula, môžeme deliť $-2$:
 
 $$
 \sum_{i=1}^{N} (y_i - \hat{y}) = 0
 $$
 
-Split the sum. The term $\sum_{i=1}^{N}\hat{y}$ equals $N\hat{y}$ (adding $\hat{y}$
-to itself $N$ times — "one banana, second banana, … until $N$ bananas"):
+Rozdelíme sumu. Člen $\sum_{i=1}^{N}\hat{y}$ sa rovná $N\hat{y}$ (pridávame $\hat{y}$
+k sebe $N$-krát — „jeden banán, druhý banán, … až $N$ banánov"):
 
 $$
 \sum_{i=1}^{N} y_i - N\hat{y} = 0 \quad\Longrightarrow\quad
   \hat{y} = \frac{1}{N}\sum_{i=1}^{N} y_i
 $$
 
-So the **arithmetic mean** is the answer. The minimized quantity
-$\sum (y_i - \hat{y})^2$ is essentially the (scaled) **variance** — so minimizing
-least squares is **minimizing the variance of the estimate**. That is why the
-arithmetic mean behaves so well: it minimizes the error/variance itself.
+Takže odpoveďou je **aritmetický priemer**. Minimalizovaná veličina
+$\sum (y_i - \hat{y})^2$ je v podstate (škálovaný) **rozptyl** — minimalizácia
+najmenších štvorcov je teda **minimalizáciou rozptylu odhadu**. Preto sa aritmetický
+priemer správa tak dobre: minimalizuje samotnú chybu/rozptyl.
 
-## Toward the statistical approach: maximum likelihood
+## Smerom k štatistickému prístupu: metóda maximálnej vierohodnosti
 
-The statistical approach starts from the same ground (data points from a normal
-distribution with mean $\bar{y}$ and some variance), but now we **take the $N$
-samples and find the most probable value** representing them.
+Štatistický prístup vychádza z rovnakého základu (dátové body z normálneho rozdelenia
+so strednou hodnotou $\bar{y}$ a nejakým rozptylom), ale teraz **vezmeme $N$ vzoriek
+a nájdeme najpravdepodobnejšiu hodnotu**, ktorá ich reprezentuje.
 
-### The likelihood function
+### Funkcia vierohodnosti
 
-Let $k$ be the ordinal number of an experiment. Statisticians write the
-probability of seeing a data point **given** the parameters (the vertical bar "|"
-reads "given that") — the PDF encoded by the mean and variance. But our case is
-the **other way around**: we are **given the data** and want to find the
-parameters. The same Gaussian function is reused under a different name — the
-**likelihood function** — asking the likelihood that the data were generated by a
-distribution with mean $\hat{y}$ and standard deviation $\sigma$:
+Nech $k$ je poradové číslo experimentu. Štatistici zapisujú pravdepodobnosť
+pozorovania dátového bodu **za predpokladu** parametrov (zvislá čiara „|" sa číta
+„za predpokladu, že") — PDF kódovaná strednou hodnotou a rozptylom. Náš prípad je
+ale **opačný**: **máme dáta** a chceme nájsť parametre. Rovnaká Gaussova funkcia
+sa znova použije pod iným názvom — **funkcia vierohodnosti** — pričom sa pýtame
+na vierohodnosť toho, že dáta boli vygenerované rozdelením so strednou hodnotou
+$\hat{y}$ a smerodajnou odchýlkou $\sigma$:
 
 $$
 L(\bar{y}, \sigma \mid y_k) = \frac{1}{\sigma\sqrt{2\pi}}\,
   e^{-\frac{(y_k - \bar{y})^2}{2\sigma^2}}
 $$
 
-It is the same good old Gaussian; only the name changes. (A **log-likelihood**
-function will appear soon.) Evaluating it for $y_1, y_2, \dots$ gives the
-contribution of each data point to the mean and standard deviation.
+Je to tá istá dobrá stará Gaussova funkcia; mení sa len názov. (Čoskoro sa objaví
+**funkcia log-vierohodnosti**.) Jej vyhodnotenie pre $y_1, y_2, \dots$ dáva príspevok
+každého dátového bodu k strednej hodnote a smerodajnej odchýlke.
 
-### Maximum likelihood estimation
+### Odhad maximálnou vierohodnosťou
 
-To get a **single** number out of the several experiments, we form a **joint**
-quantity — as with the dice last time, the probability of event A **and** event B
-is the **product** of their probabilities (e.g. rolling a one twice in a row:
-$a \cdot a$). The single likelihoods are the $L$'s, so we pose **maximum
-likelihood estimation** as maximizing the **joint** probability — the product over
-all samples — with respect to the two parameters:
+Aby sme z niekoľkých experimentov dostali **jedno** číslo, tvoríme **spojenú**
+veličinu — ako pri kocke minule, pravdepodobnosť udalosti A **a** udalosti B je
+**súčin** ich pravdepodobností (napr. hodenie jednotky dvakrát za sebou: $a \cdot a$).
+Jednotlivé vierohodnosti sú $L$, takže **odhad maximálnou vierohodnosťou** formulujeme
+ako maximalizáciu **spojenej** pravdepodobnosti — súčinu cez všetky vzorky —
+vzhľadom na dva parametre:
 
 $$
 \max_{\bar{y},\,\sigma} \;\prod_{k=1}^{N} L(\bar{y}, \sigma \mid y_k)
 $$
 
-This "beast" (a product of several Gaussian fractions/exponentials) will be
-**solved analytically next time** (cliffhanger).
+Toto „monštrum" (súčin viacerých Gaussových zlomkov/exponenciál) bude
+**analyticky vyriešené nabudúce** (záves).
