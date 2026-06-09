@@ -263,7 +263,7 @@ least 10,000 points).
 
 **PCA** does statistics on the data and constructs a small number of **independent,
 most-probable combinations** of pixels — here **36 "eigenface" components**
-$\tilde{x}_1, \dots, \tilde{x}_{36}$ (e.g. the first captures the common background
+$\tilde x_1, \dots, \tilde x_{36}$ (e.g. the first captures the common background
 color). The reduced model then needs only **36 parameters**:
 
 $$

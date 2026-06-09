@@ -98,6 +98,12 @@ typesets math with `$ … $` (inline) and `$$ … $$` (display) so it renders on
   underline and the whole equation renders as a giant heading (with the LaTeX
   shown literally). Keep the `=` on the same line as its left-hand side, or use
   `&=` inside `\begin{aligned} … \end{aligned}`.
+- **Don't let subscript underscores pair as Markdown emphasis.** A `_` right after a
+  `}` (e.g. `\mathrm{RMSE}_{\text{test}}`) can open emphasis; with a second such `_`
+  on the line, GitHub pairs the two, eats the underscores, and the inline math
+  renders as raw `$…$`. Keep the subscript inside the brace
+  (`\mathrm{RMSE_{\text{test}}}`) or drop the brace so the `_` follows a letter
+  (`\hat y_k`, `\tilde x_1`).
 
 The lecture notes also use Obsidian-compatible YAML frontmatter.
 

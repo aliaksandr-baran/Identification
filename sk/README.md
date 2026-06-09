@@ -98,6 +98,12 @@ platformách — **GitHub** aj **Obsidian**. Dve pravidlá zaručujú kompatibil
   podčiarknutie a celá rovnica sa zobrazí ako obrovský nadpis (s doslovne zobrazeným LaTeXom). Udržujte `=`
   na rovnakom riadku ako jeho ľavá strana, alebo použite
   `&=` vo vnútri `\begin{aligned} … \end{aligned}`.
+- **Nedovoľte, aby sa indexové podčiarkovníky spárovali ako zvýraznenie (emphasis).**
+  Podčiarkovník `_` hneď za `}` (napr. `\mathrm{RMSE}_{\text{test}}`) môže otvoriť
+  zvýraznenie; ak je na riadku druhý taký `_`, GitHub ich spáruje, podčiarkovníky
+  „zje" a inline matematika sa zobrazí ako doslovné `$…$`. Index dajte dovnútra
+  zátvorky (`\mathrm{RMSE_{\text{test}}}`) alebo zátvorku vynechajte, aby `_`
+  nasledoval po písmene (`\hat y_k`, `\tilde x_1`).
 
 Poznámky z prednášok tiež používajú YAML frontmatter kompatibilný s Obsidianom.
 

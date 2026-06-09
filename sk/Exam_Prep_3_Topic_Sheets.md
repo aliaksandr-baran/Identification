@@ -137,7 +137,7 @@ $$
 $$
 
 - PCA: $\mathrm{eig}\big(\mathrm{cov}(X)\big)$ → vlastné vektory (smery), vlastné čísla (rozptyl).
-- Pretrénovanie: $\mathrm{RMSE}_{\text{train}}\downarrow \text{ ale } \mathrm{RMSE}_{\text{test}}\uparrow$.
+- Pretrénovanie: $\mathrm{RMSE_{\text{train}}}\downarrow \text{ ale } \mathrm{RMSE_{\text{test}}}\uparrow$.
 
 **Doplňujúce otázky**
 - *Prečo odstrániť korelované vstupy?* → zlé podmienenie, nespoľahlivé koeficienty.
