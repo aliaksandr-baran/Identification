@@ -38,9 +38,14 @@ the **bias / offset** $b$ to absorb the constant shift. This is the simplest
 recursive estimation, the **bias update**, much used in industry (companies prefer
 not to change verified slopes/dependencies).
 
-The bias becomes a function of time. Comparing the previous prediction
-$\hat{y}_{k-1} = a x_{k-1} + b_{k-1}$ with the actual measurement $y_{k-1}$, update
-the bias by the prediction error:
+The bias becomes a function of time. The previous prediction
+
+$$
+\hat{y}_{k-1} = a x_{k-1} + b_{k-1}
+$$
+
+is compared with the actual measurement $y_{k-1}$, and we update the bias by the
+prediction error:
 
 $$
 b_k = b_{k-1} + \big(y_{k-1} - \hat{y}_{k-1}\big)
