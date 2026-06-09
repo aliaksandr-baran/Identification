@@ -38,9 +38,14 @@ rovnakým spôsobom), a nemôžeme meniť nezávislé premenné — preto upravu
 rekurzívny odhad, **aktualizácia posunu**, hojne využívaná v priemysle (spoločnosti
 preferujú nemeniť overené sklony/závislosti).
 
-Posuv sa stáva funkciou času. Porovnaním predchádzajúcej predikcie
-$\hat{y}_{k-1} = a x_{k-1} + b_{k-1}$ s aktuálnym meraním $y_{k-1}$, aktualizujeme
-posuv o chybu predikcie:
+Posuv sa stáva funkciou času. Predchádzajúcu predikciu
+
+$$
+\hat{y}_{k-1} = a x_{k-1} + b_{k-1}
+$$
+
+porovnáme s aktuálnym meraním $y_{k-1}$ a posuv aktualizujeme o chybu
+predikcie:
 
 $$
 b_k = b_{k-1} + \big(y_{k-1} - \hat{y}_{k-1}\big)
