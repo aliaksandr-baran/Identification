@@ -7,12 +7,14 @@
 You are randomly assigned **two topics — one from each category**:
 
 **I. Static Identification**
+
 1. Introduction to Statistics
 2. Estimation of a Constant
 3. Linear Regression
 4. Practical Aspects of Linear Regression
 
 **II. Dynamic Identification**
+
 5. Filtration of Dynamic Signals
 6. Modelling of Dynamic Systems
 7. Recursive Identification

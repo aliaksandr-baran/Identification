@@ -7,12 +7,14 @@
 Sú vám náhodne pridelené **dve témy — jedna z každej kategórie**:
 
 **I. Statická identifikácia**
+
 1. Úvod do štatistiky
 2. Odhad konštanty
 3. Lineárna regresia
 4. Praktické aspekty lineárnej regresie
 
 **II. Dynamická identifikácia**
+
 5. Filtrácia dynamických signálov
 6. Modelovanie dynamických systémov
 7. Rekurzívna identifikácia
