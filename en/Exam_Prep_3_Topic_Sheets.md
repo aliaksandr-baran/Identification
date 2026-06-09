@@ -50,7 +50,7 @@ we estimate is a statistic computed from noisy data.
 
 **Say this (board plan)**
 1. Simplest identification: estimate one true value $c$ from $N$ noisy readings
-   $y_i = c + e_i$. It's regression with $X = \mathbf{1}_N$ (a column of ones).
+   $y_i = c + e_i$. It's regression with $X = \mathbf 1_N$ (a column of ones).
 2. Least squares → the estimate **is the arithmetic mean** (derive it).
 3. Estimator quality: **unbiased**, **consistent**, $\mathrm{var}(\hat{c}) = \sigma^2/N$.
 4. The **$\sqrt{N}$ law**: error $\propto \sigma/\sqrt{N}$ → 4× data to halve the
@@ -137,7 +137,7 @@ $$
 $$
 
 - PCA: $\mathrm{eig}\big(\mathrm{cov}(X)\big)$ → eigenvectors (directions), eigenvalues (variance).
-- Overfit: $\mathrm{RMSE}_{\text{train}}\downarrow$ but $\mathrm{RMSE}_{\text{test}}\uparrow$.
+- Overfit: $\mathrm{RMSE}_{\text{train}}\downarrow \text{ but } \mathrm{RMSE}_{\text{test}}\uparrow$.
 
 **Follow-ups**
 - *Why remove correlated inputs?* → ill-conditioning, unreliable coefficients.

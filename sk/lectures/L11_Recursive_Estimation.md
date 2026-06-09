@@ -124,7 +124,7 @@ $$
 - $y_N$ je práve vykonané **meranie**.
 - $a_{N-1} x_N$ je **predikcia starého (neaktualizovaného) modelu** — predikcia
   v čase $N$ na základe informácií dostupných do času $N-1$, zapísaná
-  $\hat{y}_{N\mid N-1}$. Takže $(y_N - a_{N-1}x_N)$ je **chyba predikcie**.
+  $\hat y_{N\mid N-1}$. Takže $(y_N - a_{N-1}x_N)$ je **chyba predikcie**.
 - $\dfrac{x_N}{\sum_{k=1}^{N} x_k^2}$ je **zosilnenie** — nakoľko dôverujeme novému
   meraniu.
 

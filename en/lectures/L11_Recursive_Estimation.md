@@ -123,7 +123,7 @@ The structure mirrors the bias update and the controller:
 - $y_N$ is the **measurement** just taken.
 - $a_{N-1} x_N$ is the **prediction of the old (un-updated) model** — the
   prediction at time $N$ based on information available until time $N-1$, written
-  $\hat{y}_{N\mid N-1}$. So $(y_N - a_{N-1}x_N)$ is the **prediction error**.
+  $\hat y_{N\mid N-1}$. So $(y_N - a_{N-1}x_N)$ is the **prediction error**.
 - $\dfrac{x_N}{\sum_{k=1}^{N} x_k^2}$ is the **gain** — how much we trust the new
   measurement.
 

@@ -50,7 +50,7 @@ parameter, ktorý odhadujeme, je štatistika vypočítaná zo zašumených dát.
 
 **Čo povedať (plán na tabuľu)**
 1. Najjednoduchšia identifikácia: odhadnúť jednu skutočnú hodnotu $c$ z $N$ zašumených meraní
-   $y_i = c + e_i$. Je to regresia s $X = \mathbf{1}_N$ (stĺpec jednotiek).
+   $y_i = c + e_i$. Je to regresia s $X = \mathbf 1_N$ (stĺpec jednotiek).
 2. Metóda najmenších štvorcov → odhad **je aritmetický priemer** (odvoďte).
 3. Kvalita odhadovača: **nestranný**, **konzistentný**, $\mathrm{var}(\hat{c}) = \sigma^2/N$.
 4. **Zákon $\sqrt{N}$**: chyba $\propto \sigma/\sqrt{N}$ → 4-násobok dát na polovičnú
@@ -137,7 +137,7 @@ $$
 $$
 
 - PCA: $\mathrm{eig}\big(\mathrm{cov}(X)\big)$ → vlastné vektory (smery), vlastné čísla (rozptyl).
-- Pretrénovanie: $\mathrm{RMSE}_{\text{train}}\downarrow$ ale $\mathrm{RMSE}_{\text{test}}\uparrow$.
+- Pretrénovanie: $\mathrm{RMSE}_{\text{train}}\downarrow \text{ ale } \mathrm{RMSE}_{\text{test}}\uparrow$.
 
 **Doplňujúce otázky**
 - *Prečo odstrániť korelované vstupy?* → zlé podmienenie, nespoľahlivé koeficienty.
