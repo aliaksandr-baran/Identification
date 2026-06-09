@@ -203,7 +203,7 @@ mean's oscillations seen last time, unlike the median's sudden jumps.
 **Practical rule.** Since $\sigma_e = \sigma/\sqrt{N}$, the error in physical units
 improves with the **square root** of the number of measurements. Example: a sensor
 with standard deviation $\sigma = 1$, wanting an estimate precision of $0.1$ —
-improving by a factor of **10** requires at least $10^2 = $ **100 measurements**.
+improving by a factor of **10** requires at least $10^2 =$ **100 measurements**.
 
 ## Distribution of the error and the chi-square distribution
 

@@ -199,7 +199,7 @@ náhlych skokov mediánu.
 **Praktické pravidlo.** Keďže $\sigma_e = \sigma/\sqrt{N}$, chyba vo fyzikálnych
 jednotkách sa zlepšuje s **odmocninou** počtu meraní. Príklad: senzor so smerodajnou
 odchýlkou $\sigma = 1$, požadovaná presnosť odhadu $0{,}1$ — zlepšenie desaťnásobne
-vyžaduje aspoň $10^2 = $ **100 meraní**.
+vyžaduje aspoň $10^2 =$ **100 meraní**.
 
 ## Rozdelenie chyby a chí-kvadrát rozdelenie
 
