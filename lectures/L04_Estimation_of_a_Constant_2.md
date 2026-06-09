@@ -214,7 +214,7 @@ rozdelenie** (po slovensky: *chí kvadrát*). Má parameter: po sčítaní $n$
 štvorcov normálnych premenných,
 
 $$
-\sum_{i=1}^{n} X_i^2 \sim \chi^2 \text{ with } n \text{ degrees of freedom},
+\sum_{i=1}^{n} X_i^2 \sim \chi^2 \text{ s } n \text{ stupňami voľnosti},
 $$
 
 kde $n$ počíta, koľko normálnych premenných bolo umocnených a sčítaných. To bude
